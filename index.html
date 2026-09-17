@@ -265,8 +265,8 @@
             </select>
         </div>
         <div>
-            <span style="font-size:0.7em; color:var(--text-sub);">監督</span><br>
-            <strong style="font-size:1em; color:var(--text-main);" id="manager-name">---</strong>
+            <span style="font-size:0.7em; color:var(--text-sub);">監督 (切り替え)</span><br>
+            <select id="manager-select" onchange="switchManager()" style="font-size:0.85em; max-width:140px;"></select>
             <span style="font-size:0.75em; color:var(--accent-gold);" id="manager-rating"></span>
         </div>
         <div>
@@ -367,7 +367,7 @@
                 </div>
             </div>
 
-            <!-- 移籍市場（開閉機能つき） -->
+            <!-- 移籍市場 -->
             <div class="panel">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                     <h4 style="margin:0; cursor:pointer;" onclick="toggleMarketPanel()">
@@ -402,7 +402,7 @@
     </div>
 
     <script>
-        const STORAGE_KEY = "ML_PRO_SAVE_DATA_2026_V5";
+        const STORAGE_KEY = "ML_PRO_SAVE_DATA_2026_V6";
 
         let transferMarket = JSON.parse(JSON.stringify(defaultTransferMarket));
         let myStarters = [], myBench = [], myReserves = [];
@@ -413,7 +413,9 @@
             currentFormation: "4-2-3-1",
             season: 1, week: 1, funds: 2500,
             activeTab: 'standings', isMatchRunning: false,
-            manager: null, managerMarket: [],
+            manager: null,
+            myManagers: [], // 所持監督リスト
+            managerMarket: [],
             saleOffer: false, saleOfferWeeks: 0,
             buyOffer: false, buyOfferWeeks: 0,
             isMarketOpen: true
@@ -421,7 +423,6 @@
 
         let draggedSource = null, selectedPlayer = null;
 
-        // OVRに応じたクラスを取得する関数
         function getRatingClass(rating) {
             if (rating >= 90) return "rating-blue";
             if (rating >= 80) return "rating-green";
@@ -444,8 +445,13 @@
                 gameState.isMatchRunning = false;
                 if (gameState.isMarketOpen === undefined) gameState.isMarketOpen = true;
 
+                if (!gameState.myManagers || gameState.myManagers.length === 0) {
+                    gameState.myManagers = gameState.manager ? [gameState.manager] : [initialManagers[gameState.teamName]];
+                }
                 if (!gameState.manager) {
-                    gameState.manager = initialManagers[gameState.teamName];
+                    gameState.manager = gameState.myManagers[0];
+                }
+                if (!gameState.managerMarket || gameState.managerMarket.length === 0) {
                     gameState.managerMarket = JSON.parse(JSON.stringify(freeManagers));
                 }
 
@@ -538,7 +544,9 @@
             myBench = aligned.bench;
             myReserves = aligned.reserves;
 
-            gameState.manager = initialManagers[gameState.teamName];
+            const initM = initialManagers[gameState.teamName];
+            gameState.myManagers = [initM];
+            gameState.manager = initM;
             gameState.managerMarket = JSON.parse(JSON.stringify(freeManagers));
 
             initStandings();
@@ -842,22 +850,32 @@
             return targetName || "PKキッカー";
         }
 
-        function updateWinRates(myRating, enemyRating) {
+        function calculateWinRates(myRating, enemyBaseRating) {
             const isHome = (gameState.week % 2 === 1);
-            // HOME: OVR+3ボーナス, AWAY: OVR-3補正
             const myEffRating = isHome ? myRating + 3 : myRating - 3;
+            
+            const weekEnemyBonus = Math.floor((gameState.week - 1) * 0.8);
+            const enemyRating = enemyBaseRating + weekEnemyBonus;
+
             const diff = myEffRating - enemyRating;
 
             let win = Math.max(5, Math.min(90, Math.round(40 + diff * 3.5)));
             let draw = Math.max(10, 25 - Math.round(Math.abs(diff)));
             let loss = 100 - win - draw;
 
-            document.getElementById('rate-win-txt').innerText = win;
-            document.getElementById('rate-draw-txt').innerText = draw;
-            document.getElementById('rate-loss-txt').innerText = loss;
-            document.getElementById('bar-win').style.width = win + '%';
-            document.getElementById('bar-draw').style.width = draw + '%';
-            document.getElementById('bar-loss').style.width = loss + '%';
+            return { win, draw, loss, effectiveEnemyRating: enemyRating };
+        }
+
+        function updateWinRatesUI(myRating, enemyBaseRating) {
+            const rates = calculateWinRates(myRating, enemyBaseRating);
+
+            document.getElementById('rate-win-txt').innerText = rates.win;
+            document.getElementById('rate-draw-txt').innerText = rates.draw;
+            document.getElementById('rate-loss-txt').innerText = rates.loss;
+            document.getElementById('bar-win').style.width = rates.win + '%';
+            document.getElementById('bar-draw').style.width = rates.draw + '%';
+            document.getElementById('bar-loss').style.width = rates.loss + '%';
+            document.getElementById('enemy-rating').innerText = rates.effectiveEnemyRating;
         }
 
         function startMatchSimulation() {
@@ -869,21 +887,32 @@
             gameState.isMatchRunning = true;
             document.getElementById('btn-start-match').disabled = true;
 
+            document.getElementById('score-my').innerText = '0';
+            document.getElementById('score-enemy').innerText = '0';
+            document.getElementById('match-timer').innerText = '00:00';
+
             const isHome = (gameState.week % 2 === 1);
             let myRating = calculateStarterRating();
-            if (isHome) myRating += 3; else myRating -= 3; // ホーム/アウェー補正
-
+            
             const enemyTeams = standings.filter(s => !s.isUser);
             const enemy = enemyTeams[(gameState.week - 1) % enemyTeams.length];
             const enemyPreset = clubPresetData[enemy.name] || [];
 
-            const myRoll = myRating + (Math.random() * 16 - 8);
-            const enemyRoll = enemy.rating + (Math.random() * 16 - 8);
+            const rates = calculateWinRates(myRating, enemy.rating);
 
+            const rand = Math.random() * 100;
             let myFinal = 0, enemyFinal = 0;
-            if (myRoll > enemyRoll + 2) { myFinal = Math.floor(Math.random() * 3) + 1; enemyFinal = Math.floor(Math.random() * myFinal); }
-            else if (myRoll < enemyRoll - 2) { enemyFinal = Math.floor(Math.random() * 3) + 1; myFinal = Math.floor(Math.random() * enemyFinal); }
-            else { myFinal = Math.floor(Math.random() * 2); enemyFinal = myFinal; }
+
+            if (rand < rates.win) {
+                myFinal = Math.floor(Math.random() * 3) + 1;
+                enemyFinal = Math.floor(Math.random() * myFinal);
+            } else if (rand < rates.win + rates.draw) {
+                myFinal = Math.floor(Math.random() * 3);
+                enemyFinal = myFinal;
+            } else {
+                enemyFinal = Math.floor(Math.random() * 3) + 1;
+                myFinal = Math.floor(Math.random() * enemyFinal);
+            }
 
             let minute = 0, myScore = 0, enemyScore = 0;
             let matchContributors = {};
@@ -1035,7 +1064,6 @@
             const otherResults = simulateOtherMatches(enemyName);
             logBox.innerHTML += otherResults;
 
-            // 順位ソート（①勝ち点 → ②得失点差 → ③総得点 → ④勝利数）
             sortStandings();
 
             if (gameState.week === 20) {
@@ -1058,7 +1086,7 @@
             if (gameState.week < 20) {
                 gameState.week++;
             } else {
-                gameState.week = 20; // 20節で打ち止め
+                gameState.week = 20;
             }
 
             updateSpecialOffers();
@@ -1069,11 +1097,11 @@
 
         function sortStandings() {
             standings.sort((a, b) => {
-                if (b.points !== a.points) return b.points - a.points; // 1. 勝ち点
-                if (b.gd !== a.gd) return b.gd - a.gd;                 // 2. 得失点差
-                if (b.gf !== a.gf) return b.gf - a.gf;                 // 3. 総得点
-                if (b.win !== a.win) return b.win - a.win;             // 4. 勝利数
-                return a.name.localeCompare(b.name, 'ja');            // 5. 50音順
+                if (b.points !== a.points) return b.points - a.points;
+                if (b.gd !== a.gd) return b.gd - a.gd;
+                if (b.gf !== a.gf) return b.gf - a.gf;
+                if (b.win !== a.win) return b.win - a.win;
+                return a.name.localeCompare(b.name, 'ja');
             });
         }
 
@@ -1167,6 +1195,12 @@
             }
         }
 
+        // 所持している全選手（スタメン・ベンチ・リザーブ）の名前セットを取得
+        function getMyPlayerNames() {
+            const allMyPlayers = [...myStarters, ...myBench, ...myReserves];
+            return new Set(allMyPlayers.map(p => p.name));
+        }
+
         function renderMarket() {
             const grid = document.getElementById('market-grid');
             grid.innerHTML = '';
@@ -1175,6 +1209,7 @@
 
             const filter = document.getElementById('market-filter').value;
             const discount = gameState.buyOffer ? 0.7 : 1.0;
+            const myPlayerNames = getMyPlayerNames();
 
             if (filter === "MANAGER") {
                 gameState.managerMarket.forEach((m, idx) => {
@@ -1190,6 +1225,9 @@
             } else {
                 transferMarket.forEach((p, idx) => {
                     if (filter !== "ALL" && p.category !== filter) return;
+                    // 自チームに既にいる選手は市場に表示しない（重複獲得を防止）
+                    if (myPlayerNames.has(p.name)) return;
+
                     const price = Math.floor(p.price * discount);
                     const badgeClass = getRatingClass(p.rating);
                     const card = document.createElement('div');
@@ -1206,6 +1244,14 @@
         function buyPlayer(idx) {
             const discount = gameState.buyOffer ? 0.7 : 1.0;
             const p = transferMarket[idx];
+            if (!p) return;
+
+            const myPlayerNames = getMyPlayerNames();
+            if (myPlayerNames.has(p.name)) {
+                alert(`${p.name} はすでに自チームに所属しているため獲得できません。`);
+                return;
+            }
+
             const price = Math.floor(p.price * discount);
             if (gameState.funds >= price) {
                 gameState.funds -= price;
@@ -1217,13 +1263,23 @@
         function buyManager(idx) {
             const discount = gameState.buyOffer ? 0.7 : 1.0;
             const m = gameState.managerMarket[idx];
+            if (!m) return;
+
             const price = Math.floor(m.price * discount);
             if (gameState.funds >= price) {
                 gameState.funds -= price;
-                if (gameState.manager) {
-                    gameState.managerMarket.push(gameState.manager);
-                }
-                gameState.manager = gameState.managerMarket.splice(idx, 1)[0];
+                const boughtManager = gameState.managerMarket.splice(idx, 1)[0];
+                gameState.myManagers.push(boughtManager);
+                gameState.manager = boughtManager;
+                updateUI();
+            }
+        }
+
+        function switchManager() {
+            const select = document.getElementById('manager-select');
+            const idx = parseInt(select.value, 10);
+            if (gameState.myManagers && gameState.myManagers[idx]) {
+                gameState.manager = gameState.myManagers[idx];
                 updateUI();
             }
         }
@@ -1298,7 +1354,6 @@
             document.getElementById('funds').innerText = gameState.funds;
             document.getElementById('team-rating').innerText = myRating;
             document.getElementById('enemy-name').innerText = enemy ? enemy.name : "---";
-            document.getElementById('enemy-rating').innerText = enemy ? enemy.rating : 0;
             
             const venueInd = document.getElementById('venue-indicator');
             if (isHome) {
@@ -1309,10 +1364,27 @@
                 venueInd.className = "venue-badge venue-away";
             }
 
-            document.getElementById('manager-name').innerText = gameState.manager ? gameState.manager.name : "---";
+            // 監督セレクトボックスの更新
+            const managerSelect = document.getElementById('manager-select');
+            if (managerSelect) {
+                managerSelect.innerHTML = '';
+                if (!gameState.myManagers || gameState.myManagers.length === 0) {
+                    if (gameState.manager) gameState.myManagers = [gameState.manager];
+                }
+                gameState.myManagers.forEach((m, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = idx;
+                    opt.innerText = `${m.name}`;
+                    if (gameState.manager && gameState.manager.name === m.name && gameState.manager.rating === m.rating) {
+                        opt.selected = true;
+                    }
+                    managerSelect.appendChild(opt);
+                });
+            }
+
             document.getElementById('manager-rating').innerText = gameState.manager ? `(${gameState.manager.rating})` : "";
 
-            if (enemy) updateWinRates(myRating, enemy.rating);
+            if (enemy) updateWinRatesUI(myRating, enemy.rating);
             renderOfferBanner();
             renderSquad();
             renderMarket();
