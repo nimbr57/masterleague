@@ -304,9 +304,9 @@ const defaultTransferMarket = [
     // --- FW Legend ---
     { nat: "🇧🇷", name: "ペレ", pos: "CF", altPos: ["AMF", "SS"], category: "FW", rating: 98, price: 4800, isLegend: true },
     { nat: "🇦🇷", name: "マラドーナ", pos: "AMF", altPos: ["CF", "RWG"], category: "FW", rating: 97, price: 4500, isLegend: true },
-    { nat: "🇵🇹", name: "C.ロナウド", pos: "CF", altPos: ["RWG", "LWG"], category: "FW", rating: 97, price: 4500 },
+    { nat: "🇵🇹", name: "C.ロナウド", pos: "CF", altPos: ["RWG", "LWG"], category: "FW", rating: 97, price: 4500, isLegend: true },
     { nat: "🇳🇱", name: "クライフ", pos: "CF", altPos: ["AMF", "LWG"], category: "FW", rating: 96, price: 4200, isLegend: true },
-    { nat: "🇦🇷", name: "メッシ", pos: "RWG", altPos: ["AMF", "CF"], category: "FW", rating: 96, price: 4200 },
+    { nat: "🇦🇷", name: "メッシ", pos: "RWG", altPos: ["AMF", "CF"], category: "FW", rating: 96, price: 4200, isLegend: true },
     { nat: "🇧🇷", name: "ロナウド", pos: "CF", altPos: [], category: "FW", rating: 96, price: 4200, isLegend: true },
     { nat: "🇮🇹", name: "デル・ピエロ", pos: "CF", altPos: [], category: "FW", rating: 96, price: 4200, isLegend: true },
     { nat: "🇧🇷", name: "ロナウジーニョ", pos: "LWG", altPos: ["AMF", "LMF"], category: "FW", rating: 95, price: 3800, isLegend: true },
