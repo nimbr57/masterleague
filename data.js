@@ -4,7 +4,7 @@ const clubPresetData = {
         { name: "クルトワ", pos: "GK", altPos: [], category: "GK", rating: 90 },
         { name: "ククレジャ", pos: "LB", altPos: ["LWB"], category: "DF", rating: 83 },
         { name: "ミリトン", pos: "CB", altPos: ["RB"], category: "DF", rating: 85 },
-        { name: "フイセン", pos: "CB", altPos: ["DMF"], category: "DF", rating: 86 },
+        { name: "ハイセン", pos: "CB", altPos: ["DMF"], category: "DF", rating: 86 },
         { name: "トレント", pos: "RB", altPos: ["RWB", "CMF"], category: "DF", rating: 87 },
         { name: "チュアメニ", pos: "DMF", altPos: ["CB", "CMF"], category: "MF", rating: 86 },
         { name: "バルベルデ", pos: "CMF", altPos: ["RMF", "RWG", "RB"], category: "MF", rating: 89 },
@@ -16,13 +16,13 @@ const clubPresetData = {
         { name: "ギュレル", pos: "AMF", altPos: ["RMF", "RWG", "CMF"], category: "MF", rating: 84 },
         { name: "ブラヒム", pos: "AMF", altPos: ["RMF", "RWG", "LWG"], category: "MF", rating: 83 },
         { name: "エンドリッキ", pos: "CF", altPos: ["RWG"], category: "FW", rating: 81 },
-        { name: "C.エスピ", pos: "CF", altPos: [], category: "FW", rating: 79 },
+        { name: "C.エスピ", pos: "CF", altPos: [], category: "FW", rating: 80 },
         { name: "ディオマンデ", pos: "RWG", altPos: ["LWG", "CF"], category: "FW", rating: 82 }
     ],
 
     "マンチェスター・C": [
         { name: "ドンナルンマ", pos: "GK", altPos: [], category: "GK", rating: 89 },
-        { name: "アイト＝ヌーリ", pos: "LB", altPos: ["LWB", "LMF"], category: "DF", rating: 84 },
+        { name: "フサノフ", pos: "CB", altPos: ["RB"], category: "DF", rating: 84 },
         { name: "ルベン・ディアス", pos: "CB", altPos: [], category: "DF", rating: 88 },
         { name: "グヴァルディオル", pos: "CB", altPos: ["LB"], category: "DF", rating: 86 },
         { name: "グエイ", pos: "CB", altPos: ["RB"], category: "DF", rating: 84 },
@@ -33,10 +33,10 @@ const clubPresetData = {
         { name: "フォーデン", pos: "AMF", altPos: ["RMF", "RWG", "CMF", "LWG"], category: "MF", rating: 89 },
         { name: "ハーランド", pos: "CF", altPos: [], category: "FW", rating: 92 },
         { name: "ドク", pos: "LWG", altPos: ["RWG", "RMF", "LMF"], category: "FW", rating: 84 },
-        { name: "ニャブリ", pos: "RWG", altPos: ["LWG", "CF"], category: "FW", rating: 82 },
+        { name: "セメンヨ", pos: "RWG", altPos: ["LWG", "CF"], category: "FW", rating: 82 },
         { name: "エンディアイエ", pos: "CF", altPos: ["LWG", "RWG", "AMF"], category: "FW", rating: 82 },
-        { name: "セメニョ", pos: "RWG", altPos: ["CF", "LWG"], category: "FW", rating: 82 },
-        { name: "アラン", pos: "RWG", altPos: ["LWG", "RMF"], category: "FW", rating: 78 }
+        { name: "オライリー", pos: "CMF", altPos: ["LB"], category: "MF", rating: 82 },
+        { name: "ブアディ", pos: "DMF", altPos: ["CMF"], category: "MF", rating: 80 }
     ],
 
     "バルセロナ": [
@@ -71,7 +71,7 @@ const clubPresetData = {
         { name: "ブルーノ・ギマランイス", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 87 },
         { name: "スビメンディ", pos: "DMF", altPos: ["CMF"], category: "MF", rating: 85 },
         { name: "サカ", pos: "RWG", altPos: ["RMF", "LWG", "RWB"], category: "FW", rating: 89 },
-        { name: "トロサール", pos: "LWG", altPos: ["LMF", "CF", "AMF"], category: "FW", rating: 83 },
+        { name: "マドゥエケ", pos: "RWG", altPos: ["LMF", "RMF", "LWG"], category: "FW", rating: 83 },
         { name: "ハヴァーツ", pos: "CF", altPos: ["AMF", "CMF"], category: "FW", rating: 85 },
         { name: "エゼ", pos: "AMF", altPos: ["LWG", "LMF", "CMF"], category: "MF", rating: 85 },
         { name: "メリーノ", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 83 }
@@ -93,12 +93,12 @@ const clubPresetData = {
         { name: "パヴロヴィッチ", pos: "CMF", altPos: ["DMF"], category: "MF", rating: 82 },
         { name: "ニャブリ", pos: "RWG", altPos: ["LWG", "CF"], category: "FW", rating: 83 },
         { name: "ルイス・ディアス", pos: "LWG", altPos: ["LMF", "RWG"], category: "FW", rating: 87 },
-        { name: "オリス", pos: "RWG", altPos: ["RMF", "AMF"], category: "FW", rating: 87 },
+        { name: "オリーセ", pos: "RWG", altPos: ["RMF", "AMF"], category: "FW", rating: 87 },
         { name: "ケイン", pos: "CF", altPos: ["AMF"], category: "FW", rating: 91 }
     ],
 
     "ドルトムント": [
-        { name: "コーベル", pos: "GK", altPos: [], category: "GK", rating: 87 },
+        { name: "コベル", pos: "GK", altPos: [], category: "GK", rating: 87 },
         { name: "アントン", pos: "CB", altPos: ["RB"], category: "DF", rating: 82 },
         { name: "シュロッターベック", pos: "CB", altPos: ["LB"], category: "DF", rating: 85 },
         { name: "ベンセバイニ", pos: "LB", altPos: ["CB", "LWB"], category: "DF", rating: 81 },
@@ -142,14 +142,14 @@ const clubPresetData = {
         { name: "ベラウド", pos: "CB", altPos: ["LB"], category: "DF", rating: 80 },
         { name: "マルキーニョス", pos: "CB", altPos: ["RB", "DMF"], category: "DF", rating: 86 },
         { name: "ザバルニー", pos: "CB", altPos: [], category: "DF", rating: 82 },
-        { name: "ディニュ", pos: "LB", altPos: ["LWB"], category: "DF", rating: 80 },
+        { name: "ディーニュ", pos: "LB", altPos: ["LWB"], category: "DF", rating: 80 },
         { name: "メンデス", pos: "LB", altPos: ["LWB"], category: "DF", rating: 85 },
         { name: "ヴィティーニャ", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 88 },
         { name: "ファビアン・ルイス", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 85 },
         { name: "ザイール＝エメリ", pos: "CMF", altPos: ["DMF", "RB"], category: "MF", rating: 83 },
         { name: "ジョアン・ネヴェス", pos: "DMF", altPos: ["CMF"], category: "MF", rating: 84 },
         { name: "デンベレ", pos: "RWG", altPos: ["LWG", "CF", "RMF"], category: "FW", rating: 89 },
-        { name: "クヴァラツヘリア", pos: "LWG", altPos: ["LMF", "RWG"], category: "FW", rating: 88 },
+        { name: "クヴァラツヘリア", pos: "LWG", altPos: ["LMF", "CF"], category: "FW", rating: 88 },
         { name: "ドゥエ", pos: "LWG", altPos: ["AMF", "RWG"], category: "FW", rating: 87 },
         { name: "アクリウシュ", pos: "RWG", altPos: ["AMF", "LWG"], category: "FW", rating: 82 },
         { name: "フェラン", pos: "CF", altPos: ["RWG", "LWG"], category: "FW", rating: 82 }
@@ -198,16 +198,16 @@ const clubPresetData = {
 
 // 初期監督（総合値80前後に設定）
 const initialManagers = {
-    "レアル・マドリード": { name: "モウリーニョ", rating: 82, price: 250 },
-    "マンチェスター・C": { name: "マレスカ", rating: 81, price: 230 },
-    "バルセロナ": { name: "フリック", rating: 80, price: 200 },
-    "アーセナル": { name: "アルテタ", rating: 80, price: 200 },
-    "バイエルン": { name: "コンパニ", rating: 79, price: 180 },
-    "ドルトムント": { name: "コヴァチ", rating: 78, price: 160 },
-    "チェルシー": { name: "マレスカ", rating: 80, price: 200 },
+    "レアル・マドリード": { name: "ジョゼ・モウリーニョ", rating: 82, price: 250 },
+    "マンチェスター・C": { name: "エンソ・マレスカ", rating: 81, price: 230 },
+    "バルセロナ": { name: "ハンジ・フリック", rating: 80, price: 200 },
+    "アーセナル": { name: "ミケル・アルテタ", rating: 80, price: 200 },
+    "バイエルン": { name: "ヴァンサン・コンパニ", rating: 79, price: 180 },
+    "ドルトムント": { name: "ニコ・コヴァチ", rating: 78, price: 160 },
+    "チェルシー": { name: "シャビ・アロンソ", rating: 80, price: 200 },
     "パリサンジェルマン": { name: "ルイス・エンリケ", rating: 81, price: 220 },
-    "インテルナツィオナーレ・ミラノ": { name: "キヴ", rating: 79, price: 180 },
-    "ACミラン": { name: "アモリム", rating: 78, price: 160 }
+    "インテルナツィオナーレ・ミラノ": { name: "クリスティアン・キヴ", rating: 79, price: 180 },
+    "ACミラン": { name: "ルベン・アモリム", rating: 78, price: 160 }
 };
 
 // 獲得可能なフリー監督市場（80~95に設定）
@@ -299,49 +299,93 @@ const formations = {
     ]
 };
 
-// 移籍市場データ（若手・他クラブスター選手・初期90越えを大幅追加）
+// 移籍市場データ（現役 ＋ 引退済みレジェンド選手を追加）
 const defaultTransferMarket = [
+    // === 👑 LEGEND PLAYERS (各ポジション 5名以上) ===
+    // --- FW Legend ---
+    { nat: "🇧🇷", name: "ペレ", pos: "CF", altPos: ["AMF", "SS"], category: "FW", rating: 98, price: 4800, isLegend: true },
+    { nat: "🇦🇷", name: "マラドーナ", pos: "AMF", altPos: ["CF", "RWG"], category: "FW", rating: 97, price: 4500, isLegend: true },
+    { nat: "🇳🇱", name: "クライフ", pos: "CF", altPos: ["AMF", "LWG"], category: "FW", rating: 96, price: 4200, isLegend: true },
+    { nat: "🇧🇷", name: "ロナウド", pos: "CF", altPos: [], category: "FW", rating: 96, price: 4200, isLegend: true },
+    { nat: "🇮🇹", name: "デル・ピエロ", pos: "CF", altPos: [], category: "FW", rating: 96, price: 4200, isLegend: true },
+    { nat: "🇧🇷", name: "ロナウジーニョ", pos: "LWG", altPos: ["AMF", "LMF"], category: "FW", rating: 95, price: 3800, isLegend: true },
+    { nat: "🇫🇷", name: "ベンゼマ", pos: "CF", altPos: [], category: "FW", rating: 95, price: 3800, isLegend: true },
+    { nat: "🇫🇷", name: "アンリ", pos: "CF", altPos: ["LWG"], category: "FW", rating: 94, price: 3500, isLegend: true },
+    { nat: "🏴󠁧󠁢󠁷󠁬󠁳󠁿", name: "ベイル", pos: "RWG", altPos: ["CF", "LB"], category: "FW", rating: 94, price: 3500, isLegend: true },
+
+    // --- MF Legend ---
+    { nat: "🇫🇷", name: "ジダン", pos: "AMF", altPos: ["CMF"], category: "MF", rating: 97, price: 4400, isLegend: true },
+    { nat: "🇫🇷", name: "プラティニ", pos: "AMF", altPos: ["CMF"], category: "MF", rating: 95, price: 3800, isLegend: true },
+    { nat: "🇳🇱", name: "フリット", pos: "CMF", altPos: ["AMF", "CF", "CB"], category: "MF", rating: 95, price: 3900, isLegend: true },
+    { nat: "🇩🇪", name: "クロース", pos: "CMF", altPos: ["DMF"], category: "MF", rating: 95, price: 3800, isLegend: true },
+    { nat: "🇪🇸", name: "シャビ", pos: "CMF", altPos: ["DMF"], category: "MF", rating: 94, price: 3500, isLegend: true },
+    { nat: "🇧🇷", name: "カゼミロ", pos: "DMF", altPos: ["CMF"], category: "MF", rating: 94, price: 3500, isLegend: true },
+    { nat: "🇪🇸", name: "イニエスタ", pos: "CMF", altPos: ["AMF", "LMF"], category: "MF", rating: 94, price: 3500, isLegend: true },
+    { nat: "🇮🇹", name: "ピルロ", pos: "DMF", altPos: ["CMF"], category: "MF", rating: 93, price: 3200, isLegend: true },
+
+    // --- DF Legend ---
+    { nat: "🇮🇹", name: "マルディーニ", pos: "CB", altPos: ["LB"], category: "DF", rating: 97, price: 4300, isLegend: true },
+    { nat: "🇩🇪", name: "ベッケンバウアー", pos: "CB", altPos: ["DMF"], category: "DF", rating: 97, price: 4400, isLegend: true },
+    { nat: "🇵🇹", name: "ペペ", pos: "CB", altPos: [], category: "DF", rating: 96, price: 4000, isLegend: true },
+    { nat: "🇮🇹", name: "バレージ", pos: "CB", altPos: [], category: "DF", rating: 95, price: 3700, isLegend: true },
+    { nat: "🇪🇸", name: "セルヒオ・ラモス", pos: "CB", altPos: ["RB"], category: "DF", rating: 95, price: 3700, isLegend: true },
+    { nat: "🇧🇷", name: "マルセロ", pos: "LB", altPos: ["LWB", "LMF"], category: "DF", rating: 94, price: 3500, isLegend: true },
+    { nat: "🇮🇹", name: "ネスタ", pos: "CB", altPos: [], category: "DF", rating: 94, price: 3400, isLegend: true },
+    { nat: "🇮🇹", name: "カンナヴァーロ", pos: "CB", altPos: [], category: "DF", rating: 93, price: 3200, isLegend: true },
+    { nat: "🇫🇷", name: "デサイー", pos: "CB", altPos: ["LB"], category: "DF", rating: 93, price: 3200, isLegend: true },
+
+    // --- GK Legend ---
+    { nat: "🇷🇺", name: "ヤシン", pos: "GK", altPos: [], category: "GK", rating: 96, price: 3800, isLegend: true },
+    { nat: "🇮🇹", name: "ブッフォン", pos: "GK", altPos: [], category: "GK", rating: 95, price: 3500, isLegend: true },
+    { nat: "🇨🇿", name: "チェフ", pos: "GK", altPos: [], category: "GK", rating: 95, price: 3500, isLegend: true },
+    { nat: "🇩🇪", name: "カーン", pos: "GK", altPos: [], category: "GK", rating: 94, price: 3300, isLegend: true },
+    { nat: "🇪🇸", name: "カシージャス", pos: "GK", altPos: [], category: "GK", rating: 94, price: 3300, isLegend: true },
+    { nat: "🇩🇰", name: "シュマイケル", pos: "GK", altPos: [], category: "GK", rating: 93, price: 3100, isLegend: true },
+
+    // === ⚽ CURRENT PLAYERS ===
     // --- FW (16名) ---
     { nat: "🇫🇷", name: "エンバペ", pos: "CF", altPos: ["LWG", "RWG"], category: "FW", rating: 92, price: 2600 },
     { nat: "🇳🇴", name: "ハーランド", pos: "CF", altPos: [], category: "FW", rating: 92, price: 2600 },
     { nat: "🇧🇷", name: "ヴィニシウス", pos: "LWG", altPos: ["LMF", "CF"], category: "FW", rating: 91, price: 2400 },
+    { nat: "🇬🇪", name: "クヴァラツヘリア", pos: "LWG", altPos: ["LMF", "CF"], category: "FW", rating: 91, price: 2400 },
     { nat: "🇪🇸", name: "ヤマル", pos: "RWG", altPos: ["AMF", "RMF"], category: "FW", rating: 91, price: 2500 },
-    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁢", name: "ケイン", pos: "CF", altPos: ["AMF"], category: "FW", rating: 91, price: 2200 },
-    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁢", name: "サカ", pos: "RWG", altPos: ["RMF", "LWG"], category: "FW", rating: 90, price: 2100 },
+    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "ケイン", pos: "CF", altPos: ["AMF"], category: "FW", rating: 91, price: 2200 },
+    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "サカ", pos: "RWG", altPos: ["RMF", "LWG", "LMF" ,"LB"], category: "FW", rating: 90, price: 2100 },
     { nat: "🇪🇬", name: "サラー", pos: "RWG", altPos: ["CF", "RMF"], category: "FW", rating: 89, price: 1900 },
     { nat: "🇳🇬", name: "オシムヘン", pos: "CF", altPos: [], category: "FW", rating: 88, price: 1800 },
     { nat: "🇦🇷", name: "アルバレス", pos: "CF", altPos: ["AMF"], category: "FW", rating: 87, price: 1700 },
     { nat: "🇸🇪", name: "イサク", pos: "CF", altPos: [], category: "FW", rating: 86, price: 1600 },
-    { nat: "🇰🇷", name: "孫興民", pos: "LWG", altPos: ["CF", "LMF"], category: "FW", rating: 86, price: 1400 },
+    { nat: "🇰🇷", name: "ソンフンミン", pos: "LWG", altPos: ["CF", "LMF"], category: "FW", rating: 86, price: 1400 },
     { nat: "🇯🇵", name: "三笘薫", pos: "LWG", altPos: ["LMF"], category: "FW", rating: 83, price: 1200 },
     { nat: "🇧🇷", name: "エンドリッキ", pos: "CF", altPos: ["RWG"], category: "FW", rating: 82, price: 1100 },
     { nat: "🇧🇷", name: "エステヴァン", pos: "RWG", altPos: ["AMF", "LWG"], category: "FW", rating: 81, price: 1000 },
     { nat: "🇦🇷", name: "メッシ", pos: "RWG", altPos: ["AMF", "CF"], category: "FW", rating: 86, price: 1100 },
-    { nat: "🇵🇹", name: "C.ロナウド", pos: "CF", altPos: [], category: "FW", rating: 85, price: 950 },
+    { nat: "🇵🇹", name: "C.ロナウド", pos: "CF", altPos: ["RWG", "LWG"], category: "FW", rating: 85, price: 950 },
 
     // --- MF (16名) ---
     { nat: "🇪🇸", name: "ロドリ", pos: "DMF", altPos: ["CMF"], category: "MF", rating: 91, price: 2400 },
-    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁢", name: "ベリンガム", pos: "AMF", altPos: ["CMF", "CF"], category: "MF", rating: 91, price: 2500 },
+    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "ベリンガム", pos: "AMF", altPos: ["CMF", "CF"], category: "MF", rating: 91, price: 2500 },
     { nat: "🇩🇪", name: "ムシアラ", pos: "AMF", altPos: ["LMF", "LWG", "CMF"], category: "MF", rating: 90, price: 2300 },
     { nat: "🇩🇪", name: "ヴィルツ", pos: "AMF", altPos: ["LMF", "RWG", "CMF"], category: "MF", rating: 90, price: 2300 },
     { nat: "🇧🇪", name: "デ・ブライネ", pos: "AMF", altPos: ["CMF"], category: "MF", rating: 89, price: 1900 },
-    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁢", name: "パーマー", pos: "AMF", altPos: ["RMF", "RWG"], category: "MF", rating: 89, price: 2100 },
-    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁢", name: "ライス", pos: "DMF", altPos: ["CMF", "CB"], category: "MF", rating: 89, price: 2000 },
+    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "パーマー", pos: "AMF", altPos: ["RMF", "RWG"], category: "MF", rating: 89, price: 2100 },
+    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "ライス", pos: "DMF", altPos: ["CMF", "CB"], category: "MF", rating: 89, price: 2000 },
     { nat: "🇪🇸", name: "ペドリ", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 88, price: 1800 },
-    { nat: "🇵🇹", name: "B.フェルナンデス", pos: "AMF", altPos: ["CMF"], category: "MF", rating: 87, price: 1600 },
-    { nat: "🇦🇷", name: "マック・アリスター", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 86, price: 1500 },
-    { nat: "トルコ", name: "ギュレル", pos: "AMF", altPos: ["RMF", "RWG"], category: "MF", rating: 85, price: 1300 },
+    { nat: "🇵🇹", name: "ブルーノ", pos: "AMF", altPos: ["CMF"], category: "MF", rating: 87, price: 1600 },
+    { nat: "🇦🇷", name: "マクアリスター", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 86, price: 1500 },
+    { nat: "🇹🇷", name: "ギュレル", pos: "AMF", altPos: ["RMF", "RWG"], category: "MF", rating: 85, price: 1300 },
     { nat: "🇯🇵", name: "久保建英", pos: "RMF", altPos: ["RWG", "AMF"], category: "MF", rating: 84, price: 1300 },
-    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁢", name: "メインゥ", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 83, price: 1200 },
+    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "メイヌー", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 83, price: 1200 },
     { nat: "🇭🇷", name: "モドリッチ", pos: "CMF", altPos: ["AMF", "DMF"], category: "MF", rating: 83, price: 700 },
     { nat: "🇯🇵", name: "遠藤航", pos: "DMF", altPos: ["CB"], category: "MF", rating: 80, price: 700 },
-    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁢", name: "ヌワネリ", pos: "AMF", altPos: ["RMF", "CMF"], category: "MF", rating: 80, price: 900 },
+    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "ヌワネリ", pos: "AMF", altPos: ["RMF", "CMF"], category: "MF", rating: 80, price: 900 },
 
-    // --- DF (14名) ---
+    // --- DF (15名) ---
     { nat: "🇳🇱", name: "ファン・ダイク", pos: "CB", altPos: [], category: "DF", rating: 90, price: 2100 },
-    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁢", name: "サリバ", pos: "CB", altPos: [], category: "DF", rating: 89, price: 2000 },
+    { nat: "🇺🇾", name: "アラウホ", pos: "CB", altPos: [], category: "DF", rating: 89, price: 2000 },
+    { nat: "🇫🇷", name: "サリバ", pos: "CB", altPos: [], category: "DF", rating: 89, price: 2000 },
     { nat: "🇵🇹", name: "ルベン・ディアス", pos: "CB", altPos: [], category: "DF", rating: 88, price: 1800 },
-    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁢", name: "トレント", pos: "RB", altPos: ["RWB", "CMF"], category: "DF", rating: 87, price: 1700 },
+    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "トレント", pos: "RB", altPos: ["RWB", "CMF"], category: "DF", rating: 87, price: 1700 },
     { nat: "🇲🇦", name: "ハキミ", pos: "RB", altPos: ["RWB", "RMF"], category: "DF", rating: 87, price: 1600 },
     { nat: "🇪🇸", name: "グリマルド", pos: "LB", altPos: ["LWB", "LMF"], category: "DF", rating: 86, price: 1500 },
     { nat: "🇭🇷", name: "グヴァルディオル", pos: "CB", altPos: ["LB"], category: "DF", rating: 86, price: 1600 },
@@ -349,12 +393,13 @@ const defaultTransferMarket = [
     { nat: "🇨🇦", name: "デイヴィス", pos: "LB", altPos: ["LWB", "LMF"], category: "DF", rating: 85, price: 1400 },
     { nat: "🇪🇸", name: "クバルシ", pos: "CB", altPos: [], category: "DF", rating: 85, price: 1500 },
     { nat: "🇪🇸", name: "カルバハル", pos: "RB", altPos: ["RWB"], category: "DF", rating: 84, price: 950 },
-    { nat: "🇳🇱", name: "ダンフリース", pos: "RB", altPos: ["RWB", "RMF"], category: "DF", rating: 83, price: 1100 },
+    { nat: "🇳🇱", name: "ドゥンフリース", pos: "RB", altPos: ["RWB", "RMF"], category: "DF", rating: 83, price: 1100 },
     { nat: "🇯🇵", name: "冨安健洋", pos: "CB", altPos: ["RB", "LB"], category: "DF", rating: 81, price: 900 },
     { nat: "🇳🇱", name: "ハト", pos: "LB", altPos: ["CB"], category: "DF", rating: 82, price: 1100 },
 
     // --- GK (10名) ---
     { nat: "🇧🇪", name: "クルトワ", pos: "GK", altPos: [], category: "GK", rating: 90, price: 2100 },
+    { nat: "🇩🇪", name: "ノイアー", pos: "GK", altPos: [], category: "GK", rating: 90, price: 2100 },
     { nat: "🇧🇷", name: "アリソン", pos: "GK", altPos: [], category: "GK", rating: 89, price: 1900 },
     { nat: "🇮🇹", name: "ドンナルンマ", pos: "GK", altPos: [], category: "GK", rating: 89, price: 1900 },
     { nat: "🇸🇮", name: "オブラク", pos: "GK", altPos: [], category: "GK", rating: 88, price: 1700 },
