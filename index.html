@@ -2,25 +2,20 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Web Master League Pro 2026/27</title>
 
-    <!-- Windowsで国旗絵文字を完全に補正表示するスクリプトとWebフォント -->
+    <!-- 国旗絵文字補正 -->
+    <script src="data.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1/dist/index.spec.js"></script>
     <style>
-     @font-face {
-         font-family: "Twemoji Country Flags";
-         src: url("https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1/dist/TwemojiCountryFlags.woff2") format("woff2");
-         unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0061-E007A, U+E007F;
-         font-display: swap;
-     }
+        @font-face {
+            font-family: "Twemoji Country Flags";
+            src: url("https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1/dist/TwemojiCountryFlags.woff2") format("woff2");
+            unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0061-E007A, U+E007F;
+            font-display: swap;
+        }
 
-     body, button, select, input {
-         font-family: "Twemoji Country Flags", -apple-system, BlinkMacSystemFont, "Segoe UI Emoji", "Apple Color Emoji", "Segoe UI", Roboto, sans-serif;
-     }
-    </style>
-
-    <style>
         :root, body[data-theme="dark"] {
             --bg-color: #0b0f19;
             --panel-bg: #151d2a;
@@ -29,10 +24,13 @@
             --accent-gold: #f59e0b;
             --accent-blue: #3b82f6;
             --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
             --card-bg: #0f172a;
+            --card-hover: #1e293b;
             --header-bg: linear-gradient(135deg, #1e293b, #0f172a);
+            --browser-outer-bg: #111827;
             --browser-bar-bg: #1e293b;
             --tab-active-bg: #151d2a;
             --tab-inactive-bg: #0f172a;
@@ -40,30 +38,120 @@
         }
 
         body[data-theme="light"] {
-            --bg-color: #f1f5f9;
+            --bg-color: #e2e8f0;
             --panel-bg: #ffffff;
             --panel-border: #cbd5e1;
             --accent-green: #059669;
             --accent-gold: #d97706;
             --accent-blue: #2563eb;
             --accent-red: #dc2626;
+            --accent-purple: #7c3aed;
             --text-main: #0f172a;
             --text-sub: #64748b;
             --card-bg: #f8fafc;
+            --card-hover: #f1f5f9;
             --header-bg: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-            --browser-bar-bg: #e2e8f0;
+            --browser-outer-bg: #cbd5e1;
+            --browser-bar-bg: #94a3b8;
             --tab-active-bg: #ffffff;
-            --tab-inactive-bg: #cbd5e1;
+            --tab-inactive-bg: #e2e8f0;
             --tab-border: #94a3b8;
         }
 
-        body {
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: "Twemoji Country Flags", -apple-system, BlinkMacSystemFont, "Segoe UI Emoji", "Apple Color Emoji", "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            margin: 0;
-            padding: 12px;
-            box-sizing: border-box;
-            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .app-browser-frame {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--panel-bg);
+            box-shadow: none;
+            border: none;
+        }
+
+        .app-browser-header {
+            display: flex;
+            align-items: center;
+            background-color: var(--browser-bar-bg);
+            padding: 8px 16px;
+            gap: 12px;
+            border-bottom: 1px solid var(--panel-border);
+            flex-wrap: wrap;
+        }
+
+        .browser-dots { 
+            display: flex; 
+            gap: 6px; 
+        }
+        .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .app-browser-tabs {
+            display: flex;
+            gap: 6px;
+            flex: 1;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .app-browser-tabs::-webkit-scrollbar { display: none; }
+
+        .app-page-tab {
+            background: var(--tab-inactive-bg);
+            border: 1px solid var(--tab-border);
+            border-bottom: none;
+            color: var(--text-sub);
+            padding: 8px 18px;
+            font-size: 0.88em;
+            font-weight: bold;
+            cursor: pointer;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .app-page-tab.active {
+            background: var(--tab-active-bg);
+            color: var(--text-main);
+            border-color: var(--panel-border);
+            border-bottom: 3px solid var(--accent-blue);
+        }
+
+        .app-address-bar {
+            background: var(--card-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 6px;
+            padding: 5px 14px;
+            font-size: 0.78em;
+            color: var(--text-sub);
+            min-width: 240px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .app-view-body {
+            flex: 1;
+            padding: 14px;
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
         }
 
         .header {
@@ -74,7 +162,7 @@
             border: 1px solid var(--panel-border);
             padding: 12px 18px;
             border-radius: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             flex-wrap: wrap;
             gap: 12px;
         }
@@ -84,10 +172,11 @@
             background-color: var(--card-bg);
             color: var(--text-main);
             border: 1px solid var(--panel-border);
-            padding: 5px 8px;
+            padding: 6px 10px;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
         }
         select:disabled, button:disabled { opacity: 0.5; cursor: not-allowed; }
 
@@ -95,64 +184,70 @@
             background-color: var(--card-bg);
             border: 1px solid var(--accent-blue);
             color: var(--text-main);
-            font-size: 0.8em;
-            padding: 4px 8px;
+            font-size: 0.82em;
+            padding: 5px 10px;
         }
 
         .btn-reset {
-            background-color: rgba(239, 68, 68, 0.2);
+            background-color: rgba(239, 68, 68, 0.15);
             color: var(--accent-red);
             border: 1px solid var(--accent-red);
-            font-size: 0.75em;
-            padding: 4px 8px;
+            font-size: 0.82em;
+            padding: 5px 10px;
         }
-        .btn-reset:hover {
-            background-color: var(--accent-red);
-            color: #fff;
+
+        .btn-auto-align {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            border: none;
+            padding: 5px 10px;
+            font-size: 0.78em;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+        }
+        .btn-auto-align:hover {
+            opacity: 0.9;
         }
 
         .main-layout {
             display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 12px;
-        }
-        @media (max-width: 900px) {
-            .main-layout { grid-template-columns: 1fr; }
+            grid-template-columns: 360px 1fr;
+            gap: 14px;
         }
 
         .panel {
             background-color: var(--panel-bg);
             border-radius: 10px;
-            padding: 12px;
+            padding: 14px;
             border: 1px solid var(--panel-border);
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
-        /* ピッチ */
         .pitch-container {
             position: relative;
             width: 100%;
-            height: 310px;
+            height: 330px;
             background: repeating-linear-gradient(0deg, #15803d, #15803d 25px, #166534 25px, #166534 50px);
             border: 2px solid rgba(255,255,255,0.25);
             border-radius: 8px;
             overflow: hidden;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            user-select: none;
         }
         .pitch-line-center { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.25); }
         .pitch-circle { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; border: 2px solid rgba(255,255,255,0.25); border-radius: 50%; transform: translate(-50%, -50%); }
 
-        /* 選手カード (ベース) */
         .player-card {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background: var(--card-bg);
-            border-radius: 5px;
-            padding: 2px 4px;
+            border-radius: 6px;
+            padding: 3px 5px;
             cursor: grab;
             user-select: none;
+            touch-action: manipulation;
             transition: transform 0.1s, border-color 0.1s, opacity 0.1s, box-shadow 0.2s;
             box-sizing: border-box;
         }
@@ -161,13 +256,11 @@
         .player-card.drag-over { border: 2px dashed var(--accent-gold) !important; background: rgba(245, 158, 11, 0.2); }
         .player-card.selected { border: 2px solid var(--accent-blue) !important; box-shadow: 0 0 10px var(--accent-blue) !important; }
 
-        /* 現役選手：青色で輝く枠 */
         .card-active-player {
             border: 1.5px solid #3b82f6 !important;
-            box-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
         }
 
-        /* レジェンド選手：金色で輝く枠 (光彩アニメーション) */
         .card-legend-player {
             border: 1.5px solid #f59e0b !important;
             box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
@@ -183,15 +276,14 @@
         .player-pin {
             position: absolute;
             transform: translate(-50%, -50%);
-            width: 54px;
-            height: 48px;
+            width: 58px;
+            height: 50px;
         }
 
-        /* 総合値バッジのカラー指定 */
         .rating-badge {
             font-size: 9px;
             font-weight: bold;
-            padding: 1px 3px;
+            padding: 1px 4px;
             border-radius: 3px;
             color: #fff;
         }
@@ -201,63 +293,63 @@
         .rating-red { background-color: #ef4444; }
 
         .stamina-bar-container {
-            width: 85%;
+            width: 88%;
             height: 3px;
             background-color: #334155;
             border-radius: 2px;
             margin-top: 2px;
             overflow: hidden;
         }
-        .stamina-bar-fill {
-            height: 100%;
-            transition: width 0.2s;
-        }
+        .stamina-bar-fill { height: 100%; transition: width 0.2s; }
 
         .player-name {
-            font-size: 9px;
+            font-size: 9.5px;
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 48px;
+            max-width: 52px;
             text-align: center;
+            pointer-events: none;
         }
 
         .bench-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 4px;
-            margin-top: 4px;
-            min-height: 48px;
+            gap: 6px;
+            margin-top: 6px;
+            min-height: 52px;
+            user-select: none;
         }
         .reserve-section {
-            margin-top: 8px;
+            margin-top: 10px;
             border-top: 1px dashed var(--panel-border);
-            padding-top: 6px;
+            padding-top: 8px;
         }
         .reserve-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
-            max-height: 80px;
+            gap: 6px;
+            max-height: 120px;
             overflow-y: auto;
-            min-height: 48px;
+            min-height: 50px;
+            user-select: none;
         }
 
         .match-card {
             background: var(--card-bg);
             border: 1px solid var(--panel-border);
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             text-align: center;
         }
         .venue-badge {
             display: inline-block;
-            font-size: 0.7em;
+            font-size: 0.72em;
             font-weight: bold;
-            padding: 1px 6px;
+            padding: 2px 8px;
             border-radius: 4px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
         .venue-home { background: var(--accent-green); color: #fff; }
         .venue-away { background: var(--accent-red); color: #fff; }
@@ -267,7 +359,7 @@
             height: 8px;
             border-radius: 4px;
             overflow: hidden;
-            margin: 5px 0;
+            margin: 6px 0;
             background: #334155;
         }
         .rate-win { background: var(--accent-green); }
@@ -278,288 +370,451 @@
             background: var(--card-bg);
             border: 1px solid var(--panel-border);
             border-radius: 8px;
-            padding: 8px;
-            margin-top: 8px;
+            padding: 10px;
+            margin-top: 10px;
         }
-        .scoreboard { font-size: 1.4em; font-weight: bold; text-align: center; }
+        .scoreboard { font-size: 1.5em; font-weight: bold; text-align: center; }
         .match-log {
-            height: 120px;
+            height: 150px;
             overflow-y: auto;
-            font-size: 0.8em;
+            font-size: 0.82em;
             color: var(--text-sub);
-            margin-top: 6px;
+            margin-top: 8px;
             border-top: 1px dashed var(--panel-border);
-            padding-top: 4px;
+            padding-top: 6px;
         }
-        .log-entry { margin-bottom: 3px; text-align: left; }
-        .log-goal { color: var(--accent-gold); font-weight: bold; }
-        .log-card-yellow { color: #facc15; font-weight: bold; }
-        .log-card-red { color: var(--accent-red); font-weight: bold; }
-        .log-summary { color: var(--accent-blue); font-weight: bold; margin-top: 4px; padding-top: 4px; border-top: 1px dashed var(--panel-border); }
+        .log-entry { margin-bottom: 4px; text-align: left; line-height: 1.4; }
+        .log-goal { color: #22c55e; font-weight: bold; }
+        .log-kickoff { color: #38bdf8; font-weight: bold; border-bottom: 1px dashed rgba(56,189,248,0.3); padding-bottom: 2px; }
+        .log-finish { color: #facc15; font-weight: bold; font-size: 1.02em; border-top: 1px dashed rgba(250,204,21,0.3); padding-top: 2px; }
+        .log-mom { color: #f59e0b; font-weight: bold; background: rgba(245, 158, 11, 0.12); padding: 3px 6px; border-radius: 4px; margin: 4px 0; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .log-pk { color: #c084fc; font-weight: bold; }
+        .log-pk-stop { color: #22d3ee; font-weight: bold; }
+        .log-card { color: #f87171; font-weight: bold; }
+        .log-other { color: #94a3b8; font-size: 0.85em; background: rgba(255,255,255,0.03); padding: 4px 6px; border-radius: 4px; border-left: 3px solid var(--accent-blue); margin-top: 6px; }
 
-        /* ブラウザ風 移籍市場UI */
-        .browser-window {
+        .transfer-market-page {
+            background: linear-gradient(180deg, var(--panel-bg) 0%, rgba(15,23,42,0.95) 100%);
+            border-radius: 12px;
+            padding: 18px;
             border: 1px solid var(--panel-border);
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: var(--panel-bg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
-        .browser-header {
+
+        .market-categories {
             display: flex;
-            align-items: center;
-            background-color: var(--browser-bar-bg);
-            padding: 6px 10px;
-            gap: 10px;
-            border-bottom: 1px solid var(--panel-border);
-        }
-        .browser-dots { display: flex; gap: 5px; }
-        .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
-        .dot.red { background: #ff5f56; }
-        .dot.yellow { background: #ffbd2e; }
-        .dot.green { background: #27c93f; }
-        .browser-address-bar {
-            flex: 1;
-            background: var(--card-bg);
-            border: 1px solid var(--panel-border);
-            border-radius: 4px;
-            padding: 2px 10px;
-            font-size: 0.72em;
-            color: var(--text-sub);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .browser-tabs {
-            display: flex;
-            background-color: var(--browser-bar-bg);
-            border-bottom: 1px solid var(--panel-border);
+            gap: 8px;
+            margin-bottom: 16px;
             overflow-x: auto;
-            padding: 4px 6px 0 6px;
-            gap: 3px;
-        }
-        .browser-tab {
-            background: var(--tab-inactive-bg);
-            border: 1px solid var(--tab-border);
-            border-bottom: none;
-            color: var(--text-sub);
-            padding: 5px 12px;
-            font-size: 0.75em;
-            font-weight: bold;
-            cursor: pointer;
-            border-top-left-radius: 6px;
-            border-top-right-radius: 6px;
-            transition: all 0.15s;
-            white-space: nowrap;
-        }
-        .browser-tab.active {
-            background: var(--tab-active-bg);
-            color: var(--text-main);
-            border-color: var(--panel-border);
-            border-bottom: 1px solid var(--tab-active-bg);
-            margin-bottom: -1px;
-        }
-        .browser-tab.legend-tab {
-            color: var(--accent-gold);
+            padding-bottom: 8px;
+            scrollbar-width: thin;
         }
 
-        .market-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-            gap: 6px;
-            max-height: 220px;
-            overflow-y: auto;
-            padding: 8px;
-        }
-        .market-card {
+        .market-tab-btn {
             background: var(--card-bg);
-            padding: 6px;
-            border-radius: 5px;
-            font-size: 0.78em;
+            border: 1px solid var(--panel-border);
+            color: var(--text-sub);
+            padding: 8px 16px;
+            font-size: 0.84em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        .market-tab-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--text-main);
+        }
+        .market-tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
+            color: #fff;
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        .market-tab-btn.legend-tab {
+            color: var(--accent-gold);
+            border-color: rgba(245, 158, 11, 0.4);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), var(--card-bg));
+        }
+        .market-tab-btn.legend-tab.active {
+            background: linear-gradient(135deg, var(--accent-gold), #d97706);
+            color: #000;
+            border-color: var(--accent-gold);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
         }
 
-        .tab-menu { display: flex; gap: 4px; margin-bottom: 6px; }
-        .tab-btn { background: var(--card-bg); border: 1px solid var(--panel-border); color: var(--text-sub); padding: 4px 8px; font-size: 0.78em; cursor: pointer; border-radius: 4px; }
+        .market-grid-large {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            max-height: 680px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .market-card-item {
+            background: linear-gradient(145deg, var(--card-bg), var(--panel-bg));
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        body[data-theme="light"] .market-card-item {
+            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+        }
+
+        .market-card-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), transparent);
+        }
+        .market-card-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+        }
+        .market-card-item.legend-border {
+            border: 1px solid rgba(245, 158, 11, 0.6);
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.08), var(--card-bg));
+        }
+        body[data-theme="light"] .market-card-item.legend-border {
+            background: linear-gradient(145deg, #fffbeb, #fef3c7);
+        }
+        .market-card-item.legend-border::before {
+            background: linear-gradient(90deg, var(--accent-gold), #ef4444);
+        }
+        .market-card-item.legend-border:hover {
+            box-shadow: 0 8px 22px rgba(245, 158, 11, 0.35);
+        }
+
+        .market-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .market-pos-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            font-size: 0.72em;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .market-detail-row {
+            font-size: 0.75em;
+            color: var(--text-sub);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
+        .legend-pill {
+            background: linear-gradient(135deg, var(--accent-gold), #d97706);
+            color: #000;
+            font-size: 0.68em;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .active-pill {
+            background: #3b82f6;
+            color: #fff;
+            font-size: 0.68em;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .btn-buy {
+            background: linear-gradient(135deg, var(--accent-green), #059669);
+            color: #fff;
+            border: none;
+            padding: 7px 14px;
+            font-size: 0.82em;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            transition: all 0.15s;
+        }
+        .btn-buy:hover { opacity: 0.9; transform: scale(1.02); }
+        .btn-buy:disabled {
+            background: var(--panel-border);
+            color: var(--text-sub);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .tab-menu { display: flex; gap: 6px; margin-bottom: 8px; }
+        .tab-btn { background: var(--card-bg); border: 1px solid var(--panel-border); color: var(--text-sub); padding: 5px 10px; font-size: 0.8em; cursor: pointer; border-radius: 5px; }
         .tab-btn.active { background: var(--accent-blue); color: #fff; }
 
-        table { width: 100%; border-collapse: collapse; font-size: 0.75em; }
-        th, td { padding: 4px 2px; text-align: center; border-bottom: 1px solid var(--panel-border); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8em; }
+        th, td { padding: 6px 4px; text-align: center; border-bottom: 1px solid var(--panel-border); }
         th { background: var(--card-bg); color: var(--text-sub); }
         tr.my-team-row { background: rgba(16, 185, 129, 0.15); font-weight: bold; }
+
+        @media (max-width: 900px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .app-browser-header { padding: 8px 10px; }
+            .app-address-bar { display: none; }
+            .app-view-body { padding: 8px; }
+            .header { padding: 10px; gap: 8px; }
+            .header > div { flex: 1 1 45%; }
+            .pitch-container { height: 300px; }
+            .player-pin { width: 52px; height: 46px; }
+            .player-name { font-size: 8.5px; max-width: 46px; }
+            .market-grid-large { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+            .market-card-item { padding: 10px; }
+            .bench-grid { gap: 4px; }
+        }
     </style>
 </head>
 <body>
 
-    <script src="data.js"></script>
-
-    <div class="header">
-        <div>
-            <span style="font-size:0.7em; color:var(--text-sub);">クラブ選択 (欧州強豪10)</span><br>
-            <select id="team-select" onchange="selectMyTeam()">
-                <option value="レアル・マドリード">レアル・マドリード</option>
-                <option value="マンチェスター・C">マンチェスター・C</option>
-                <option value="バルセロナ">バルセロナ</option>
-                <option value="アーセナル">アーセナル</option>
-                <option value="バイエルン">バイエルン</option>
-                <option value="ドルトムント">ドルトムント</option>
-                <option value="チェルシー">チェルシー</option>
-                <option value="パリサンジェルマン">パリサンジェルマン</option>
-                <option value="インテルナツィオナーレ・ミラノ">インテル</option>
-                <option value="ACミラン">ACミラン</option>
-            </select>
-        </div>
-        <div>
-            <span style="font-size:0.7em; color:var(--text-sub);">監督 (切り替え)</span><br>
-            <select id="manager-select" onchange="switchManager()" style="font-size:0.85em; max-width:140px;"></select>
-            <span style="font-size:0.75em; color:var(--accent-gold);" id="manager-rating"></span>
-        </div>
-        <div>
-            <span style="font-size:0.7em; color:var(--text-sub);">所属リーグ</span><br>
-            <strong style="font-size:1em; color:var(--accent-blue);">欧州スーパーリーグ 26/27</strong>
-        </div>
-        <div>
-            <span style="font-size:0.7em; color:var(--text-sub);">シーズン / 節 (全20節)</span><br>
-            <strong>S<span id="season">1</span> - 第<span id="week">1</span>節</strong>
-        </div>
-        <div>
-            <span style="font-size:0.7em; color:var(--text-sub);">資金 / 実効OVR</span><br>
-            <strong style="color:var(--accent-green);">$<span id="funds">2500</span>M</strong> / 
-            <strong style="color:var(--accent-gold);" id="team-rating">0</strong>
-        </div>
-        <div style="display:flex; gap:6px; align-items:center;">
-            <button class="btn-theme" id="theme-toggle-btn" onclick="toggleTheme()">☀️ ライト</button>
-            <button class="btn-reset" onclick="confirmResetAllData()">データ全削除</button>
-        </div>
-    </div>
-
-    <div id="offer-banner"></div>
-
-    <div class="main-layout">
-        
-        <div class="panel">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <h4 style="margin:0; display:flex; align-items:center; gap:6px;">
-                    スカッド編成
-                    <span style="font-size:0.75em; font-weight:normal; color:var(--accent-gold);">
-                        (チームOVR: <span id="squad-team-rating">0</span>)
-                    </span>
-                </h4>
-                <select id="formation-select" onchange="changeFormation()" style="font-size:0.75em;">
-                    <option value="4-2-3-1" selected>4-2-3-1</option>
-                    <option value="4-3-3">4-3-3</option>
-                    <option value="4-4-2">4-4-2</option>
-                    <option value="3-5-2">3-5-2</option>
-                    <option value="3-4-3">3-4-3</option>
-                    <option value="4-1-4-1">4-1-4-1</option>
-                    <option value="4-3-2-1">4-3-2-1</option>
-                    <option value="5-3-2">5-3-2</option>
-                </select>
+    <div class="app-browser-frame">
+        <div class="app-browser-header">
+            <div class="browser-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            
+            <div class="app-browser-tabs">
+                <button class="app-page-tab active" id="app-tab-1" onclick="switchAppPage(1)">
+                    ⚽ クラブ管理 & 試合
+                </button>
+                <button class="app-page-tab" id="app-tab-2" onclick="switchAppPage(2)">
+                    🔄 移籍市場
+                </button>
             </div>
 
-            <div class="pitch-container" id="pitch">
-                <div class="pitch-line-center"></div>
-                <div class="pitch-circle"></div>
+            <div class="app-address-bar" id="app-address-display">
+                🔒 https://master-league-2026.game/club-management
             </div>
+        </div>
 
-            <div>
-                <strong style="font-size:0.75em; color:var(--accent-gold);">ベンチ (サブ)</strong>
-                <div class="bench-grid" id="bench-container"></div>
-            </div>
+        <div class="app-view-body">
 
-            <div class="reserve-section">
-                <strong style="font-size:0.75em; color:var(--text-sub);">ベンチ外 (リザーブ)</strong>
-                <div class="reserve-list" id="reserve-container"></div>
-            </div>
-
-            <div id="player-action-panel" style="margin-top: 8px; display:none; background:var(--card-bg); padding:8px; border-radius:6px; border:1px solid var(--panel-border);">
-                <div id="selected-player-info" style="font-size:0.8em; font-weight:bold; margin-bottom:6px; text-align:center;"></div>
-                <div style="display:flex; gap:6px;">
-                    <button id="btn-train-player" style="flex:1; padding:6px; background:var(--accent-blue);" onclick="trainSelectedPlayer()">育成</button>
-                    <button id="btn-sell-player" style="flex:1; padding:6px; background:var(--accent-red);" onclick="sellSelectedPlayer()">放出</button>
+            <!-- 画面内確認モーダル（ブラウザダイアログ不使用） -->
+            <div id="custom-modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+                <div style="background:var(--panel-bg); border:1px solid var(--panel-border); border-radius:12px; padding:20px; max-width:440px; width:90%; color:var(--text-main); box-shadow:0 10px 25px rgba(0,0,0,0.5); text-align:center;">
+                    <h4 id="modal-title" style="margin-top:0; margin-bottom:12px; color:var(--accent-gold); font-size:1.1em;">確認</h4>
+                    <div id="modal-message" style="font-size:0.9em; margin-bottom:18px; line-height:1.5; white-space:pre-wrap; color:var(--text-main);"></div>
+                    <div style="display:flex; gap:10px; justify-content:center;" id="modal-actions">
+                        <button id="modal-btn-confirm" style="background:var(--accent-green); color:#fff; border:none; padding:8px 18px; border-radius:6px; font-weight:bold;">受諾 / 実行</button>
+                        <button id="modal-btn-cancel" style="background:var(--card-bg); color:var(--text-sub); border:1px solid var(--panel-border); padding:8px 18px; border-radius:6px; font-weight:bold;">キャンセル / 拒否</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div>
-            <div class="panel">
-                <h4 style="margin:0 0 6px 0;">マッチセンター</h4>
-                <div class="match-card">
-                    <div id="venue-indicator" class="venue-badge venue-home">HOME</div>
-                    <div style="font-size:1em; font-weight:bold;">
-                        <span id="my-team-disp">---</span> vs <span id="enemy-name">---</span>
+            <div id="page-content-1">
+                <div class="header">
+                    <div>
+                        <span style="font-size:0.7em; color:var(--text-sub);">クラブ選択 (欧州強豪10)</span><br>
+                        <select id="team-select" onchange="selectMyTeam()">
+                            <option value="レアル・マドリード">レアル・マドリード</option>
+                            <option value="マンチェスター・C">マンチェスター・C</option>
+                            <option value="バルセロナ">バルセロナ</option>
+                            <option value="アーセナル">アーセナル</option>
+                            <option value="バイエルン">バイエルン</option>
+                            <option value="ドルトムント">ドルトムント</option>
+                            <option value="チェルシー">チェルシー</option>
+                            <option value="パリサンジェルマン">パリサンジェルマン</option>
+                            <option value="インテルナツィオナーレ・ミラノ">インテル</option>
+                            <option value="ACミラン">ACミラン</option>
+                        </select>
                     </div>
-                    <div style="font-size:0.75em; color:var(--text-sub);">敵OVR: <span id="enemy-rating">0</span></div>
+                    <div>
+                        <span style="font-size:0.7em; color:var(--text-sub);">監督 (切り替え)</span><br>
+                        <select id="manager-select" onchange="switchManager()" style="font-size:0.85em; max-width:140px;"></select>
+                        <span style="font-size:0.75em; color:var(--accent-gold);" id="manager-rating"></span>
+                    </div>
+                    <div>
+                        <span style="font-size:0.7em; color:var(--text-sub);">所属リーグ</span><br>
+                        <strong style="font-size:0.95em; color:var(--accent-blue);">欧州スーパーリーグ 26/27</strong>
+                    </div>
+                    <div>
+                        <span style="font-size:0.7em; color:var(--text-sub);">シーズン / 節 (全20節)</span><br>
+                        <strong>S<span id="season">1</span> - 第<span id="week">1</span>節</strong>
+                    </div>
+                    <div>
+                        <span style="font-size:0.7em; color:var(--text-sub);">資金 / 実効OVR</span><br>
+                        <strong style="color:var(--accent-green);" id="funds">3,500億円</strong> / 
+                        <strong style="color:var(--accent-gold);" id="team-rating">0</strong>
+                    </div>
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        <button class="btn-theme" id="theme-toggle-btn" onclick="toggleTheme()">☀️ ライト</button>
+                        <button class="btn-reset" onclick="confirmResetAllData()">全削除</button>
+                    </div>
+                </div>
 
-                    <div style="margin-top:4px;">
-                        <div style="font-size:0.7em; display:flex; justify-content:space-between; color:var(--text-sub);">
-                            <span>勝 <span id="rate-win-txt">0</span>%</span>
-                            <span>分 <span id="rate-draw-txt">0</span>%</span>
-                            <span>負 <span id="rate-loss-txt">0</span>%</span>
+                <div class="main-layout">
+                    
+                    <div>
+                        <div class="panel">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:4px;">
+                                <h4 style="margin:0; display:flex; align-items:center; gap:6px; font-size:0.95em;">
+                                    スカッド編成
+                                    <span style="font-size:0.8em; font-weight:normal; color:var(--accent-gold);">
+                                        (OVR: <span id="squad-team-rating">0</span>)
+                                    </span>
+                                </h4>
+                                <div style="display:flex; gap:6px; align-items:center;">
+                                    <button class="btn-auto-align" onclick="autoOptimizeSquad()" title="コンディションと能力の高い選手を自動で最適配置">⚡ 自動配置</button>
+                                    <select id="formation-select" onchange="changeFormation()" style="font-size:0.78em;">
+                                        <option value="4-2-3-1" selected>4-2-3-1</option>
+                                        <option value="4-3-3">4-3-3</option>
+                                        <option value="4-4-2">4-4-2</option>
+                                        <option value="3-5-2">3-5-2</option>
+                                        <option value="3-4-3">3-4-3</option>
+                                        <option value="4-1-4-1">4-1-4-1</option>
+                                        <option value="4-3-2-1">4-3-2-1</option>
+                                        <option value="5-3-2">5-3-2</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="pitch-container" id="pitch">
+                                <div class="pitch-line-center"></div>
+                                <div class="pitch-circle"></div>
+                            </div>
+
+                            <div>
+                                <strong style="font-size:0.78em; color:var(--accent-gold);">ベンチ (サブ 5名)</strong>
+                                <div class="bench-grid" id="bench-container"></div>
+                            </div>
+
+                            <div class="reserve-section">
+                                <strong style="font-size:0.78em; color:var(--text-sub);">ベンチ外 (リザーブ)</strong>
+                                <div class="reserve-list" id="reserve-container"></div>
+                            </div>
+
+                            <div id="player-action-panel" style="margin-top: 10px; display:none; background:var(--card-bg); padding:10px; border-radius:8px; border:1px solid var(--panel-border);">
+                                <div id="selected-player-info" style="font-size:0.82em; margin-bottom:8px;"></div>
+                                <div style="display:flex; gap:8px;">
+                                    <button id="btn-train-player" style="flex:1; padding:6px; background:var(--accent-blue); color:#fff; border:none;" onclick="trainSelectedPlayer()">育成 (100億円)</button>
+                                    <button id="btn-sell-player" style="flex:1; padding:6px; background:var(--accent-red); color:#fff; border:none;" onclick="sellSelectedPlayer()">放出</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="win-rate-bar">
-                            <div class="rate-win" id="bar-win" style="width:33%"></div>
-                            <div class="rate-draw" id="bar-draw" style="width:33%"></div>
-                            <div class="rate-loss" id="bar-loss" style="width:34%"></div>
+
+                        <!-- 保留中のオファー一覧表示パネル -->
+                        <div class="panel" id="offers-panel">
+                            <h4 style="margin:0 0 8px 0; font-size:0.95em; display:flex; justify-content:space-between; align-items:center;">
+                                <span>📩 保留中のオファー</span>
+                                <span style="font-size:0.8em; color:var(--accent-gold);" id="offer-count-badge">0件</span>
+                            </h4>
+                            <div id="offers-list" style="max-height:180px; overflow-y:auto; font-size:0.82em; display:flex; flex-direction:column; gap:6px;">
+                                <div style="color:var(--text-sub); text-align:center; padding:10px;">現在届いているオファーはありません</div>
+                            </div>
                         </div>
                     </div>
 
-                    <button id="btn-start-match" style="width:100%; margin-top:4px; padding:6px; background:var(--accent-green);" onclick="startMatchSimulation()">試合開始 (キックオフ)</button>
-                </div>
+                    <div>
+                        <div class="panel">
+                            <h4 style="margin:0 0 8px 0; font-size:0.95em;">マッチセンター</h4>
+                            <div class="match-card">
+                                <div id="venue-indicator" class="venue-badge venue-home">HOME</div>
+                                <div style="font-size:1.05em; font-weight:bold;">
+                                    <span id="my-team-disp">---</span> vs <span id="enemy-name">---</span>
+                                </div>
+                                <div style="font-size:0.78em; color:var(--text-sub);">敵OVR: <span id="enemy-rating">0</span></div>
 
-                <div class="match-live-screen">
-                    <div style="font-size:0.75em; color:var(--accent-gold); text-align:center;" id="match-timer">00:00</div>
-                    <div class="scoreboard">
-                        <span id="score-my">0</span> - <span id="score-enemy">0</span>
-                    </div>
-                    <div class="match-log" id="match-log">
-                        <div class="log-entry">キックオフを待っています...</div>
-                    </div>
-                </div>
-            </div>
+                                <div style="margin-top:6px;">
+                                    <div style="font-size:0.72em; display:flex; justify-content:space-between; color:var(--text-sub);">
+                                        <span>勝 <span id="rate-win-txt">0</span>%</span>
+                                        <span>分 <span id="rate-draw-txt">0</span>%</span>
+                                        <span>負 <span id="rate-loss-txt">0</span>%</span>
+                                    </div>
+                                    <div class="win-rate-bar">
+                                        <div class="rate-win" id="bar-win" style="width:33%"></div>
+                                        <div class="rate-draw" id="bar-draw" style="width:33%"></div>
+                                        <div class="rate-loss" id="bar-loss" style="width:34%"></div>
+                                    </div>
+                                </div>
 
-            <!-- ブラウザ風 移籍市場 -->
-            <div class="panel" style="padding:0; overflow:hidden;">
-                <div class="browser-window">
-                    <div class="browser-header">
-                        <div class="browser-dots">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
+                                <button id="btn-start-match" style="width:100%; margin-top:6px; padding:8px; background:var(--accent-green); color:#fff; border:none;" onclick="startMatchSimulation()">試合開始 (キックオフ)</button>
+                            </div>
+
+                            <div class="match-live-screen">
+                                <div style="font-size:0.78em; color:var(--accent-gold); text-align:center;" id="match-timer">00:00</div>
+                                <div class="scoreboard">
+                                    <span id="score-my">0</span> - <span id="score-enemy">0</span>
+                                </div>
+                                <div class="match-log" id="match-log">
+                                    <div class="log-entry">キックオフを待っています...</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="browser-address-bar">
-                            🔒 https://transfer-market.football-master.league/2026
+
+                        <div class="panel">
+                            <div class="tab-menu">
+                                <button class="tab-btn active" id="tab-standings" onclick="switchViewTab('standings')">順位表</button>
+                                <button class="tab-btn" id="tab-goals" onclick="switchViewTab('goals')">得点王</button>
+                                <button class="tab-btn" id="tab-assists" onclick="switchViewTab('assists')">アシスト王</button>
+                                <button class="tab-btn" id="tab-cards" onclick="switchViewTab('cards')">警告/退場</button>
+                            </div>
+                            <div id="view-container"></div>
                         </div>
-                        <button onclick="toggleMarketPanel()" style="font-size:0.7em; padding:2px 6px;">開閉 <span id="market-toggle-icon">▼</span></button>
                     </div>
 
-                    <div class="browser-tabs" id="market-tabs">
-                        <button class="browser-tab active" id="mtab-ALL" onclick="setMarketCategory('ALL')">すべて</button>
-                        <button class="browser-tab" id="mtab-FW" onclick="setMarketCategory('FW')">FW</button>
-                        <button class="browser-tab" id="mtab-MF" onclick="setMarketCategory('MF')">MF</button>
-                        <button class="browser-tab" id="mtab-DF" onclick="setMarketCategory('DF')">DF</button>
-                        <button class="browser-tab" id="mtab-GK" onclick="setMarketCategory('GK')">GK</button>
-                        <button class="browser-tab legend-tab" id="mtab-LEGEND" onclick="setMarketCategory('LEGEND')">👑 レジェンド</button>
-                        <button class="browser-tab" id="mtab-MANAGER" onclick="setMarketCategory('MANAGER')">👔 監督</button>
-                    </div>
-
-                    <div class="market-grid" id="market-grid"></div>
                 </div>
             </div>
 
-            <div class="panel">
-                <div class="tab-menu">
-                    <button class="tab-btn active" id="tab-standings" onclick="switchViewTab('standings')">順位表</button>
-                    <button class="tab-btn" id="tab-goals" onclick="switchViewTab('goals')">得点王</button>
-                    <button class="tab-btn" id="tab-assists" onclick="switchViewTab('assists')">アシスト王</button>
-                    <button class="tab-btn" id="tab-cards" onclick="switchViewTab('cards')">警告/退場</button>
+            <div id="page-content-2" style="display:none;">
+                <div class="transfer-market-page">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                        <h3 style="margin:0; display:flex; align-items:center; gap:8px; font-size:1.1em; color:var(--text-main);">
+                            🔄 移籍市場 (Transfer Market)
+                        </h3>
+                        <div style="font-size:0.9em; color:var(--text-sub);">
+                            所持金: <strong style="color:var(--accent-green); font-size:1.15em;" id="market-page-funds">3,500億円</strong>
+                        </div>
+                    </div>
+
+                    <div class="market-categories" id="market-tabs">
+                        <button class="market-tab-btn active" id="mtab-ALL" onclick="setMarketCategory('ALL')">すべて</button>
+                        <button class="market-tab-btn" id="mtab-ACTIVE_ALL" onclick="setMarketCategory('ACTIVE_ALL')">現役選手</button>
+                        <button class="market-tab-btn" id="mtab-FW" onclick="setMarketCategory('FW')">FW</button>
+                        <button class="market-tab-btn" id="mtab-MF" onclick="setMarketCategory('MF')">MF</button>
+                        <button class="market-tab-btn" id="mtab-DF" onclick="setMarketCategory('DF')">DF</button>
+                        <button class="market-tab-btn" id="mtab-GK" onclick="setMarketCategory('GK')">GK</button>
+                        <button class="market-tab-btn legend-tab" id="mtab-LEGEND_ALL" onclick="setMarketCategory('LEGEND_ALL')">レジェンド選手</button>
+                        <button class="market-tab-btn legend-tab" id="mtab-LEGEND_FW" onclick="setMarketCategory('LEGEND_FW')">👑FW</button>
+                        <button class="market-tab-btn legend-tab" id="mtab-LEGEND_MF" onclick="setMarketCategory('LEGEND_MF')">👑MF</button>
+                        <button class="market-tab-btn legend-tab" id="mtab-LEGEND_DF" onclick="setMarketCategory('LEGEND_DF')">👑DF</button>
+                        <button class="market-tab-btn legend-tab" id="mtab-LEGEND_GK" onclick="setMarketCategory('LEGEND_GK')">👑GK</button>
+                        <button class="market-tab-btn" id="mtab-MANAGER" onclick="setMarketCategory('MANAGER')">👔 監督市場</button>
+                    </div>
+
+                    <div class="market-grid-large" id="market-grid"></div>
                 </div>
-                <div id="view-container"></div>
             </div>
+
         </div>
-
     </div>
 
     <script>
-        const STORAGE_KEY = "ML_PRO_SAVE_DATA_2026_V6";
+        const STORAGE_KEY = "ML_PRO_SAVE_DATA_2026_V10";
         const THEME_KEY = "ML_PRO_THEME_PREF";
 
         let transferMarket = JSON.parse(JSON.stringify(defaultTransferMarket));
@@ -569,26 +824,87 @@
         let gameState = {
             teamName: "レアル・マドリード",
             currentFormation: "4-2-3-1",
-            season: 1, week: 1, funds: 2500,
+            season: 1, week: 1, funds: 3500,
             activeTab: 'standings', isMatchRunning: false,
+            activePage: 1,
             manager: null,
             myManagers: [],
             managerMarket: [],
-            saleOffer: false, saleOfferWeeks: 0,
-            buyOffer: false, buyOfferWeeks: 0,
-            merchOffer: false,
-            isMarketOpen: true,
-            marketCategory: 'ALL'
+            marketCategory: 'ALL',
+            teamSelectLocked: false,
+            pendingOffers: []
         };
 
         let draggedSource = null, selectedPlayer = null;
 
-        /* テーマ切り替え機能 */
+        window.onload = function() {
+            initApp();
+        };
+
+        function initApp() {
+            initTheme();
+            if (!loadGameState()) {
+                selectMyTeam();
+            } else {
+                initAllPlayerStats();
+                updateUI();
+            }
+        }
+
+        /* 画面内カスタムモーダルダイアログ表示機能 */
+        function showCustomModal(title, message, onConfirm, onCancel) {
+            const overlay = document.getElementById('custom-modal-overlay');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            
+            const confirmBtn = document.getElementById('modal-btn-confirm');
+            const cancelBtn = document.getElementById('modal-btn-cancel');
+
+            if (onCancel === null) {
+                cancelBtn.style.display = 'none';
+                confirmBtn.innerText = 'OK';
+            } else {
+                cancelBtn.style.display = 'inline-block';
+                confirmBtn.innerText = '受諾 / 実行';
+            }
+
+            confirmBtn.onclick = () => {
+                overlay.style.display = 'none';
+                if (onConfirm) onConfirm();
+            };
+            cancelBtn.onclick = () => {
+                overlay.style.display = 'none';
+                if (onCancel) onCancel();
+            };
+
+            overlay.style.display = 'flex';
+        }
+
+        function formatCurrency(amount) {
+            if (amount === undefined || amount === null) return "0億円";
+            return `${amount.toLocaleString()}億円`;
+        }
+
+        function switchAppPage(pageNum) {
+            gameState.activePage = pageNum;
+            document.getElementById('app-tab-1').classList.toggle('active', pageNum === 1);
+            document.getElementById('app-tab-2').classList.toggle('active', pageNum === 2);
+            document.getElementById('page-content-1').style.display = (pageNum === 1) ? 'block' : 'none';
+            document.getElementById('page-content-2').style.display = (pageNum === 2) ? 'block' : 'none';
+
+            const addressBar = document.getElementById('app-address-display');
+            if (pageNum === 1) {
+                addressBar.innerText = '🔒 https://master-league-2026.game/club-management';
+            } else {
+                addressBar.innerText = '🔒 https://master-league-2026.game/transfer-market';
+                renderMarket();
+            }
+            saveGameState();
+        }
+
         function initTheme() {
             let theme = localStorage.getItem(THEME_KEY);
-            if (!theme) {
-                theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-            }
+            if (!theme) theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
             applyTheme(theme);
         }
 
@@ -596,9 +912,7 @@
             document.body.setAttribute('data-theme', theme);
             localStorage.setItem(THEME_KEY, theme);
             const btn = document.getElementById('theme-toggle-btn');
-            if (btn) {
-                btn.innerText = theme === 'dark' ? '☀️ ライト' : '🌙 ダーク';
-            }
+            if (btn) btn.innerText = theme === 'dark' ? '☀️ ライト' : '🌙 ダーク';
         }
 
         function toggleTheme() {
@@ -625,9 +939,13 @@
         }
 
         function ensurePlayerDefaults(p) {
+            if (!p) return p;
             if (p.stamina === undefined) p.stamina = 100;
             if (p.injuryWeeks === undefined) p.injuryWeeks = 0;
             if (p.suspendedWeeks === undefined) p.suspendedWeeks = 0;
+            if (!p.altPos) p.altPos = [];
+            if (p.name) p.name = p.name.replace(/^👑\s*/, '');
+            if (!p.nat && playerNatMap[p.name]) p.nat = playerNatMap[p.name];
             return p;
         }
 
@@ -636,16 +954,11 @@
         }
 
         function getStatusBadgeHtml(p) {
-            if (p.injuryWeeks > 0) {
-                return `<div style="font-size:7px; color:var(--accent-red); font-weight:bold;">🚑ケガ(${p.injuryWeeks}節)</div>`;
-            }
-            if (p.suspendedWeeks > 0) {
-                return `<div style="font-size:7px; color:var(--accent-red); font-weight:bold;">🟥停止(${p.suspendedWeeks}節)</div>`;
-            }
+            if (p.injuryWeeks > 0) return `<div style="font-size:7px; color:var(--accent-red); font-weight:bold;">🚑ケガ(${p.injuryWeeks}節)</div>`;
+            if (p.suspendedWeeks > 0) return `<div style="font-size:7px; color:var(--accent-red); font-weight:bold;">🟥停止(${p.suspendedWeeks}節)</div>`;
             return '';
         }
 
-        /* 出場不可(ケガ・レッドカード)発生時の自チーム人数安全保持ロジック */
         function autoFixSquadForUnavailable() {
             let all = [...myStarters, ...myBench, ...myReserves];
             all.forEach(ensurePlayerDefaults);
@@ -654,14 +967,8 @@
             let youthIndex = 1;
             while (availableCount < 16) {
                 const youthPlayer = {
-                    name: `ユース選手${youthIndex++}`,
-                    pos: "CMF",
-                    altPos: ["DMF", "AMF"],
-                    category: "MF",
-                    rating: 70,
-                    stamina: 100,
-                    injuryWeeks: 0,
-                    suspendedWeeks: 0
+                    nat: "🇯🇵", name: `ユース${youthIndex++}`, pos: "CMF", altPos: ["DMF"], category: "MF",
+                    rating: 70, stamina: 100, injuryWeeks: 0, suspendedWeeks: 0
                 };
                 myReserves.push(youthPlayer);
                 all.push(youthPlayer);
@@ -675,26 +982,48 @@
                         let temp = myStarters[i];
                         myStarters[i] = myBench[benchIdx];
                         myBench[benchIdx] = temp;
+                    }
+                }
+            }
+        }
+
+        /* スタメン放出時の自動補充機能 */
+        function autoFillStarterAndBench() {
+            myStarters = myStarters.filter(p => p != null);
+            myBench = myBench.filter(p => p != null);
+            myReserves = myReserves.filter(p => p != null);
+
+            const slots = formations[gameState.currentFormation];
+
+            while (myStarters.length < 11) {
+                let missingIndex = myStarters.length;
+                let slot = slots[missingIndex] || { pos: "CMF", category: "MF" };
+
+                let candidateBenchIdx = myBench.findIndex(p => p.pos === slot.pos);
+                if (candidateBenchIdx === -1) candidateBenchIdx = myBench.findIndex(p => p.altPos && p.altPos.includes(slot.pos));
+                if (candidateBenchIdx === -1) candidateBenchIdx = myBench.findIndex(p => p.category === slot.category);
+                if (candidateBenchIdx === -1 && myBench.length > 0) candidateBenchIdx = 0;
+
+                if (candidateBenchIdx !== -1) {
+                    let promoted = myBench.splice(candidateBenchIdx, 1)[0];
+                    myStarters.push(promoted);
+                } else {
+                    let candidateResIdx = myReserves.findIndex(p => p.pos === slot.pos);
+                    if (candidateResIdx === -1) candidateResIdx = myReserves.findIndex(p => p.altPos && p.altPos.includes(slot.pos));
+                    if (candidateResIdx === -1) candidateResIdx = myReserves.findIndex(p => p.category === slot.category);
+                    if (candidateResIdx === -1 && myReserves.length > 0) candidateResIdx = 0;
+
+                    if (candidateResIdx !== -1) {
+                        let promoted = myReserves.splice(candidateResIdx, 1)[0];
+                        myStarters.push(promoted);
                     } else {
-                        let resIdx = myReserves.findIndex(p => !isPlayerUnavailable(p));
-                        if (resIdx !== -1) {
-                            let temp = myStarters[i];
-                            myStarters[i] = myReserves[resIdx];
-                            myReserves[resIdx] = temp;
-                        }
+                        break;
                     }
                 }
             }
 
-            for (let i = 0; i < myBench.length; i++) {
-                if (isPlayerUnavailable(myBench[i])) {
-                    let resIdx = myReserves.findIndex(p => !isPlayerUnavailable(p));
-                    if (resIdx !== -1) {
-                        let temp = myBench[i];
-                        myBench[i] = myReserves[resIdx];
-                        myReserves[resIdx] = temp;
-                    }
-                }
+            while (myBench.length < 5 && myReserves.length > 0) {
+                myBench.push(myReserves.shift());
             }
         }
 
@@ -711,16 +1040,13 @@
                 const data = JSON.parse(saved);
                 gameState = data.gameState;
                 gameState.isMatchRunning = false;
-                if (gameState.isMarketOpen === undefined) gameState.isMarketOpen = true;
                 if (!gameState.marketCategory) gameState.marketCategory = 'ALL';
-                if (gameState.merchOffer === undefined) gameState.merchOffer = false;
+                if (!gameState.pendingOffers) gameState.pendingOffers = [];
 
                 if (!gameState.myManagers || gameState.myManagers.length === 0) {
-                    gameState.myManagers = gameState.manager ? [gameState.manager] : [initialManagers[gameState.teamName]];
+                    gameState.myManagers = [initialManagers[gameState.teamName]];
                 }
-                if (!gameState.manager) {
-                    gameState.manager = gameState.myManagers[0];
-                }
+                if (!gameState.manager) gameState.manager = gameState.myManagers[0];
                 if (!gameState.managerMarket || gameState.managerMarket.length === 0) {
                     gameState.managerMarket = JSON.parse(JSON.stringify(freeManagers));
                 }
@@ -729,48 +1055,36 @@
                 myBench = (data.myBench || []).map(ensurePlayerDefaults);
                 myReserves = (data.myReserves || []).map(ensurePlayerDefaults);
                 transferMarket = (data.transferMarket || []).map(ensurePlayerDefaults);
-                playerStats = data.playerStats;
-                standings = data.standings;
+                playerStats = data.playerStats || {};
+                standings = data.standings || [];
 
                 document.getElementById('team-select').value = gameState.teamName;
                 document.getElementById('formation-select').value = gameState.currentFormation;
+
+                switchAppPage(gameState.activePage || 1);
                 return true;
             } catch (e) { return false; }
         }
 
         function confirmResetAllData() {
-            if (confirm("すべてのデータを初期化しますか？") && confirm("本当に削除しますか？")) {
-                localStorage.removeItem(STORAGE_KEY);
-                location.reload();
-            }
-        }
-
-        function toggleMarketPanel() {
-            gameState.isMarketOpen = !gameState.isMarketOpen;
-            const grid = document.getElementById('market-grid');
-            const icon = document.getElementById('market-toggle-icon');
-            if (gameState.isMarketOpen) {
-                grid.style.display = 'grid';
-                icon.innerText = '▼';
-            } else {
-                grid.style.display = 'none';
-                icon.innerText = '▲';
-            }
-            saveGameState();
+            showCustomModal(
+                "全データ初期化の確認",
+                "すべてのセーブデータを削除して初期化しますか？",
+                () => {
+                    localStorage.removeItem(STORAGE_KEY);
+                    location.reload();
+                },
+                () => {}
+            );
         }
 
         function setMarketCategory(category) {
             gameState.marketCategory = category;
-            document.querySelectorAll('.browser-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.market-tab-btn').forEach(t => t.classList.remove('active'));
             const activeTab = document.getElementById(`mtab-${category}`);
             if (activeTab) activeTab.classList.add('active');
             renderMarket();
             saveGameState();
-        }
-
-        function getStat(name, team) {
-            if (!playerStats[name]) playerStats[name] = { name, team, goals: 0, assists: 0, yellow: 0, red: 0 };
-            return playerStats[name];
         }
 
         function getEffectivePlayer(player, slotInfo) {
@@ -790,12 +1104,27 @@
             }
 
             const staminaLoss = Math.floor((100 - player.stamina) * 0.12);
-
             return {
                 ...player,
                 effectiveRating: Math.max(40, player.rating + penalty - staminaLoss),
                 penalty
             };
+        }
+
+        function alignStartersToFormation(starters, formKey) {
+            const slots = formations[formKey];
+            let pool = JSON.parse(JSON.stringify(starters)).map(ensurePlayerDefaults);
+            let aligned = [];
+
+            slots.forEach(slot => {
+                let idx = pool.findIndex(p => p.pos === slot.pos);
+                if (idx === -1) idx = pool.findIndex(p => p.altPos && p.altPos.includes(slot.pos));
+                if (idx === -1) idx = pool.findIndex(p => p.category === slot.category);
+                if (idx === -1) idx = 0;
+                aligned.push(pool.splice(idx, 1)[0]);
+            });
+
+            return aligned;
         }
 
         function autoAlignToFormation(players, formKey) {
@@ -808,22 +1137,78 @@
                 if (idx === -1) idx = pool.findIndex(p => p.altPos && p.altPos.includes(slot.pos));
                 if (idx === -1) idx = pool.findIndex(p => p.category === slot.category);
                 if (idx === -1) idx = 0;
-
                 starters.push(pool.splice(idx, 1)[0]);
             });
 
             return { starters, bench: pool.splice(0, 5), reserves: pool };
         }
 
-        function selectMyTeam() {
-            if (gameState.week > 1 || gameState.season > 1) return;
-            gameState.teamName = document.getElementById('team-select').value;
-            const presetAll = clubPresetData[gameState.teamName];
-            const aligned = autoAlignToFormation(presetAll, gameState.currentFormation);
+        function autoOptimizeSquad() {
+            if (gameState.isMatchRunning) return;
 
-            myStarters = aligned.starters;
-            myBench = aligned.bench;
-            myReserves = aligned.reserves;
+            let allPlayers = [...myStarters, ...myBench, ...myReserves];
+            allPlayers.forEach(ensurePlayerDefaults);
+
+            let available = allPlayers.filter(p => !isPlayerUnavailable(p));
+            let unavailable = allPlayers.filter(p => isPlayerUnavailable(p));
+
+            const slots = formations[gameState.currentFormation];
+            let newStarters = [];
+
+            slots.forEach(slot => {
+                if (available.length === 0) return;
+
+                let bestIdx = 0;
+                let bestScore = -999;
+
+                available.forEach((p, idx) => {
+                    let posBonus = 0;
+                    if (p.pos === slot.pos) posBonus = 15;
+                    else if (p.altPos && p.altPos.includes(slot.pos)) posBonus = 8;
+                    else if (p.category === slot.category) posBonus = 0;
+                    else posBonus = -25;
+
+                    let score = p.rating + posBonus + (p.stamina * 0.25);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestIdx = idx;
+                    }
+                });
+
+                newStarters.push(available.splice(bestIdx, 1)[0]);
+            });
+
+            available.sort((a, b) => (b.rating + b.stamina * 0.2) - (a.rating + a.stamina * 0.2));
+            let newBench = available.splice(0, 5);
+            let newReserves = [...available, ...unavailable];
+
+            myStarters = newStarters;
+            myBench = newBench;
+            myReserves = newReserves;
+
+            updateUI();
+            showCustomModal("自動配置完了", "⚡ コンディションと能力が高い選手を自動配置しました！", null, null);
+        }
+
+        function selectMyTeam() {
+            if (gameState.teamSelectLocked || gameState.week > 1 || gameState.season > 1) return;
+            gameState.teamName = document.getElementById('team-select').value;
+            const presetAll = JSON.parse(JSON.stringify(clubPresetData[gameState.teamName])).map(ensurePlayerDefaults);
+
+            const starters = presetAll.filter(p => p.squadRole === 'starter');
+            const bench = presetAll.filter(p => p.squadRole === 'bench');
+            const reserves = presetAll.filter(p => p.squadRole === 'out' || (!p.squadRole && !starters.includes(p) && !bench.includes(p)));
+
+            if (starters.length === 11 && bench.length > 0) {
+                myStarters = alignStartersToFormation(starters, gameState.currentFormation);
+                myBench = bench;
+                myReserves = reserves;
+            } else {
+                const aligned = autoAlignToFormation(presetAll, gameState.currentFormation);
+                myStarters = aligned.starters;
+                myBench = aligned.bench;
+                myReserves = aligned.reserves;
+            }
 
             const initM = initialManagers[gameState.teamName];
             gameState.myManagers = [initM];
@@ -831,17 +1216,83 @@
             gameState.managerMarket = JSON.parse(JSON.stringify(freeManagers));
 
             initStandings();
+            initAllPlayerStats();
             updateUI();
         }
 
         function initStandings() {
             standings = Object.keys(clubPresetData).map(tName => ({
-                name: tName, 
-                points: 0, played: 0, win: 0, draw: 0, loss: 0,
-                gf: 0, ga: 0, gd: 0,
+                name: tName, points: 0, played: 0, win: 0, draw: 0, loss: 0, gf: 0, ga: 0, gd: 0,
                 rating: Math.round(clubPresetData[tName].slice(0, 11).reduce((a,b)=>a+b.rating,0)/11),
                 isUser: tName === gameState.teamName
             }));
+        }
+
+        function initAllPlayerStats() {
+            if (!playerStats) playerStats = {};
+
+            const addStats = (p, team) => {
+                if (!p || !p.name) return;
+                if (!playerStats[p.name]) {
+                    playerStats[p.name] = {
+                        name: p.name,
+                        team: (team === "移籍市場" ? "フリー" : team) || "フリー",
+                        pos: p.pos || "CMF",
+                        goals: 0,
+                        assists: 0,
+                        yellowCards: 0,
+                        redCards: 0
+                    };
+                } else if (team && team !== "移籍市場") {
+                    playerStats[p.name].team = team;
+                }
+            };
+
+            Object.keys(clubPresetData).forEach(team => {
+                clubPresetData[team].forEach(p => addStats(p, team));
+            });
+
+            [...myStarters, ...myBench, ...myReserves].forEach(p => addStats(p, gameState.teamName));
+            (transferMarket || []).forEach(p => addStats(p, "移籍市場"));
+        }
+
+        function recordGoal(name, team, pos = 'FW') {
+            if (!name) return;
+            initAllPlayerStats();
+            if (!playerStats[name]) playerStats[name] = { name, team, pos, goals: 0, assists: 0, yellowCards: 0, redCards: 0 };
+            playerStats[name].goals += 1;
+            if (team && team !== "移籍市場") playerStats[name].team = team;
+        }
+
+        function recordAssist(name, team, pos = 'MF') {
+            if (!name) return;
+            initAllPlayerStats();
+            if (!playerStats[name]) playerStats[name] = { name, team, pos, goals: 0, assists: 0, yellowCards: 0, redCards: 0 };
+            playerStats[name].assists += 1;
+            if (team && team !== "移籍市場") playerStats[name].team = team;
+        }
+
+        function recordCard(name, team, isRed = false, pos = 'DF') {
+            if (!name) return;
+            initAllPlayerStats();
+            if (!playerStats[name]) playerStats[name] = { name, team, pos, goals: 0, assists: 0, yellowCards: 0, redCards: 0 };
+            if (isRed) playerStats[name].redCards += 1;
+            else playerStats[name].yellowCards += 1;
+            if (team && team !== "移籍市場") playerStats[name].team = team;
+        }
+
+        function selectScorer(playerList) {
+            if (!playerList || playerList.length === 0) return null;
+            let rand = Math.random() * 100;
+            let targetCategory = "FW";
+            if (rand < 60) targetCategory = "FW";
+            else if (rand < 90) targetCategory = "MF";
+            else if (rand < 98) targetCategory = "DF";
+            else targetCategory = "GK";
+
+            let pool = playerList.filter(p => p.category === targetCategory);
+            if (pool.length === 0) pool = playerList;
+            return pool[Math.floor(Math.random() * pool.length)];
         }
 
         function changeFormation() {
@@ -853,20 +1304,24 @@
 
         function calculateStarterRating() {
             const slots = formations[gameState.currentFormation];
-            let sum = 0;
-            let legendCount = 0;
+            let sum = 0, legendCount = 0;
 
             myStarters.forEach((p, idx) => {
                 ensurePlayerDefaults(p);
                 sum += getEffectivePlayer(p, slots[idx]).effectiveRating;
                 if (p.isLegend) legendCount++;
             });
-            let base = Math.round(sum / myStarters.length);
-            
+            let base = Math.round(sum / (myStarters.length || 1));
             let managerBonus = gameState.manager ? Math.floor((gameState.manager.rating - 80) / 2) : 0;
-            let legendBonus = legendCount * 2;
+            return base + managerBonus + (legendCount * 2);
+        }
 
-            return base + managerBonus + legendBonus;
+        function calculateSellValue(player) {
+            if (!player) return 0;
+            if (player.price) return Math.floor(player.price * 0.8);
+            let base = Math.floor(player.rating * player.rating * 0.28);
+            if (player.isLegend) base = Math.floor(base * 1.5);
+            return Math.max(50, base);
         }
 
         function renderSquad() {
@@ -911,11 +1366,13 @@
             benchContainer.innerHTML = '';
             myBench.forEach((player, idx) => {
                 ensurePlayerDefaults(player);
-                const card = document.createElement('div');
+                const isSelected = selectedPlayer && selectedPlayer.type === 'bench' && selectedPlayer.index === idx;
                 const glowClass = getCardGlowClass(player);
                 const statusBadge = getStatusBadgeHtml(player);
 
-                card.className = `player-card ${glowClass} ${selectedPlayer && selectedPlayer.type === 'bench' && selectedPlayer.index === idx ? 'selected' : ''}`;
+                const card = document.createElement('div');
+                card.className = `player-card ${glowClass} ${isSelected ? 'selected' : ''}`;
+                card.style.height = '48px';
                 card.draggable = !gameState.isMatchRunning;
                 if (isPlayerUnavailable(player)) card.style.opacity = '0.6';
 
@@ -923,8 +1380,9 @@
                 card.onclick = () => handlePlayerClick('bench', idx);
 
                 let badgeClass = getRatingClass(player.rating);
+
                 card.innerHTML = `
-                    <div style="font-size:7px; color:var(--accent-gold); font-weight:bold;">${player.pos}</div>
+                    <div style="font-size:7px; color:var(--text-sub);">${player.pos}</div>
                     <div class="player-name">${player.name}</div>
                     ${statusBadge ? statusBadge : `<span class="rating-badge ${badgeClass}">${player.rating}</span>`}
                     <div class="stamina-bar-container">
@@ -938,12 +1396,14 @@
             reserveContainer.innerHTML = '';
             myReserves.forEach((player, idx) => {
                 ensurePlayerDefaults(player);
-                const card = document.createElement('div');
+                const isSelected = selectedPlayer && selectedPlayer.type === 'reserve' && selectedPlayer.index === idx;
                 const glowClass = getCardGlowClass(player);
                 const statusBadge = getStatusBadgeHtml(player);
 
-                card.className = `player-card ${glowClass} ${selectedPlayer && selectedPlayer.type === 'reserve' && selectedPlayer.index === idx ? 'selected' : ''}`;
-                card.style.minWidth = '52px';
+                const card = document.createElement('div');
+                card.className = `player-card ${glowClass} ${isSelected ? 'selected' : ''}`;
+                card.style.width = '52px';
+                card.style.height = '46px';
                 card.draggable = !gameState.isMatchRunning;
                 if (isPlayerUnavailable(player)) card.style.opacity = '0.6';
 
@@ -951,983 +1411,1055 @@
                 card.onclick = () => handlePlayerClick('reserve', idx);
 
                 let badgeClass = getRatingClass(player.rating);
+
                 card.innerHTML = `
                     <div style="font-size:7px; color:var(--text-sub);">${player.pos}</div>
                     <div class="player-name">${player.name}</div>
                     ${statusBadge ? statusBadge : `<span class="rating-badge ${badgeClass}">${player.rating}</span>`}
-                    <div class="stamina-bar-container">
-                        <div class="stamina-bar-fill" style="width:${player.stamina}%; background-color:${getStaminaColor(player.stamina)};"></div>
-                    </div>
                 `;
                 reserveContainer.appendChild(card);
             });
 
-            attachContainerDragEvents(pitch, 'starter');
-            attachContainerDragEvents(benchContainer, 'bench');
-            attachContainerDragEvents(reserveContainer, 'reserve');
-
-            renderPlayerActionPanel();
-        }
-
-        function renderPlayerActionPanel() {
-            const actionPanel = document.getElementById('player-action-panel');
-            if (!actionPanel) return;
-
-            if (!selectedPlayer) {
-                actionPanel.style.display = 'none';
-                return;
-            }
-
-            const list = getList(selectedPlayer.type);
-            const player = list[selectedPlayer.index];
-            if (!player) {
-                selectedPlayer = null;
-                actionPanel.style.display = 'none';
-                return;
-            }
-
-            actionPanel.style.display = 'block';
-
-            const trainCost = Math.floor(player.rating * 2);
-            const mult = gameState.saleOffer ? 1.5 : 1.0;
-            const sellPrice = Math.floor(player.rating * 8 * mult);
-            const offerTxt = gameState.saleOffer ? " 🔥1.5倍!" : "";
-
-            const infoEl = document.getElementById('selected-player-info');
-            infoEl.innerHTML = `<span style="color:var(--accent-gold);">${player.name}</span> (${player.pos} | OVR:${player.rating} | STA:${player.stamina}%)`;
-
-            const trainBtn = document.getElementById('btn-train-player');
-            const sellBtn = document.getElementById('btn-sell-player');
-
-            const maxRating = player.isLegend ? 110 : 105;
-            if (player.rating >= maxRating) {
-                trainBtn.innerText = `育成完了 (MAX ${maxRating})`;
-                trainBtn.disabled = true;
-            } else {
-                trainBtn.innerText = `育成 ($${trainCost}M) OVR+1`;
-                trainBtn.disabled = gameState.funds < trainCost || gameState.isMatchRunning;
-            }
-
-            // ケガ・出場停止中の場合は放出不可に制御
-            if (isPlayerUnavailable(player)) {
-                sellBtn.innerText = `離脱中 (放出不可)`;
-                sellBtn.disabled = true;
-            } else {
-                sellBtn.innerText = `放出 ($${sellPrice}M)${offerTxt}`;
-                sellBtn.disabled = gameState.isMatchRunning;
-            }
+            updatePlayerActionPanel();
         }
 
         function attachDragEvents(element, type, index) {
-            element.ondragstart = (e) => { 
-                e.stopPropagation();
+            element.ondragstart = (e) => {
+                if (gameState.isMatchRunning) return;
                 draggedSource = { type, index };
-                e.dataTransfer.setData('text/plain', JSON.stringify({ type, index }));
-                e.dataTransfer.effectAllowed = 'move';
-                element.classList.add('dragging'); 
+                element.classList.add('dragging');
             };
-            element.ondragend = (e) => {
+            element.ondragend = () => {
                 element.classList.remove('dragging');
                 draggedSource = null;
             };
-            element.ondragover = (e) => { 
-                e.preventDefault(); 
-                e.stopPropagation(); 
-                e.dataTransfer.dropEffect = 'move';
-                element.classList.add('drag-over'); 
+            element.ondragover = (e) => {
+                e.preventDefault();
+                element.classList.add('drag-over');
             };
-            element.ondragleave = (e) => { 
-                e.stopPropagation(); 
-                element.classList.remove('drag-over'); 
+            element.ondragleave = () => {
+                element.classList.remove('drag-over');
             };
             element.ondrop = (e) => {
-                e.preventDefault(); 
-                e.stopPropagation(); 
-                element.classList.remove('drag-over');
-                
-                if (draggedSource) {
-                    if (draggedSource.type !== type || draggedSource.index !== index) {
-                        swapPlayers(draggedSource, { type, index });
-                    }
-                    draggedSource = null;
-                    selectedPlayer = null;
-                    updateUI();
-                }
-            };
-        }
-
-        function attachContainerDragEvents(containerEl, targetType) {
-            containerEl.ondragover = (e) => { 
-                e.preventDefault(); 
-                e.dataTransfer.dropEffect = 'move';
-            };
-            containerEl.ondrop = (e) => {
-                if (e.target.closest('.player-card')) return;
                 e.preventDefault();
-                if (draggedSource) {
-                    let targetList = getList(targetType);
-                    if (targetList.length > 0) {
-                        let targetIndex = targetList.length - 1;
-                        if (draggedSource.type !== targetType || draggedSource.index !== targetIndex) {
-                            swapPlayers(draggedSource, { type: targetType, index: targetIndex });
-                        }
-                    }
-                    draggedSource = null;
-                    selectedPlayer = null;
-                    updateUI();
-                }
+                element.classList.remove('drag-over');
+                if (draggedSource) swapPlayers(draggedSource, { type, index });
             };
         }
 
         function handlePlayerClick(type, index) {
             if (gameState.isMatchRunning) return;
-
             if (selectedPlayer && selectedPlayer.type === type && selectedPlayer.index === index) {
                 selectedPlayer = null;
             } else {
                 selectedPlayer = { type, index };
             }
+            renderSquad();
+        }
+
+        function getPlayerByLocation(loc) {
+            if (loc.type === 'starter') return myStarters[loc.index];
+            if (loc.type === 'bench') return myBench[loc.index];
+            if (loc.type === 'reserve') return myReserves[loc.index];
+            return null;
+        }
+
+        function setPlayerByLocation(loc, val) {
+            if (loc.type === 'starter') myStarters[loc.index] = val;
+            if (loc.type === 'bench') myBench[loc.index] = val;
+            if (loc.type === 'reserve') myReserves[loc.index] = val;
+        }
+
+        function swapPlayers(loc1, loc2) {
+            let p1 = getPlayerByLocation(loc1);
+            let p2 = getPlayerByLocation(loc2);
+            setPlayerByLocation(loc1, p2);
+            setPlayerByLocation(loc2, p1);
             updateUI();
         }
 
+        function updatePlayerActionPanel() {
+            const panel = document.getElementById('player-action-panel');
+            const info = document.getElementById('selected-player-info');
+
+            if (!selectedPlayer) {
+                panel.style.display = 'none';
+                return;
+            }
+
+            const p = getPlayerByLocation(selectedPlayer);
+            if (!p) {
+                panel.style.display = 'none';
+                return;
+            }
+
+            ensurePlayerDefaults(p);
+            panel.style.display = 'block';
+
+            const sellVal = calculateSellValue(p);
+            const altPosText = p.altPos && p.altPos.length > 0 ? p.altPos.join(', ') : 'なし';
+
+            info.innerHTML = `
+                <div style="text-align:left; line-height:1.4;">
+                    <div style="font-weight:bold; font-size:1.0em; color:var(--accent-gold); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
+                        <span>${p.nat || '🏳️'} ${p.name} ${p.isLegend ? '👑<span class="legend-pill">LEGEND</span>' : ''}</span>
+                        <span style="font-size:0.8em; color:var(--text-sub);">OVR: ${p.rating}</span>
+                    </div>
+                    <div>・適正ポジション: <strong style="color:var(--accent-blue);">${p.pos}</strong> (サブ: ${altPosText})</div>
+                    <div>・国籍: <strong>${p.nat || '不明'}</strong> | カテゴリ: <strong>${p.category}</strong></div>
+                    <div>・スタミナ: <strong>${p.stamina}%</strong> | コンディション: <strong>${p.injuryWeeks > 0 ? `ケガ(${p.injuryWeeks}節)` : '良好'}</strong></div>
+                    <div>・予想売却価格: <strong style="color:var(--accent-green); font-size:1.05em;">${formatCurrency(sellVal)}</strong></div>
+                </div>
+            `;
+        }
+
         function trainSelectedPlayer() {
-            if (!selectedPlayer || gameState.isMatchRunning) return;
+            if (!selectedPlayer) return;
+            const p = getPlayerByLocation(selectedPlayer);
+            if (!p) return;
 
-            const list = getList(selectedPlayer.type);
-            const player = list[selectedPlayer.index];
-            if (!player) return;
-
-            const trainCost = Math.floor(player.rating * 2);
-
-            const maxRating = player.isLegend ? 110 : 105;
-            if (player.rating >= maxRating) {
-                alert(`この選手は既に最高総合値(${maxRating})に達しています。`);
+            if (gameState.funds < 100) {
+                showCustomModal("資金不足", "資金が不足しています (必要: 100億円)", null, null);
                 return;
             }
 
-            if (gameState.funds < trainCost) {
-                alert(`資金が足りません。(必要資金: $${trainCost}M)`);
-                return;
-            }
-
-            gameState.funds -= trainCost;
-            player.rating += 1;
+            gameState.funds -= 100;
+            p.rating += 1;
+            showCustomModal("トレーニング完了", `${p.name} のトレーニングが成功し、OVRが ${p.rating} に上昇しました！`, null, null);
             updateUI();
         }
 
         function sellSelectedPlayer() {
-            if (!selectedPlayer || gameState.isMatchRunning) return;
-            
-            const list = getList(selectedPlayer.type);
-            const player = list[selectedPlayer.index];
+            if (!selectedPlayer) return;
+            const p = getPlayerByLocation(selectedPlayer);
+            if (!p) return;
 
-            if (isPlayerUnavailable(player)) {
-                alert("ケガまたは出場停止中の選手は離脱期間が終了するまで放出できません。");
+            const allCount = myStarters.length + myBench.length + myReserves.length;
+            if (allCount <= 11) {
+                showCustomModal("放出不可", "選手が11名以下になるため売却できません。", null, null);
                 return;
             }
 
-            const totalPlayers = myStarters.length + myBench.length + myReserves.length;
-            if (totalPlayers <= 16) {
-                alert("試合可能人数 (16人: スタメン11名 + ベンチ5名) を下回るため、これ以上選手を放出できません。");
-                return;
-            }
-
-            const mult = gameState.saleOffer ? 1.5 : 1.0;
-            const sellPrice = Math.floor(player.rating * 8 * mult);
-
-            if (confirm(`${player.name} を $${sellPrice}M で放出しますか？`)) {
-                list.splice(selectedPlayer.index, 1);
-                gameState.funds += sellPrice;
-                
-                fillSquadGaps();
-                selectedPlayer = null;
-                updateUI();
-            }
-        }
-
-        function fillSquadGaps() {
-            while (myStarters.length < 11 && myBench.length > 0) {
-                myStarters.push(myBench.shift());
-            }
-            while (myBench.length < 5 && myReserves.length > 0) {
-                myBench.push(myReserves.shift());
-            }
-        }
-
-        function swapPlayers(src, target) {
-            let list1 = getList(src.type), list2 = getList(target.type);
-            let temp = list1[src.index];
-            list1[src.index] = list2[target.index];
-            list2[target.index] = temp;
-        }
-
-        function getList(type) { return type === 'starter' ? myStarters : (type === 'bench' ? myBench : myReserves); }
-
-        function getPkKickerName(playerList, teamName) {
-            const targetName = typeof teamPkKickerMap !== 'undefined' ? teamPkKickerMap[teamName] : null;
-            if (targetName) {
-                const found = playerList.find(p => p.name === targetName || p.name.includes(targetName));
-                if (found) return found.name;
-            }
-            if (playerList && playerList.length > 0) {
-                let best = playerList[0];
-                for (let p of playerList) {
-                    if (p.rating > best.rating) best = p;
-                }
-                return best.name;
-            }
-            return targetName || "PKキッカー";
-        }
-
-        function calculateWinRates(myRating, enemyBaseRating) {
-            const isHome = (gameState.week % 2 === 1);
-            const myEffRating = isHome ? myRating + 3 : myRating - 3;
-            
-            const weekEnemyBonus = Math.floor((gameState.week - 1) * 0.8);
-            const enemyRating = enemyBaseRating + weekEnemyBonus;
-
-            const diff = myEffRating - enemyRating;
-
-            let win = Math.max(5, Math.min(90, Math.round(40 + diff * 3.5)));
-            let draw = Math.max(10, 25 - Math.round(Math.abs(diff)));
-            let loss = 100 - win - draw;
-
-            return { win, draw, loss, effectiveEnemyRating: enemyRating };
-        }
-
-        function updateWinRatesUI(myRating, enemyBaseRating) {
-            const rates = calculateWinRates(myRating, enemyBaseRating);
-
-            document.getElementById('rate-win-txt').innerText = rates.win;
-            document.getElementById('rate-draw-txt').innerText = rates.draw;
-            document.getElementById('rate-loss-txt').innerText = rates.loss;
-            document.getElementById('bar-win').style.width = rates.win + '%';
-            document.getElementById('bar-draw').style.width = rates.draw + '%';
-            document.getElementById('bar-loss').style.width = rates.loss + '%';
-            document.getElementById('enemy-rating').innerText = rates.effectiveEnemyRating;
-        }
-
-        function selectScorerByProbability(playerList, matchReds = {}) {
-            let available = playerList.filter(p => !matchReds[p.name]);
-            if (available.length === 0) available = playerList;
-
-            const rand = Math.random() * 100;
-            let targetCategory = "FW";
-            if (rand < 59) {
-                targetCategory = "FW";
-            } else if (rand < 89) {
-                targetCategory = "MF";
-            } else if (rand < 99) {
-                targetCategory = "DF";
-            } else {
-                targetCategory = "GK";
-            }
-
-            let candidates = available.filter(p => p.category === targetCategory);
-            if (candidates.length === 0) {
-                candidates = available;
-            }
-
-            return candidates[Math.floor(Math.random() * candidates.length)];
-        }
-
-        function startMatchSimulation() {
-            if (gameState.week > 20) {
-                alert("今シーズン（全20節）は終了しました。");
-                return;
-            }
-            if (gameState.isMatchRunning) return;
-
-            autoFixSquadForUnavailable();
-
-            gameState.isMatchRunning = true;
-            document.getElementById('btn-start-match').disabled = true;
-
-            document.getElementById('score-my').innerText = '0';
-            document.getElementById('score-enemy').innerText = '0';
-            document.getElementById('match-timer').innerText = '00:00';
-
-            const isHome = (gameState.week % 2 === 1);
-            let myRating = calculateStarterRating();
-            
-            const enemyTeams = standings.filter(s => !s.isUser);
-            const enemy = enemyTeams[(gameState.week - 1) % enemyTeams.length];
-            const enemyPreset = clubPresetData[enemy.name] || [];
-
-            const rates = calculateWinRates(myRating, enemy.rating);
-
-            const rand = Math.random() * 100;
-            let myFinal = 0, enemyFinal = 0;
-
-            if (rand < rates.win) {
-                myFinal = Math.floor(Math.random() * 3) + 1;
-                enemyFinal = Math.floor(Math.random() * myFinal);
-            } else if (rand < rates.win + rates.draw) {
-                myFinal = Math.floor(Math.random() * 3);
-                enemyFinal = myFinal;
-            } else {
-                enemyFinal = Math.floor(Math.random() * 3) + 1;
-                myFinal = Math.floor(Math.random() * enemyFinal);
-            }
-
-            let minute = 0, myScore = 0, enemyScore = 0;
-            let matchContributors = {};
-            let matchYellows = {};
-            let matchReds = {};
-
-            const logBox = document.getElementById('match-log');
-            logBox.innerHTML = `<div class="log-entry">【第${gameState.week}節 (${isHome ? 'HOME' : 'AWAY'})】 キックオフ！</div>`;
-
-            const timer = setInterval(() => {
-                minute += 5;
-                document.getElementById('match-timer').innerText = `${String(minute).padStart(2, '0')}:00`;
-
-                /* 修正: PK確率を 0.04 -> 0.008 に大幅低減 */
-                if (Math.random() < 0.008 && myScore < myFinal) {
-                    let kicker = getPkKickerName(myStarters, gameState.teamName);
-                    const isStopped = Math.random() < (1 / 6);
-                    if (!isStopped) {
-                        myScore++;
-                        document.getElementById('score-my').innerText = myScore;
-                        getStat(kicker, gameState.teamName).goals++;
-                        matchContributors[kicker] = (matchContributors[kicker] || 0) + 3;
-                        logBox.innerHTML += `<div class="log-entry log-goal">🎯 ${minute}分: PK獲得！キッカーは${kicker}... 決めた！GOAL!! [${gameState.teamName}]</div>`;
-                    } else {
-                        logBox.innerHTML += `<div class="log-entry" style="color:var(--accent-red);">⚠️ ${minute}分: [${gameState.teamName}] PK獲得！キッカー${kicker}のシュートは相手GKに防がれた！</div>`;
-                    }
-                } 
-                else if (Math.random() < (myFinal / 18) && myScore < myFinal) {
-                    myScore++;
-                    document.getElementById('score-my').innerText = myScore;
-                    let scorerObj = selectScorerByProbability(myStarters, matchReds);
-                    let scorer = scorerObj.name;
-                    getStat(scorer, gameState.teamName).goals++;
-                    matchContributors[scorer] = (matchContributors[scorer] || 0) + 3;
-
-                    let assistTxt = "";
-                    if (Math.random() < 0.7) {
-                        let assisterCandidates = myStarters.filter(p => p.name !== scorer && !matchReds[p.name]);
-                        if (assisterCandidates.length > 0) {
-                            let assister = assisterCandidates[Math.floor(Math.random() * assisterCandidates.length)].name;
-                            getStat(assister, gameState.teamName).assists++;
-                            matchContributors[assister] = (matchContributors[assister] || 0) + 1.5;
-                            assistTxt = ` (アシスト: ${assister})`;
-                        }
-                    }
-                    logBox.innerHTML += `<div class="log-entry log-goal">⚽ ${minute}分: GOAL!! [${gameState.teamName}] ${scorer}${assistTxt}</div>`;
-                }
-
-                /* 修正: PK確率を 0.04 -> 0.008 に大幅低減 */
-                if (Math.random() < 0.008 && enemyScore < enemyFinal) {
-                    let kicker = getPkKickerName(enemyPreset, enemy.name);
-                    const isStopped = Math.random() < (1 / 6);
-                    if (!isStopped) {
-                        enemyScore++;
-                        document.getElementById('score-enemy').innerText = enemyScore;
-                        getStat(kicker, enemy.name).goals++;
-                        matchContributors[kicker] = (matchContributors[kicker] || 0) + 3;
-                        logBox.innerHTML += `<div class="log-entry log-goal">🎯 ${minute}分: PK献上... キッカー${kicker}に決められた！GOAL!! [${enemy.name}]</div>`;
-                    } else {
-                        logBox.innerHTML += `<div class="log-entry" style="color:var(--accent-blue);">🔥 ${minute}分: [${enemy.name}] にPKを与えるも、我がチームのGKが見事にPKストップ！！</div>`;
-                    }
-                } 
-                else if (Math.random() < (enemyFinal / 18) && enemyScore < enemyFinal) {
-                    enemyScore++;
-                    document.getElementById('score-enemy').innerText = enemyScore;
-                    let scorerObj = selectScorerByProbability(enemyPreset.slice(0, 11), matchReds);
-                    let scorer = scorerObj ? scorerObj.name : "相手FW";
-                    getStat(scorer, enemy.name).goals++;
-                    matchContributors[scorer] = (matchContributors[scorer] || 0) + 3;
-
-                    let assistTxt = "";
-                    if (Math.random() < 0.7 && enemyPreset.length > 1) {
-                        let assisterCandidates = enemyPreset.slice(0, 11).filter(p => p.name !== scorer && !matchReds[p.name]);
-                        if (assisterCandidates.length > 0) {
-                            let assister = assisterCandidates[Math.floor(Math.random() * assisterCandidates.length)].name;
-                            getStat(assister, enemy.name).assists++;
-                            matchContributors[assister] = (matchContributors[assister] || 0) + 1.5;
-                            assistTxt = ` (アシスト: ${assister})`;
-                        }
-                    }
-                    logBox.innerHTML += `<div class="log-entry log-goal">⚽ ${minute}分: GOAL!! [${enemy.name}] ${scorer}${assistTxt}</div>`;
-                }
-
-                if (Math.random() < 0.08) {
-                    const isMyCard = Math.random() < 0.5;
-                    const isRed = Math.random() < 0.1;
-                    let pName = "", pTeam = "";
-
-                    if (isMyCard) {
-                        let availablePlayers = myStarters.filter(p => !matchReds[p.name]);
-                        if (availablePlayers.length > 0) {
-                            let pObj = availablePlayers[Math.floor(Math.random() * availablePlayers.length)];
-                            pName = pObj.name;
-                            pTeam = gameState.teamName;
-
-                            if (isRed) {
-                                matchReds[pName] = true;
-                                getStat(pName, pTeam).red++;
-                                pObj.suspendedWeeks = 2;
-                                logBox.innerHTML += `<div class="log-entry log-card-red">🟥 ${minute}分: 警告(一発退場!) [${pTeam}] ${pName}</div>`;
-                            } else {
-                                matchYellows[pName] = (matchYellows[pName] || 0) + 1;
-                                getStat(pName, pTeam).yellow++;
-                                if (matchYellows[pName] === 2) {
-                                    matchReds[pName] = true;
-                                    getStat(pName, pTeam).red++;
-                                    pObj.suspendedWeeks = 2;
-                                    logBox.innerHTML += `<div class="log-entry log-card-red">🟨🟥 ${minute}分: 警告(2枚目のイエローで退場!) [${pTeam}] ${pName}</div>`;
-                                } else {
-                                    logBox.innerHTML += `<div class="log-entry log-card-yellow">🟨 ${minute}分: 警告(イエローカード) [${pTeam}] ${pName}</div>`;
-                                }
-                            }
-                        }
-                    } else {
-                        let availablePlayers = enemyPreset.slice(0, 11).filter(p => !matchReds[p.name]);
-                        if (availablePlayers.length > 0) {
-                            let pObj = availablePlayers[Math.floor(Math.random() * availablePlayers.length)];
-                            pName = pObj.name;
-                            pTeam = enemy.name;
-
-                            if (isRed) {
-                                matchReds[pName] = true;
-                                getStat(pName, pTeam).red++;
-                                logBox.innerHTML += `<div class="log-entry log-card-red">🟥 ${minute}分: 警告(一発退場!) [${pTeam}] ${pName}</div>`;
-                            } else {
-                                matchYellows[pName] = (matchYellows[pName] || 0) + 1;
-                                getStat(pName, pTeam).yellow++;
-                                if (matchYellows[pName] === 2) {
-                                    matchReds[pName] = true;
-                                    getStat(pName, pTeam).red++;
-                                    logBox.innerHTML += `<div class="log-entry log-card-red">🟨🟥 ${minute}分: 警告(2枚目のイエローで退場!) [${pTeam}] ${pName}</div>`;
-                                } else {
-                                    logBox.innerHTML += `<div class="log-entry log-card-yellow">🟨 ${minute}分: 警告(イエローカード) [${pTeam}] ${pName}</div>`;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                logBox.scrollTop = logBox.scrollHeight;
-
-                if (minute >= 90) {
-                    clearInterval(timer);
-                    finishMatch(myScore, enemyScore, enemy.name, matchContributors);
-                }
-            }, 80);
-        }
-
-        function getStaminaLoss(player) {
-            let baseLoss = 20;
-            const cat = player.category || "FW";
-            if (cat === "FW") baseLoss = 20;
-            else if (cat === "MF") baseLoss = 18;
-            else if (cat === "DF") baseLoss = 15;
-            else if (cat === "GK") baseLoss = 5;
-
-            if (player.isLegend) {
-                baseLoss = Math.max(0, baseLoss - 4);
-            }
-            return baseLoss;
-        }
-
-        function finishMatch(myGoals, enemyGoals, enemyName, matchContributors) {
-            const logBox = document.getElementById('match-log');
-
-            /* 修正: ケガの発生条件を「スタミナ20未満かつ低確率」に引き下げ */
-            myStarters.forEach(p => {
-                ensurePlayerDefaults(p);
-                const loss = getStaminaLoss(p);
-                p.stamina = Math.max(0, p.stamina - loss);
-
-                if (p.stamina < 20 && p.injuryWeeks === 0) {
-                    const injuryProb = (20 - p.stamina) * 0.005; // 低確率（最大約10%未満）
-                    if (Math.random() < injuryProb) {
-                        p.injuryWeeks = Math.floor(Math.random() * 2) + 2; 
-                        logBox.innerHTML += `<div class="log-entry log-card-red">🚑 負傷: [${gameState.teamName}] ${p.name} がアクシデントにより負傷離脱（${p.injuryWeeks - 1}節出場不可）</div>`;
-                    }
-                }
-            });
-
-            myBench.forEach(p => {
-                ensurePlayerDefaults(p);
-                p.stamina = Math.min(100, p.stamina + 25);
-            });
-            myReserves.forEach(p => {
-                ensurePlayerDefaults(p);
-                p.stamina = Math.min(100, p.stamina + 25);
-            });
-
-            [...myStarters, ...myBench, ...myReserves].forEach(p => {
-                if (p.suspendedWeeks > 0) p.suspendedWeeks--;
-                if (p.injuryWeeks > 0) p.injuryWeeks--;
-            });
-
-            let myStat = standings.find(s => s.isUser);
-            let enemyStat = standings.find(s => s.name === enemyName);
-
-            myStat.played++; enemyStat.played++;
-            myStat.gf += myGoals; myStat.ga += enemyGoals; myStat.gd = myStat.gf - myStat.ga;
-            enemyStat.gf += enemyGoals; enemyStat.ga += myGoals; enemyStat.gd = enemyStat.gf - enemyStat.ga;
-
-            let matchComment = "";
-
-            if (myGoals > enemyGoals) {
-                myStat.win++; myStat.points += 3; enemyStat.loss++; gameState.funds += 500;
-                matchComment = "素晴らしい勝利！攻守がかみ合った見事なゲームプランでした。";
-            } else if (myGoals < enemyGoals) {
-                myStat.loss++; enemyStat.win++; enemyStat.points += 3; gameState.funds += 100;
-                matchComment = "悔しい敗戦。次節に向けて守備の修正が急務です。";
-            } else {
-                myStat.draw++; myStat.points += 1; enemyStat.draw++; enemyStat.points += 1; gameState.funds += 300;
-                matchComment = "互角の攻防の末に引き分け。勝ち点1を分け合いました。";
-            }
-
-            let momName = "該当者なし";
-            let maxContrib = -1;
-            Object.keys(matchContributors).forEach(pName => {
-                if (matchContributors[pName] > maxContrib) {
-                    maxContrib = matchContributors[pName];
-                    momName = pName;
-                }
-            });
-            if (maxContrib <= 0) {
-                momName = myGoals >= enemyGoals ? myStarters[0].name : (clubPresetData[enemyName] ? clubPresetData[enemyName][0].name : "GK");
-            }
-
-            logBox.innerHTML += `
-                <div class="log-entry log-summary">
-                    【試合終了】 ${gameState.teamName} ${myGoals} - ${enemyGoals} ${enemyName}<br>
-                    ★ MOM: ${momName}<br>
-                    💬 総括: ${matchComment}
-                </div>
-            `;
-            
-            const otherResults = simulateOtherMatches(enemyName);
-            logBox.innerHTML += otherResults;
-
-            sortStandings();
-
-            /* 追加: 全20節終了時の順位賞金 ＆ 優勝イベント処理 */
-            if (gameState.week === 20) {
-                const champion = standings[0];
-                const myRankIndex = standings.findIndex(s => s.isUser); // 0始まり (0 = 1位)
-                const prize = Math.max(0, 6000 - (myRankIndex * 500)); // 1位: $6000M, 2位: $5500M ...
-                
-                gameState.funds += prize;
-
-                let championshipEventText = "";
-                if (myRankIndex === 0) {
-                    // 優勝イベント発生
-                    gameState.buyOffer = true;
-                    gameState.buyOfferWeeks = 5; // 獲得セール5節分確定付与
-                    championshipEventText = `<br>🎉 **【特別優勝イベント発生】** 欧州王者の名声により世界中のスカウトから注目され、**獲得オファー（全選手30%OFF）**が5節継続で発生！`;
-                }
-
-                logBox.innerHTML += `
-                    <div class="log-entry log-summary" style="color:var(--accent-gold); font-size:1.05em; border-top:2px solid var(--accent-gold);">
-                        🏆 リーグ全20節が終了しました！<br>
-                        【最終結果】 優勝: ${champion.name} (勝ち点:${champion.points})<br>
-                        📊 自クラブ順位: ${myRankIndex + 1}位 / 💰 順位賞金: +$${prize}M を獲得！
-                        ${championshipEventText}
-                    </div>
-                `;
-
-                if (champion.isUser) {
-                    alert(`🎉 おめでとうございます！ ${gameState.teamName} が欧州スーパーリーグ優勝を果たしました！\n🏆 順位賞金 $${prize}M を獲得！特別獲得オファーが発生中です！`);
-                } else {
-                    alert(`今シーズン終了！ ${myRankIndex + 1}位 でフィニッシュ（順位賞金 $${prize}M 獲得）。優勝は ${champion.name} でした。`);
-                }
-            }
-
-            logBox.scrollTop = logBox.scrollHeight;
-
-            if (gameState.week < 20) {
-                gameState.week++;
-            } else {
-                gameState.week = 20;
-            }
-
-            updateSpecialOffers();
-            gameState.isMatchRunning = false;
-            document.getElementById('btn-start-match').disabled = (gameState.week >= 20);
-            updateUI();
-        }
-
-        function sortStandings() {
-            standings.sort((a, b) => {
-                if (b.points !== a.points) return b.points - a.points;
-                if (b.gd !== a.gd) return b.gd - a.gd;
-                if (b.gf !== a.gf) return b.gf - a.gf;
-                if (b.win !== a.win) return b.win - a.win;
-                return a.name.localeCompare(b.name, 'ja');
-            });
-        }
-
-        function updateSpecialOffers() {
-            if (gameState.saleOfferWeeks > 0) {
-                gameState.saleOfferWeeks--;
-                if (gameState.saleOfferWeeks === 0) gameState.saleOffer = false;
-            }
-            if (gameState.buyOfferWeeks > 0) {
-                gameState.buyOfferWeeks--;
-                if (gameState.buyOfferWeeks === 0) gameState.buyOffer = false;
-            }
-
-            if (!gameState.saleOffer && Math.random() < 0.25) {
-                gameState.saleOffer = true;
-                gameState.saleOfferWeeks = Math.floor(Math.random() * 2) + 1;
-            }
-            if (!gameState.buyOffer && Math.random() < 0.25) {
-                gameState.buyOffer = true;
-                gameState.buyOfferWeeks = Math.floor(Math.random() * 2) + 1;
-            }
-
-            if (Math.random() < 0.25) {
-                gameState.merchOffer = true;
-                gameState.funds += 500;
-            } else {
-                gameState.merchOffer = false;
-            }
-        }
-
-        function renderOfferBanner() {
-            const banner = document.getElementById('offer-banner');
-            let html = '';
-            if (gameState.saleOffer) {
-                html += `<div style="background:rgba(239, 68, 68, 0.2); border:1px solid var(--accent-red); color:var(--accent-red); padding:6px 10px; border-radius:6px; font-size:0.75em; font-weight:bold; margin-bottom:6px;">🔥 放出オファー発生中！ 選手放出時の獲得金が 1.5倍 にアップ！ (残り${gameState.saleOfferWeeks}節)</div>`;
-            }
-            if (gameState.buyOffer) {
-                html += `<div style="background:rgba(16, 185, 129, 0.2); border:1px solid var(--accent-green); color:var(--accent-green); padding:6px 10px; border-radius:6px; font-size:0.75em; font-weight:bold; margin-bottom:6px;">🎉 獲得セールオファー発生中！ 移籍市場の契約費用が 30% OFF！ (残り${gameState.buyOfferWeeks}節)</div>`;
-            }
-            if (gameState.merchOffer) {
-                html += `<div style="background:rgba(59, 130, 246, 0.2); border:1px solid var(--accent-blue); color:var(--accent-blue); padding:6px 10px; border-radius:6px; font-size:0.75em; font-weight:bold; margin-bottom:6px;">🛍️ グッズ爆売れイベント発生！ グッズ収入として +$500M 獲得しました！</div>`;
-            }
-            banner.innerHTML = html;
-        }
-
-        function simulateOtherMatches(enemyName) {
-            let otherTeams = standings.filter(s => !s.isUser && s.name !== enemyName);
-            otherTeams.sort(() => Math.random() - 0.5);
-            
-            let otherResultsHtml = '<div class="log-entry log-summary" style="color:var(--text-main);">【他会場の試合結果】</div>';
-
-            for (let i = 0; i < otherTeams.length; i += 2) {
-                if (i + 1 >= otherTeams.length) break;
-                let t1 = otherTeams[i];
-                let t2 = otherTeams[i+1];
-                
-                let t1Roll = t1.rating + (Math.random() * 16 - 8);
-                let t2Roll = t2.rating + (Math.random() * 16 - 8);
-
-                let t1Final = 0, t2Final = 0;
-                if (t1Roll > t2Roll + 2) { t1Final = Math.floor(Math.random() * 3) + 1; t2Final = Math.floor(Math.random() * t1Final); }
-                else if (t1Roll < t2Roll - 2) { t2Final = Math.floor(Math.random() * 3) + 1; t1Final = Math.floor(Math.random() * t2Final); }
-                else { t1Final = Math.floor(Math.random() * 2); t2Final = t1Final; }
-
-                processOtherMatchStats(t1, t1Final, t2, t2Final);
-
-                t1.played++; t2.played++;
-                t1.gf += t1Final; t1.ga += t2Final; t1.gd = t1.gf - t1.ga;
-                t2.gf += t2Final; t2.ga += t1Final; t2.gd = t2.gf - t2.ga;
-
-                if (t1Final > t2Final) { t1.win++; t1.points += 3; t2.loss++; } 
-                else if (t1Final < t2Final) { t2.win++; t2.points += 3; t1.loss++; } 
-                else { t1.draw++; t1.points += 1; t2.draw++; t2.points += 1; }
-
-                otherResultsHtml += `<div class="log-entry">・ ${t1.name} ${t1Final} - ${t2Final} ${t2.name}</div>`;
-            }
-            return otherResultsHtml;
-        }
-
-        function processOtherMatchStats(teamObj, goals, enemyTeamObj, enemyGoals) {
-            let preset = clubPresetData[teamObj.name] || [];
-            let presetEn = clubPresetData[enemyTeamObj.name] || [];
-
-            for (let i = 0; i < goals; i++) {
-                if (preset.length > 0) {
-                    let scorer = selectScorerByProbability(preset.slice(0, 11));
-                    getStat(scorer.name, teamObj.name).goals++;
-                    if (Math.random() < 0.7 && preset.length > 1) {
-                        let assisterCandidates = preset.slice(0, 11).filter(p => p.name !== scorer.name);
-                        if (assisterCandidates.length > 0) {
-                            let assister = assisterCandidates[Math.floor(Math.random() * assisterCandidates.length)];
-                            getStat(assister.name, teamObj.name).assists++;
-                        }
-                    }
-                }
-            }
-
-            for (let i = 0; i < enemyGoals; i++) {
-                if (presetEn.length > 0) {
-                    let scorer = selectScorerByProbability(presetEn.slice(0, 11));
-                    getStat(scorer.name, enemyTeamObj.name).goals++;
-                    if (Math.random() < 0.7 && presetEn.length > 1) {
-                        let assisterCandidates = presetEn.slice(0, 11).filter(p => p.name !== scorer.name);
-                        if (assisterCandidates.length > 0) {
-                            let assister = assisterCandidates[Math.floor(Math.random() * assisterCandidates.length)];
-                            getStat(assister.name, enemyTeamObj.name).assists++;
-                        }
-                    }
-                }
-            }
-        }
-
-        function switchViewTab(tab) {
-            gameState.activeTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`tab-${tab}`).classList.add('active');
-            updateView();
-        }
-
-        function updateView() {
-            const container = document.getElementById('view-container');
-            if (gameState.activeTab === 'standings') renderStandings();
-            else if (gameState.activeTab === 'goals') renderGoalRankings();
-            else if (gameState.activeTab === 'assists') renderAssistRankings();
-            else if (gameState.activeTab === 'cards') renderCardRankings();
-        }
-
-        function renderStandings() {
-            const container = document.getElementById('view-container');
-            let html = `<table>
-                <thead>
-                    <tr><th>順</th><th>クラブ</th><th>勝点</th><th>試</th><th>勝</th><th>分</th><th>負</th><th>得</th><th>失</th><th>差</th></tr>
-                </thead><tbody>`;
-            
-            standings.forEach((st, idx) => {
-                const isMy = st.isUser;
-                html += `<tr class="${isMy ? 'my-team-row' : ''}">
-                    <td>${idx + 1}</td>
-                    <td style="text-align:left;">${st.name}</td>
-                    <td><strong>${st.points}</strong></td>
-                    <td>${st.played}</td>
-                    <td>${st.win}</td>
-                    <td>${st.draw}</td>
-                    <td>${st.loss}</td>
-                    <td>${st.gf}</td>
-                    <td>${st.ga}</td>
-                    <td>${st.gd > 0 ? '+' + st.gd : st.gd}</td>
-                </tr>`;
-            });
-            html += `</tbody></table>`;
-            container.innerHTML = html;
-        }
-
-        function renderGoalRankings() {
-            const container = document.getElementById('view-container');
-            let list = Object.values(playerStats).sort((a, b) => b.goals - a.goals).slice(0, 10);
-            let html = `<table><thead><tr><th>順位</th><th>選手名</th><th>所属</th><th>得点数</th></tr></thead><tbody>`;
-            list.forEach((p, idx) => {
-                html += `<tr><td>${idx + 1}</td><td>${p.name}</td><td>${p.team}</td><td><strong>${p.goals}</strong></td></tr>`;
-            });
-            html += `</tbody></table>`;
-            container.innerHTML = html;
-        }
-
-        function renderAssistRankings() {
-            const container = document.getElementById('view-container');
-            let list = Object.values(playerStats).sort((a, b) => b.assists - a.assists).slice(0, 10);
-            let html = `<table><thead><tr><th>順位</th><th>選手名</th><th>所属</th><th>アシスト</th></tr></thead><tbody>`;
-            list.forEach((p, idx) => {
-                html += `<tr><td>${idx + 1}</td><td>${p.name}</td><td>${p.team}</td><td><strong>${p.assists}</strong></td></tr>`;
-            });
-            html += `</tbody></table>`;
-            container.innerHTML = html;
-        }
-
-        function renderCardRankings() {
-            const container = document.getElementById('view-container');
-            let list = Object.values(playerStats).sort((a, b) => (b.yellow + b.red * 2) - (a.yellow + a.red * 2)).slice(0, 10);
-            let html = `<table><thead><tr><th>順位</th><th>選手名</th><th>所属</th><th>🟨</th><th>🟥</th></tr></thead><tbody>`;
-            list.forEach((p, idx) => {
-                html += `<tr><td>${idx + 1}</td><td>${p.name}</td><td>${p.team}</td><td>${p.yellow}</td><td>${p.red}</td></tr>`;
-            });
-            html += `</tbody></table>`;
-            container.innerHTML = html;
-        }
-
-        function renderMarket() {
-            const grid = document.getElementById('market-grid');
-            grid.innerHTML = '';
-
-            const category = gameState.marketCategory;
-
-            if (category === 'MANAGER') {
-                gameState.managerMarket.forEach((m, idx) => {
-                    const canAfford = gameState.funds >= m.price;
-                    const card = document.createElement('div');
-                    card.className = 'market-card';
-                    card.innerHTML = `
-                        <div style="font-weight:bold;">👔 ${m.name}</div>
-                        <div>OVR: <span style="color:var(--accent-gold);">${m.rating}</span></div>
-                        <div style="margin-top:4px;">価格: $${m.price}M</div>
-                        <button style="width:100%; margin-top:4px; font-size:0.75em; background:${canAfford ? 'var(--accent-blue)' : '#475569'};" 
-                                ${canAfford ? '' : 'disabled'} 
-                                onclick="buyManager(${idx})">招聘</button>
-                    `;
-                    grid.appendChild(card);
-                });
-                return;
-            }
-
-            // 自チーム所属選手および選択中クラブの全選手名を取得
-            const myPlayerNames = new Set([
-                ...myStarters.map(p => p.name),
-                ...myBench.map(p => p.name),
-                ...myReserves.map(p => p.name)
-            ]);
-            const currentTeamPreset = clubPresetData[gameState.teamName] || [];
-            const currentTeamNames = new Set(currentTeamPreset.map(p => p.name));
-
-            let filtered = transferMarket.filter(p => {
-                // 選択中のクラブの選手、または自チーム内に既にいる選手は非表示
-                if (currentTeamNames.has(p.name) || myPlayerNames.has(p.name) || p.team === gameState.teamName) {
-                    return false;
-                }
-                if (category === 'ALL') return true;
-                if (category === 'LEGEND') return p.isLegend;
-                return p.category === category && !p.isLegend;
-            });
-
-            const discount = gameState.buyOffer ? 0.7 : 1.0;
-
-            filtered.forEach((player, idx) => {
-                const actualIndex = transferMarket.indexOf(player);
-                const finalPrice = Math.floor(player.price * discount);
-                const canAfford = gameState.funds >= finalPrice;
-                const card = document.createElement('div');
-                const glowClass = getCardGlowClass(player);
-                card.className = `market-card ${glowClass}`;
-
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span>${player.nat || ''} ${player.name}</span>
-                        <span class="rating-badge ${getRatingClass(player.rating)}">${player.rating}</span>
-                    </div>
-                    <div style="font-size:0.7em; color:var(--text-sub); margin-top:2px;">${player.pos} | ${player.category}</div>
-                    <div style="margin-top:4px; font-weight:bold; color:var(--accent-green);">$${finalPrice}M ${gameState.buyOffer ? '<span style="font-size:0.7em; color:var(--accent-red);">(30%OFF)</span>' : ''}</div>
-                    <button style="width:100%; margin-top:4px; font-size:0.75em; background:${canAfford ? 'var(--accent-green)' : '#475569'};" 
-                            ${canAfford ? '' : 'disabled'} 
-                            onclick="buyPlayer(${actualIndex})">獲得</button>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function buyPlayer(index) {
-            if (gameState.isMatchRunning) return;
-            const player = transferMarket[index];
-            if (!player) return;
-
-            const discount = gameState.buyOffer ? 0.7 : 1.0;
-            const price = Math.floor(player.price * discount);
-
-            if (gameState.funds < price) {
-                alert(`資金が足りません。(必要額: $${price}M)`);
-                return;
-            }
-
-            if (confirm(`${player.name} を $${price}M で獲得しますか？`)) {
-                gameState.funds -= price;
-                transferMarket.splice(index, 1);
-                
-                ensurePlayerDefaults(player);
-                myReserves.push(player);
-
-                fillSquadGaps();
-                updateUI();
-            }
-        }
-
-        function renderManagerSelect() {
-            const select = document.getElementById('manager-select');
-            select.innerHTML = '';
-            gameState.myManagers.forEach((m, idx) => {
-                const opt = document.createElement('option');
-                opt.value = idx;
-                opt.innerText = m.name;
-                if (gameState.manager && gameState.manager.name === m.name) opt.selected = true;
-                select.appendChild(opt);
-            });
-
-            if (gameState.manager) {
-                document.getElementById('manager-rating').innerText = `OVR:${gameState.manager.rating}`;
-            }
-        }
-
-        function switchManager() {
-            const idx = document.getElementById('manager-select').value;
-            gameState.manager = gameState.myManagers[idx];
-            updateUI();
-        }
-
-        function buyManager(index) {
-            if (gameState.isMatchRunning) return;
-            const m = gameState.managerMarket[index];
-            if (!m) return;
-
-            if (gameState.funds < m.price) {
-                alert(`資金が足りません。(必要額: $${m.price}M)`);
-                return;
-            }
-
-            if (confirm(`${m.name} 監督を $${m.price}M で招聘しますか？`)) {
-                gameState.funds -= m.price;
-                gameState.myManagers.push(m);
-                gameState.manager = m;
-                gameState.managerMarket.splice(index, 1);
-                updateUI();
-            }
+            const sellVal = calculateSellValue(p);
+            showCustomModal(
+                "選手放出の確認",
+                `${p.name} を ${formatCurrency(sellVal)} で放出してよろしいですか？`,
+                () => {
+                    gameState.funds += sellVal;
+                    if (playerStats[p.name]) playerStats[p.name].team = "フリー";
+
+                    if (selectedPlayer.type === 'starter') myStarters.splice(selectedPlayer.index, 1);
+                    else if (selectedPlayer.type === 'bench') myBench.splice(selectedPlayer.index, 1);
+                    else if (selectedPlayer.type === 'reserve') myReserves.splice(selectedPlayer.index, 1);
+
+                    selectedPlayer = null;
+                    autoFillStarterAndBench();
+                    autoFixSquadForUnavailable();
+                    updateUI();
+                },
+                () => {}
+            );
         }
 
         function updateUI() {
             document.getElementById('season').innerText = gameState.season;
             document.getElementById('week').innerText = gameState.week;
-            document.getElementById('funds').innerText = gameState.funds;
+            document.getElementById('funds').innerText = formatCurrency(gameState.funds);
+            document.getElementById('market-page-funds').innerText = formatCurrency(gameState.funds);
 
             const teamSelect = document.getElementById('team-select');
-            const isLeagueStarted = (gameState.week > 1 || gameState.season > 1);
-            if (teamSelect) {
-                teamSelect.disabled = isLeagueStarted;
-                teamSelect.style.opacity = isLeagueStarted ? '0.5' : '1.0';
-                teamSelect.style.cursor = isLeagueStarted ? 'not-allowed' : 'pointer';
+            teamSelect.value = gameState.teamName;
+            
+            if (gameState.teamSelectLocked || gameState.week > 1 || gameState.season > 1) {
+                teamSelect.disabled = true;
+            } else {
+                teamSelect.disabled = false;
             }
 
             const myRating = calculateStarterRating();
             document.getElementById('team-rating').innerText = myRating;
             document.getElementById('squad-team-rating').innerText = myRating;
 
-            document.getElementById('my-team-disp').innerText = gameState.teamName;
-
-            const enemyTeams = standings.filter(s => !s.isUser);
-            if (enemyTeams.length > 0) {
-                const enemy = enemyTeams[(gameState.week - 1) % enemyTeams.length];
-                document.getElementById('enemy-name').innerText = enemy.name;
-                const isHome = (gameState.week % 2 === 1);
-                const vBadge = document.getElementById('venue-indicator');
-                vBadge.innerText = isHome ? "HOME" : "AWAY";
-                vBadge.className = `venue-badge ${isHome ? 'venue-home' : 'venue-away'}`;
-
-                updateWinRatesUI(myRating, enemy.rating);
-            }
-
-            renderOfferBanner();
+            renderManagers();
             renderSquad();
-            renderManagerSelect();
-            renderMarket();
-            updateView();
+            renderPendingOffers();
+            updateMatchCenterUI();
+            renderView();
             saveGameState();
         }
 
-        window.onload = () => {
-            initTheme();
-            if (!loadGameState()) {
-                selectMyTeam();
-            } else {
+        function renderManagers() {
+            const select = document.getElementById('manager-select');
+            select.innerHTML = '';
+            (gameState.myManagers || []).forEach((m, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.innerText = m.name;
+                select.appendChild(opt);
+            });
+            if (gameState.manager) {
+                document.getElementById('manager-rating').innerText = ` (OVR: ${gameState.manager.rating})`;
+            }
+        }
+
+        function switchManager() {
+            const idx = document.getElementById('manager-select').value;
+            if (gameState.myManagers[idx]) {
+                gameState.manager = gameState.myManagers[idx];
                 updateUI();
             }
-        };
+        }
+
+        /* 保留中のオファー一覧レンダリング */
+        function renderPendingOffers() {
+            const listEl = document.getElementById('offers-list');
+            const badgeEl = document.getElementById('offer-count-badge');
+            if (!listEl) return;
+
+            let offers = gameState.pendingOffers || [];
+            badgeEl.innerText = `${offers.length}件`;
+
+            if (offers.length === 0) {
+                listEl.innerHTML = `<div style="color:var(--text-sub); text-align:center; padding:10px;">現在届いているオファーはありません</div>`;
+                return;
+            }
+
+            let html = '';
+            offers.forEach((off, idx) => {
+                if (off.type === 'sell_player') {
+                    html += `
+                        <div style="background:var(--card-bg); border:1px solid var(--panel-border); border-radius:6px; padding:8px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="color:var(--accent-gold); font-weight:bold;">📤 放出オファー</span>
+                                <span style="font-size:0.75em; color:var(--accent-red); font-weight:bold;">残り${off.expireWeeks}節</span>
+                            </div>
+                            <div style="margin:4px 0;"><strong>${off.playerName}</strong> (${off.player ? off.player.pos : ''}) → ${off.club}</div>
+                            <div style="font-size:0.9em; color:var(--accent-green); font-weight:bold; margin-bottom:6px;">オファー額: ${formatCurrency(off.price)}</div>
+                            <div style="display:flex; gap:6px;">
+                                <button onclick="acceptOffer(${idx})" style="flex:1; padding:4px; font-size:0.75em; background:var(--accent-green); color:#fff; border:none; border-radius:4px;">受諾</button>
+                                <button onclick="rejectOffer(${idx})" style="flex:1; padding:4px; font-size:0.75em; background:var(--card-bg); color:var(--text-sub); border:1px solid var(--panel-border); border-radius:4px;">拒否</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (off.type === 'buy_player') {
+                    html += `
+                        <div style="background:var(--card-bg); border:1px solid var(--panel-border); border-radius:6px; padding:8px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="color:var(--accent-blue); font-weight:bold;">📥 獲得特別オファー</span>
+                                <span style="font-size:0.75em; color:var(--accent-red); font-weight:bold;">残り${off.expireWeeks}節</span>
+                            </div>
+                            <div style="margin:4px 0;"><strong>${off.playerName}</strong> (${off.player ? off.player.pos : ''}) 売り込み</div>
+                            <div style="font-size:0.9em; color:var(--accent-green); font-weight:bold; margin-bottom:6px;">特別価格: ${formatCurrency(off.price)}</div>
+                            <div style="display:flex; gap:6px;">
+                                <button onclick="acceptOffer(${idx})" style="flex:1; padding:4px; font-size:0.75em; background:var(--accent-blue); color:#fff; border:none; border-radius:4px;">購入</button>
+                                <button onclick="rejectOffer(${idx})" style="flex:1; padding:4px; font-size:0.75em; background:var(--card-bg); color:var(--text-sub); border:1px solid var(--panel-border); border-radius:4px;">見送り</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            listEl.innerHTML = html;
+        }
+
+        function acceptOffer(index) {
+            if (!gameState.pendingOffers || !gameState.pendingOffers[index]) return;
+            let off = gameState.pendingOffers[index];
+
+            if (off.type === 'sell_player') {
+                const allMy = [...myStarters, ...myBench, ...myReserves];
+                if (allMy.length <= 11) {
+                    showCustomModal("放出不可", "選手数が11名以下になるため放出できません。", null, null);
+                    return;
+                }
+
+                gameState.funds += off.price;
+                removePlayerFromSquad(off.player);
+                if (playerStats[off.playerName]) playerStats[off.playerName].team = off.club;
+                autoFillStarterAndBench();
+                gameState.pendingOffers.splice(index, 1);
+                updateUI();
+                showCustomModal("移籍成立", `🎉 ${off.playerName} 選手を ${off.club} へ ${formatCurrency(off.price)} で放出し、資金を獲得しました！`, null, null);
+            } else if (off.type === 'buy_player') {
+                if (gameState.funds < off.price) {
+                    showCustomModal("資金不足", "資金が不足しているため購入できません。", null, null);
+                    return;
+                }
+                gameState.funds -= off.price;
+                let tIdx = transferMarket.findIndex(p => p.name === off.playerName);
+                if (tIdx !== -1) transferMarket.splice(tIdx, 1);
+
+                ensurePlayerDefaults(off.player);
+                myReserves.push(off.player);
+                if (playerStats[off.playerName]) playerStats[off.playerName].team = gameState.teamName;
+                autoFillStarterAndBench();
+                gameState.pendingOffers.splice(index, 1);
+                updateUI();
+                showCustomModal("獲得完了", `🎉 ${off.playerName} 選手を ${formatCurrency(off.price)} で獲得しました！`, null, null);
+            }
+        }
+
+        function rejectOffer(index) {
+            if (!gameState.pendingOffers || !gameState.pendingOffers[index]) return;
+            let off = gameState.pendingOffers[index];
+            gameState.pendingOffers.splice(index, 1);
+            updateUI();
+            showCustomModal("オファー見送り", `${off.playerName} に対するオファーを見送りました。`, null, null);
+        }
+
+        /* 試合が進むごとに相手の勝率・能力が徐々に上昇するように修正 */
+        function updateMatchCenterUI() {
+            const myTeam = gameState.teamName;
+            let otherTeams = Object.keys(clubPresetData).filter(t => t !== myTeam);
+            let enemyIndex = (gameState.week - 1) % otherTeams.length;
+            let enemyTeam = otherTeams[enemyIndex];
+
+            const isHome = (gameState.week % 2 !== 0);
+            const venue = document.getElementById('venue-indicator');
+            venue.className = `venue-badge ${isHome ? 'venue-home' : 'venue-away'}`;
+            venue.innerText = isHome ? 'HOME' : 'AWAY';
+
+            document.getElementById('my-team-disp').innerText = myTeam;
+            document.getElementById('enemy-name').innerText = enemyTeam;
+
+            // 経過試合数に応じた難易度（敵追加OVR）の上昇補正
+            let matchProgress = (gameState.season - 1) * 20 + (gameState.week - 1);
+            let difficultyBonus = Math.floor(matchProgress * 0.7);
+
+            let baseEnemyRating = Math.round(clubPresetData[enemyTeam].slice(0, 11).reduce((a,b)=>a+b.rating,0)/11);
+            let enemyRating = baseEnemyRating + difficultyBonus;
+            document.getElementById('enemy-rating').innerText = enemyRating;
+
+            let myRating = calculateStarterRating();
+            let diff = myRating - enemyRating;
+
+            let winRate = Math.min(85, Math.max(10, 45 + diff * 4));
+            let drawRate = Math.min(35, Math.max(10, 25 - Math.abs(diff)));
+            let lossRate = Math.max(5, 100 - winRate - drawRate);
+
+            document.getElementById('rate-win-txt').innerText = Math.round(winRate);
+            document.getElementById('rate-draw-txt').innerText = Math.round(drawRate);
+            document.getElementById('rate-loss-txt').innerText = Math.round(lossRate);
+
+            document.getElementById('bar-win').style.width = `${winRate}%`;
+            document.getElementById('bar-draw').style.width = `${drawRate}%`;
+            document.getElementById('bar-loss').style.width = `${lossRate}%`;
+        }
+
+        function addMatchLog(text, className = '') {
+            const logContainer = document.getElementById('match-log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${className}`;
+            entry.innerHTML = text;
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function startMatchSimulation() {
+            if (gameState.isMatchRunning) return;
+
+            gameState.teamSelectLocked = true;
+            document.getElementById('team-select').disabled = true;
+
+            gameState.isMatchRunning = true;
+            document.getElementById('btn-start-match').disabled = true;
+
+            const logContainer = document.getElementById('match-log');
+            logContainer.innerHTML = '';
+
+            const myTeam = gameState.teamName;
+            let otherTeams = Object.keys(clubPresetData).filter(t => t !== myTeam);
+            let enemyTeam = otherTeams[(gameState.week - 1) % otherTeams.length];
+
+            let scoreMy = 0, scoreEnemy = 0;
+            document.getElementById('score-my').innerText = '0';
+            document.getElementById('score-enemy').innerText = '0';
+
+            addMatchLog(`🔔【キックオフ】第${gameState.week}節 ${myTeam} vs ${enemyTeam} 試合開始のホイッスル！`, 'log-kickoff');
+
+            let minute = 0;
+            let myRating = calculateStarterRating();
+
+            let matchProgress = (gameState.season - 1) * 20 + (gameState.week - 1);
+            let difficultyBonus = Math.floor(matchProgress * 0.7);
+            let enemyRating = Math.round(clubPresetData[enemyTeam].slice(0, 11).reduce((a,b)=>a+b.rating,0)/11) + difficultyBonus;
+
+            let myScorers = [];
+            let enemyScorers = [];
+
+            let interval = setInterval(() => {
+                minute += 10;
+                if (minute > 90) minute = 90;
+                document.getElementById('match-timer').innerText = `${minute}:00`;
+
+                let roll = Math.random() * 100;
+                let probMy = 15 + (myRating - enemyRating) * 1.5;
+                let probEnemy = 15 + (enemyRating - myRating) * 1.5;
+
+                if (roll < 8) {
+                    let isMyPk = Math.random() > 0.5;
+                    let kickerTeam = isMyPk ? myTeam : enemyTeam;
+                    let kickerName = isMyPk ? (myStarters.find(p=>p.category==='FW')?.name || myStarters[0].name) : (teamPkKickerMap[enemyTeam] || "エース");
+                    let isGoal = Math.random() < 0.78;
+
+                    if (isGoal) {
+                        if (isMyPk) { 
+                            scoreMy++; myScorers.push(kickerName);
+                            recordGoal(kickerName, myTeam, "FW");
+                        } else { 
+                            scoreEnemy++; enemyScorers.push(kickerName);
+                            recordGoal(kickerName, enemyTeam, "FW");
+                        }
+                        addMatchLog(`🎯【PK獲得!!】${minute}分 ${kickerTeam}のキッカー ${kickerName} が冷静に決めゴール！`, 'log-pk');
+                    } else {
+                        addMatchLog(`🧤【PKストップ!!】${minute}分 ${kickerTeam}のPK獲得！しかしキーパーが見事なセーブ！`, 'log-pk-stop');
+                    }
+                    document.getElementById('score-my').innerText = scoreMy;
+                    document.getElementById('score-enemy').innerText = scoreEnemy;
+                }
+                else if (roll < 8 + probMy) {
+                    scoreMy++;
+                    let scorer = selectScorer(myStarters);
+                    let name = scorer ? scorer.name : myStarters[0].name;
+                    myScorers.push(name);
+                    recordGoal(name, myTeam, scorer ? scorer.pos : "FW");
+
+                    let assister = myStarters.find(p => p.name !== name && (p.category === 'MF' || p.category === 'FW' || p.category === 'DF'));
+                    let assistText = "";
+                    if (assister && Math.random() < 0.7) {
+                        recordAssist(assister.name, myTeam, assister.pos);
+                        assistText = ` (アシスト: ${assister.name})`;
+                    }
+
+                    document.getElementById('score-my').innerText = scoreMy;
+                    addMatchLog(`⚽ GOAL!! ${minute}分 [${myTeam}] ${name} の鮮やかなゴール！${assistText}`, 'log-goal');
+                } 
+                else if (roll < 8 + probMy + probEnemy) {
+                    scoreEnemy++;
+                    let enemyList = clubPresetData[enemyTeam] || [];
+                    let enemyScorer = selectScorer(enemyList);
+                    let eName = enemyScorer ? enemyScorer.name : "エース";
+                    enemyScorers.push(eName);
+                    recordGoal(eName, enemyTeam, enemyScorer ? enemyScorer.pos : "FW");
+
+                    let enemyAssister = enemyList.find(p => p.name !== eName && (p.category === 'MF' || p.category === 'FW' || p.category === 'DF'));
+                    let eAssistText = "";
+                    if (enemyAssister && Math.random() < 0.7) {
+                        recordAssist(enemyAssister.name, enemyTeam, enemyAssister.pos);
+                        eAssistText = ` (アシスト: ${enemyAssister.name})`;
+                    }
+
+                    document.getElementById('score-enemy').innerText = scoreEnemy;
+                    addMatchLog(`⚽ GOAL!! ${minute}分 [${enemyTeam}] ${eName} にゴールを奪われる！${eAssistText}`, 'log-entry');
+                }
+                else if (roll > 90) {
+                    let isMyCard = Math.random() < 0.5;
+                    if (isMyCard && myStarters.length > 0) {
+                        let cardPlayer = myStarters[Math.floor(Math.random() * myStarters.length)];
+                        recordCard(cardPlayer.name, myTeam, false, cardPlayer.pos);
+                        addMatchLog(`🟨【警告】${minute}分 [${myTeam}] ${cardPlayer.name} にイエローカード。`, 'log-card');
+                    }
+                }
+
+                if (minute >= 90) {
+                    clearInterval(interval);
+                    finishMatch(scoreMy, scoreEnemy, enemyTeam, myScorers, enemyScorers);
+                }
+            }, 450);
+        }
+
+        function finishMatch(scoreMy, scoreEnemy, enemyTeam, myScorers, enemyScorers) {
+            const myTeam = gameState.teamName;
+
+            addMatchLog(`🏁【試合終了】主審のホイッスル！試合終了です！ [${myTeam}] ${scoreMy} - ${scoreEnemy} [${enemyTeam}]`, 'log-finish');
+
+            let momName = "";
+            let winnerTeamName = "";
+
+            if (scoreMy > scoreEnemy) {
+                winnerTeamName = myTeam;
+                if (myScorers.length > 0) {
+                    momName = myScorers[Math.floor(Math.random() * myScorers.length)];
+                } else {
+                    let bestP = myStarters.reduce((max, p) => p.rating > max.rating ? p : max, myStarters[0]);
+                    momName = bestP ? bestP.name : "守護神";
+                }
+                addMatchLog(`🎙️【MOM発表】本日のMan of the Matchには、見事勝利を収めた [${winnerTeamName}] の <strong>${momName}</strong> 選手が選ばれました！`, 'log-mom');
+            } else if (scoreEnemy > scoreMy) {
+                winnerTeamName = enemyTeam;
+                if (enemyScorers.length > 0) {
+                    momName = enemyScorers[Math.floor(Math.random() * enemyScorers.length)];
+                } else {
+                    let enemyPreset = clubPresetData[enemyTeam] || [];
+                    let bestE = enemyPreset.slice(0, 11).reduce((max, p) => p.rating > max.rating ? p : max, enemyPreset[0]);
+                    momName = bestE ? bestE.name : "エース";
+                }
+                addMatchLog(`🎙️【MOM発表】本日のMan of the Matchには、勝利に貢献した [${winnerTeamName}] の <strong>${momName}</strong> 選手が選ばれました！`, 'log-mom');
+            } else {
+                let bestP = myStarters.reduce((max, p) => p.rating > max.rating ? p : max, myStarters[0]);
+                momName = bestP ? bestP.name : "守護神";
+                addMatchLog(`🎙️【MOM発表】白熱の引き分けとなった一戦、本日のMOMには攻守に奮闘した [${myTeam}] の <strong>${momName}</strong> 選手が選ばれました！`, 'log-mom');
+            }
+
+            /* スタミナ処理の修正: 出場したスタメンのみ減少、控え選手のみ回復 */
+            myStarters.forEach(p => {
+                ensurePlayerDefaults(p);
+                let baseLoss = 20;
+                let factor = p.isLegend ? 0.85 : 1.0;
+                p.stamina = Math.max(10, p.stamina - Math.floor(baseLoss * factor));
+            });
+
+            [...myBench, ...myReserves].forEach(p => {
+                ensurePlayerDefaults(p);
+                let baseRecover = 25;
+                let factor = p.isLegend ? 1.10 : 1.05;
+                p.stamina = Math.min(100, p.stamina + Math.floor(baseRecover * factor));
+            });
+
+            [...myStarters, ...myBench, ...myReserves].forEach(p => {
+                if (p.injuryWeeks > 0) p.injuryWeeks--;
+                if (p.suspendedWeeks > 0) p.suspendedWeeks--;
+            });
+
+            let otherLogText = simulateOtherMatches(enemyTeam, scoreMy, scoreEnemy);
+            addMatchLog(`📊【他会場の試合結果】<br>${otherLogText}`, 'log-other');
+
+            let prize = 150;
+            let resultTxt = "敗北";
+            if (scoreMy > scoreEnemy) {
+                prize = 700;
+                resultTxt = "勝利";
+            } else if (scoreMy === scoreEnemy) {
+                prize = 300;
+                resultTxt = "引き分け";
+            }
+            gameState.funds += prize;
+            addMatchLog(`💰【試合報酬】${resultTxt}報酬として <strong>${formatCurrency(prize)}</strong> を獲得しました！ (所持金: ${formatCurrency(gameState.funds)})`, 'log-entry');
+
+            // オファー期限の進行
+            if (gameState.pendingOffers && gameState.pendingOffers.length > 0) {
+                for (let i = gameState.pendingOffers.length - 1; i >= 0; i--) {
+                    gameState.pendingOffers[i].expireWeeks--;
+                    if (gameState.pendingOffers[i].expireWeeks <= 0) {
+                        addMatchLog(`📩 [オファー失効] ${gameState.pendingOffers[i].playerName} に対するオファーの期限が切れました。`, 'log-entry');
+                        gameState.pendingOffers.splice(i, 1);
+                    }
+                }
+            }
+
+            // 新ランダムイベントの判定
+            triggerRandomEvents();
+
+            // 新オファーイベントの発生判定
+            triggerTransferOfferEvents();
+
+            gameState.week++;
+
+            // シーズン終了 (全20節終了時) の報酬・進行処理
+            if (gameState.week > 20) {
+                let userRank = standings.findIndex(s => s.name === gameState.teamName) + 1;
+                if (userRank === 0) userRank = 1;
+
+                // 1位: 5000億円、1位下がるごとに-500億円
+                let rankPrize = Math.max(0, 5000 - (userRank - 1) * 500);
+                gameState.funds += rankPrize;
+
+                showCustomModal(
+                    "🏆 シーズン終了 & 順位報酬獲得",
+                    `欧州スーパーリーグ S${gameState.season} が全20節終了しました！\n\n` +
+                    `【最終順位】 第 ${userRank} 位\n` +
+                    `【順位獲得賞金】 ${formatCurrency(rankPrize)}\n\n` +
+                    `（現在の所持金: ${formatCurrency(gameState.funds)}）\n\n` +
+                    `新シーズン S${gameState.season + 1} が開幕します！`,
+                    null, null
+                );
+
+                addMatchLog(`🏆【シーズン終了】最終順位 ${userRank}位！ 順位賞金 ${formatCurrency(rankPrize)} を獲得！`, 'log-mom');
+
+                gameState.week = 1;
+                gameState.season++;
+                initStandings();
+            }
+
+            gameState.isMatchRunning = false;
+            document.getElementById('btn-start-match').disabled = false;
+            updateUI();
+        }
+
+        /* 新イベント追加（グッズ売り上げ報酬、特別リフレッシュ休暇） */
+        function triggerRandomEvents() {
+            let eventRoll = Math.random();
+
+            // グッズ売り上げ報酬イベント (稀に発生)
+            if (eventRoll < 0.08) {
+                let reward = 1000;
+                gameState.funds += reward;
+                setTimeout(() => {
+                    showCustomModal(
+                        "🛍️ グッズ売り上げ爆発ヒット！",
+                        `クラブの公式グッズやユニフォームが世界中で爆発的ヒット！\n特別臨時報酬として 【${formatCurrency(reward)}】 を獲得しました！\n\n（現在の所持金: ${formatCurrency(gameState.funds)}）`,
+                        null, null
+                    );
+                }, 600);
+                addMatchLog(`🛍️【特別イベント】グッズ売り上げ急増により ${formatCurrency(reward)} の臨時収入を獲得！`, 'log-mom');
+            }
+            // 選手休暇イベント (たまに発生)
+            else if (eventRoll < 0.22) {
+                let allPlayers = [...myStarters, ...myBench, ...myReserves];
+                allPlayers.forEach(p => {
+                    ensurePlayerDefaults(p);
+                    p.stamina = Math.min(100, p.stamina + 40);
+                });
+                setTimeout(() => {
+                    showCustomModal(
+                        "🏖️ チーム特別リフレッシュ休暇！",
+                        `過密日程を考慮し、チーム全体に特別リフレッシュ休暇が与えられました！\n全選手のスタミナが大幅に回復（+40）しました！`,
+                        null, null
+                    );
+                }, 600);
+                addMatchLog(`🏖️【特別イベント】特別リフレッシュ休暇により全選手のスタミナが大幅回復！`, 'log-mom');
+            }
+        }
+
+        function simulateOtherMatches(userEnemyTeam, scoreMy, scoreEnemy) {
+            let userTeam = gameState.teamName;
+            let otherTeams = Object.keys(clubPresetData).filter(t => t !== userTeam && t !== userEnemyTeam);
+
+            let uRecord = standings.find(s => s.name === userTeam);
+            let eRecord = standings.find(s => s.name === userEnemyTeam);
+
+            if (uRecord && eRecord) {
+                uRecord.played++; eRecord.played++;
+                uRecord.gf += scoreMy; uRecord.ga += scoreEnemy; uRecord.gd = uRecord.gf - uRecord.ga;
+                eRecord.gf += scoreEnemy; eRecord.ga += scoreMy; eRecord.gd = eRecord.gf - eRecord.ga;
+
+                if (scoreMy > scoreEnemy) { uRecord.win++; uRecord.points += 3; eRecord.loss++; }
+                else if (scoreMy < scoreEnemy) { eRecord.win++; eRecord.points += 3; uRecord.loss++; }
+                else { uRecord.draw++; uRecord.points += 1; eRecord.draw++; eRecord.points += 1; }
+            }
+
+            let resultsSummary = [];
+
+            for (let i = 0; i < otherTeams.length; i += 2) {
+                if (i + 1 >= otherTeams.length) break;
+                let t1 = otherTeams[i];
+                let t2 = otherTeams[i+1];
+
+                let g1 = Math.floor(Math.random() * 4);
+                let g2 = Math.floor(Math.random() * 4);
+
+                let pList1 = clubPresetData[t1] || [];
+                let pList2 = clubPresetData[t2] || [];
+
+                for (let k = 0; k < g1; k++) {
+                    let sc = selectScorer(pList1);
+                    if (sc) {
+                        recordGoal(sc.name, t1, sc.pos);
+                        let ass = pList1.find(p => p.name !== sc.name && (p.category === 'MF' || p.category === 'FW'));
+                        if (ass && Math.random() < 0.7) recordAssist(ass.name, t1, ass.pos);
+                    }
+                }
+                for (let k = 0; k < g2; k++) {
+                    let sc = selectScorer(pList2);
+                    if (sc) {
+                        recordGoal(sc.name, t2, sc.pos);
+                        let ass = pList2.find(p => p.name !== sc.name && (p.category === 'MF' || p.category === 'FW'));
+                        if (ass && Math.random() < 0.7) recordAssist(ass.name, t2, ass.pos);
+                    }
+                }
+
+                if (Math.random() < 0.3) {
+                    let cp = pList1[Math.floor(Math.random() * pList1.length)];
+                    if (cp) recordCard(cp.name, t1, Math.random() < 0.15, cp.pos);
+                }
+                if (Math.random() < 0.3) {
+                    let cp = pList2[Math.floor(Math.random() * pList2.length)];
+                    if (cp) recordCard(cp.name, t2, Math.random() < 0.15, cp.pos);
+                }
+
+                let r1 = standings.find(s => s.name === t1);
+                let r2 = standings.find(s => s.name === t2);
+
+                if (r1 && r2) {
+                    r1.played++; r2.played++;
+                    r1.gf += g1; r1.ga += g2; r1.gd = r1.gf - r1.ga;
+                    r2.gf += g2; r2.ga += g1; r2.gd = r2.gf - r2.ga;
+
+                    if (g1 > g2) { r1.win++; r1.points += 3; r2.loss++; }
+                    else if (g1 < g2) { r2.win++; r2.points += 3; r1.loss++; }
+                    else { r1.draw++; r1.points += 1; r2.draw++; r2.points += 1; }
+                }
+
+                resultsSummary.push(`・${t1} ${g1} - ${g2} ${t2}`);
+            }
+
+            standings.sort((a, b) => b.points - a.points || b.gd - a.gd || b.gf - a.gf);
+            return resultsSummary.join('<br>');
+        }
+
+        /* 獲得オファー・放出オファーの保留追加機能 */
+        function triggerTransferOfferEvents() {
+            if (!gameState.pendingOffers) gameState.pendingOffers = [];
+
+            let roll = Math.random();
+
+            if (roll < 0.25) {
+                let allMy = [...myStarters, ...myBench, ...myReserves];
+                if (allMy.length <= 11) return;
+
+                let targetPlayer = allMy[Math.floor(Math.random() * allMy.length)];
+                if (gameState.pendingOffers.some(o => o.playerName === targetPlayer.name)) return;
+
+                let baseVal = calculateSellValue(targetPlayer);
+                let offerPrice = Math.floor(baseVal * (1.3 + Math.random() * 0.4));
+
+                let buyerClubs = Object.keys(clubPresetData).filter(c => c !== gameState.teamName);
+                let buyer = buyerClubs[Math.floor(Math.random() * buyerClubs.length)];
+
+                gameState.pendingOffers.push({
+                    id: Date.now() + Math.random(),
+                    type: 'sell_player',
+                    player: targetPlayer,
+                    playerName: targetPlayer.name,
+                    price: offerPrice,
+                    club: buyer,
+                    expireWeeks: 3
+                });
+
+                addMatchLog(`📩【オファー到着】${buyer} から ${targetPlayer.name} 選手への獲得オファー(${formatCurrency(offerPrice)})が届きました！(3節検討可能)`, 'log-mom');
+                renderPendingOffers();
+            }
+            else if (roll < 0.45) {
+                let availableOffers = transferMarket.filter(p => !p.isLegend);
+                if (availableOffers.length === 0) return;
+
+                let targetPlayer = availableOffers[Math.floor(Math.random() * availableOffers.length)];
+                if (gameState.pendingOffers.some(o => o.playerName === targetPlayer.name)) return;
+
+                let discountPrice = Math.floor(targetPlayer.price * 0.7);
+
+                gameState.pendingOffers.push({
+                    id: Date.now() + Math.random(),
+                    type: 'buy_player',
+                    player: targetPlayer,
+                    playerName: targetPlayer.name,
+                    price: discountPrice,
+                    expireWeeks: 3
+                });
+
+                addMatchLog(`📢【オファー到着】移籍エージェントから ${targetPlayer.name} 選手の特別価格オファー(${formatCurrency(discountPrice)})が届きました！(3節検討可能)`, 'log-mom');
+                renderPendingOffers();
+            }
+        }
+
+        function removePlayerFromSquad(player) {
+            let sIdx = myStarters.indexOf(player);
+            if (sIdx !== -1) { myStarters.splice(sIdx, 1); return; }
+            let bIdx = myBench.indexOf(player);
+            if (bIdx !== -1) { myBench.splice(bIdx, 1); return; }
+            let rIdx = myReserves.indexOf(player);
+            if (rIdx !== -1) { myReserves.splice(rIdx, 1); return; }
+        }
+
+        function switchViewTab(tab) {
+            gameState.activeTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            if (activeBtn) activeBtn.classList.add('active');
+            renderView();
+        }
+
+        function renderView() {
+            const container = document.getElementById('view-container');
+            initAllPlayerStats();
+
+            if (gameState.activeTab === 'standings') {
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>順位</th>
+                                <th>クラブ</th>
+                                <th>勝点</th>
+                                <th>試</th>
+                                <th>勝</th>
+                                <th>分</th>
+                                <th>負</th>
+                                <th>得失</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                standings.forEach((s, idx) => {
+                    let isMy = s.name === gameState.teamName;
+                    html += `
+                        <tr class="${isMy ? 'my-team-row' : ''}">
+                            <td>${idx + 1}</td>
+                            <td style="text-align:left;">${s.name}</td>
+                            <td><strong>${s.points}</strong></td>
+                            <td>${s.played}</td>
+                            <td>${s.win}</td>
+                            <td>${s.draw}</td>
+                            <td>${s.loss}</td>
+                            <td>${s.gd > 0 ? '+' + s.gd : s.gd}</td>
+                        </tr>
+                    `;
+                });
+                html += '</tbody></table>';
+                container.innerHTML = html;
+
+            } else if (gameState.activeTab === 'goals') {
+                let list = Object.values(playerStats)
+                    .filter(p => p.goals > 0)
+                    .sort((a, b) => b.goals - a.goals)
+                    .slice(0, 15);
+
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>順位</th>
+                                <th>選手名</th>
+                                <th>所属</th>
+                                <th>Pos</th>
+                                <th>得点数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                if (list.length === 0) {
+                    html += `<tr><td colspan="5" style="padding:15px; color:var(--text-sub);">まだ記録はありません</td></tr>`;
+                } else {
+                    list.forEach((p, idx) => {
+                        let isMy = p.team === gameState.teamName;
+                        html += `
+                            <tr class="${isMy ? 'my-team-row' : ''}">
+                                <td>${idx + 1}</td>
+                                <td style="text-align:left; font-weight:bold;">${p.name}</td>
+                                <td>${p.team}</td>
+                                <td>${p.pos}</td>
+                                <td><strong style="color:var(--accent-green);">${p.goals}</strong> G</td>
+                            </tr>
+                        `;
+                    });
+                }
+                html += '</tbody></table>';
+                container.innerHTML = html;
+
+            } else if (gameState.activeTab === 'assists') {
+                let list = Object.values(playerStats)
+                    .filter(p => p.assists > 0)
+                    .sort((a, b) => b.assists - a.assists)
+                    .slice(0, 15);
+
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>順位</th>
+                                <th>選手名</th>
+                                <th>所属</th>
+                                <th>Pos</th>
+                                <th>アシスト</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                if (list.length === 0) {
+                    html += `<tr><td colspan="5" style="padding:15px; color:var(--text-sub);">まだ記録はありません</td></tr>`;
+                } else {
+                    list.forEach((p, idx) => {
+                        let isMy = p.team === gameState.teamName;
+                        html += `
+                            <tr class="${isMy ? 'my-team-row' : ''}">
+                                <td>${idx + 1}</td>
+                                <td style="text-align:left; font-weight:bold;">${p.name}</td>
+                                <td>${p.team}</td>
+                                <td>${p.pos}</td>
+                                <td><strong style="color:var(--accent-blue);">${p.assists}</strong> A</td>
+                            </tr>
+                        `;
+                    });
+                }
+                html += '</tbody></table>';
+                container.innerHTML = html;
+
+            } else if (gameState.activeTab === 'cards') {
+                let list = Object.values(playerStats)
+                    .filter(p => p.yellowCards > 0 || p.redCards > 0)
+                    .sort((a, b) => (b.redCards * 3 + b.yellowCards) - (a.redCards * 3 + a.yellowCards))
+                    .slice(0, 15);
+
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>順位</th>
+                                <th>選手名</th>
+                                <th>所属</th>
+                                <th>🟨 警告</th>
+                                <th>🟥 退場</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                if (list.length === 0) {
+                    html += `<tr><td colspan="5" style="padding:15px; color:var(--text-sub);">カード記録はありません</td></tr>`;
+                } else {
+                    list.forEach((p, idx) => {
+                        let isMy = p.team === gameState.teamName;
+                        html += `
+                            <tr class="${isMy ? 'my-team-row' : ''}">
+                                <td>${idx + 1}</td>
+                                <td style="text-align:left; font-weight:bold;">${p.name}</td>
+                                <td>${p.team}</td>
+                                <td><span style="color:#facc15; font-weight:bold;">${p.yellowCards}</span></td>
+                                <td><span style="color:#ef4444; font-weight:bold;">${p.redCards}</span></td>
+                            </tr>
+                        `;
+                    });
+                }
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            }
+        }
+
+        function renderMarket() {
+            const grid = document.getElementById('market-grid');
+            grid.innerHTML = '';
+
+            const cat = gameState.marketCategory || 'ALL';
+
+            if (cat === 'MANAGER') {
+                (gameState.managerMarket || []).forEach((m, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'market-card-item';
+                    card.innerHTML = `
+                        <div>
+                            <div class="market-card-header">
+                                <span class="market-pos-badge">👔 MANAGER</span>
+                                <span style="font-size:0.75em; color:var(--text-sub);">指揮官</span>
+                            </div>
+                            <div style="font-weight:bold; font-size:1.05em; margin-top:6px;">${m.name}</div>
+                            <div class="market-detail-row">
+                                総合評価: <strong style="color:var(--accent-gold);">${m.rating}</strong>
+                            </div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+                            <span style="font-weight:bold; color:var(--accent-green); font-size:1.0em;">${formatCurrency(m.price)}</span>
+                            <button class="btn-buy" onclick="buyManager(${idx})">契約</button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                return;
+            }
+
+            let filtered = transferMarket.filter(p => {
+                ensurePlayerDefaults(p);
+                if (cat === 'ALL') return true;
+                if (cat === 'ACTIVE_ALL') return !p.isLegend;
+                if (cat === 'LEGEND_ALL') return p.isLegend;
+                if (cat === 'FW') return p.category === 'FW' && !p.isLegend;
+                if (cat === 'MF') return p.category === 'MF' && !p.isLegend;
+                if (cat === 'DF') return p.category === 'DF' && !p.isLegend;
+                if (cat === 'GK') return p.category === 'GK' && !p.isLegend;
+                if (cat === 'LEGEND_FW') return p.category === 'FW' && p.isLegend;
+                if (cat === 'LEGEND_MF') return p.category === 'MF' && p.isLegend;
+                if (cat === 'LEGEND_DF') return p.category === 'DF' && p.isLegend;
+                if (cat === 'LEGEND_GK') return p.category === 'GK' && p.isLegend;
+                return true;
+            });
+
+            filtered.forEach((player) => {
+                const realIndex = transferMarket.indexOf(player);
+                const card = document.createElement('div');
+                card.className = `market-card-item ${player.isLegend ? 'legend-border' : ''}`;
+
+                let badgeClass = getRatingClass(player.rating);
+                let altPosTxt = (player.altPos && player.altPos.length > 0) ? player.altPos.join(', ') : 'なし';
+
+                card.innerHTML = `
+                    <div>
+                        <div class="market-card-header">
+                            <span class="market-pos-badge">${player.pos}</span>
+                            ${player.isLegend ? '<span class="legend-pill">👑 LEGEND</span>' : '<span class="active-pill">現役</span>'}
+                        </div>
+                        <div style="font-weight:bold; font-size:1.05em; margin-top:6px; display:flex; align-items:center; gap:6px;">
+                            <span>${player.nat || '🏳️'}</span>
+                            <span>${player.name}</span>
+                        </div>
+                        <div class="market-detail-row">
+                            <span>・メイン適性: <strong style="color:var(--accent-blue);">${player.pos}</strong></span><br>
+                            <span>・サブ適性: <strong>${altPosTxt}</strong></span>
+                        </div>
+                        <div style="margin-top:6px; font-size:0.8em; color:var(--text-sub); display:flex; align-items:center; gap:6px;">
+                            <span>OVR:</span>
+                            <span class="rating-badge ${badgeClass}">${player.rating}</span>
+                            <span style="font-size:0.75em; opacity:0.8;">| ${player.category}</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; border-top:1px dashed var(--panel-border); padding-top:8px;">
+                        <span style="font-weight:bold; color:var(--accent-green); font-size:1.0em;">${formatCurrency(player.price)}</span>
+                        <button class="btn-buy" onclick="buyPlayer(${realIndex})">獲得</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function buyPlayer(index) {
+            const player = transferMarket[index];
+            if (!player) return;
+
+            if (gameState.funds < player.price) {
+                showCustomModal("資金不足", `資金が不足しています。(必要: ${formatCurrency(player.price)})`, null, null);
+                return;
+            }
+
+            showCustomModal(
+                "選手獲得の確認",
+                `${player.nat || ''} ${player.name} (${player.pos} / OVR:${player.rating}) を\n${formatCurrency(player.price)} で獲得しますか？`,
+                () => {
+                    gameState.funds -= player.price;
+                    const bought = transferMarket.splice(index, 1)[0];
+                    ensurePlayerDefaults(bought);
+                    myReserves.push(bought);
+
+                    if (playerStats[bought.name]) playerStats[bought.name].team = gameState.teamName;
+
+                    updateUI();
+                    renderMarket();
+                    showCustomModal("獲得完了", `${bought.name} 選手を獲得しました！`, null, null);
+                },
+                () => {}
+            );
+        }
+
+        function buyManager(index) {
+            const manager = gameState.managerMarket[index];
+            if (!manager) return;
+
+            if (gameState.funds < manager.price) {
+                showCustomModal("資金不足", "資金が不足しています。", null, null);
+                return;
+            }
+
+            showCustomModal(
+                "監督契約の確認",
+                `${manager.name} 監督と ${formatCurrency(manager.price)} で契約しますか？`,
+                () => {
+                    gameState.funds -= manager.price;
+                    const bought = gameState.managerMarket.splice(index, 1)[0];
+                    gameState.myManagers.push(bought);
+                    gameState.manager = bought;
+
+                    updateUI();
+                    renderMarket();
+                    showCustomModal("契約完了", `${bought.name} 監督と契約しました！`, null, null);
+                },
+                () => {}
+            );
+        }
     </script>
 </body>
 </html>
