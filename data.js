@@ -304,22 +304,22 @@ const initialManagers = {
 
 // 獲得可能なフリー監督市場（80~95に設定）
 const freeManagers = [
-    { name: "ペップ・グアルディオラ", rating: 95, price: 800 },
-    { name: "カルロ・アンチェロッティ", rating: 94, price: 750 },
-    { name: "ユルゲン・クロップ", rating: 93, price: 700 },
-    { name: "ジネディーヌ・ジダン", rating: 91, price: 620 },
-    { name: "ディエゴ・シメオネ", rating: 91, price: 600 },
-    { name: "シャビ・アロンソ", rating: 90, price: 550 },
-    { name: "トマス・トゥヘル", rating: 89, price: 500 },
-    { name: "ユリアン・ナーゲルスマン", rating: 89, price: 480 },
-    { name: "アントニオ・コンテ", rating: 88, price: 450 },
-    { name: "ジャン・ピエロ・ガスペリーニ", rating: 88, price: 440 },
-    { name: "ウナイ・エメリ", rating: 87, price: 420 },
-    { name: "ロベルト・デ・ゼルビ", rating: 86, price: 380 },
-    { name: "シャビ・エルナンデス", rating: 85, price: 350 },
-    { name: "ルベン・アモリム", rating: 85, price: 340 },
-    { name: "マウリシオ・ポチェッティーノ", rating: 84, price: 320 },
-    { name: "ルシアン・ファヴル", rating: 82, price: 250 }
+    { name: "ペップ・グアルディオラ", rating: 95, price: 1800 },
+    { name: "カルロ・アンチェロッティ", rating: 94, price: 1750 },
+    { name: "ユルゲン・クロップ", rating: 93, price: 1700 },
+    { name: "ジネディーヌ・ジダン", rating: 91, price: 1620 },
+    { name: "ディエゴ・シメオネ", rating: 91, price: 1600 },
+    { name: "シャビ・アロンソ", rating: 90, price: 1550 },
+    { name: "トマス・トゥヘル", rating: 89, price: 1500 },
+    { name: "ユリアン・ナーゲルスマン", rating: 89, price: 1480 },
+    { name: "アントニオ・コンテ", rating: 88, price: 1450 },
+    { name: "ジャン・ピエロ・ガスペリーニ", rating: 88, price: 1440 },
+    { name: "ウナイ・エメリ", rating: 87, price: 1420 },
+    { name: "ロベルト・デ・ゼルビ", rating: 86, price: 1380 },
+    { name: "シャビ・エルナンデス", rating: 85, price: 1350 },
+    { name: "ルベン・アモリム", rating: 85, price: 1340 },
+    { name: "マウリシオ・ポチェッティーノ", rating: 84, price: 1320 },
+    { name: "ルシアン・ファヴル", rating: 82, price: 1250 }
 ];
 
 const teamPkKickerMap = {
@@ -399,21 +399,23 @@ const defaultTransferMarket = [
     { nat: "🇦🇷", name: "マラドーナ", pos: "AMF", altPos: ["CF", "RWG"], category: "FW", rating: 97, price: 4500, isLegend: true },
     { nat: "🇵🇹", name: "C.ロナウド", pos: "CF", altPos: ["RWG", "LWG"], category: "FW", rating: 97, price: 4500, isLegend: true },
     { nat: "🇳🇱", name: "クライフ", pos: "CF", altPos: ["AMF", "LWG"], category: "FW", rating: 96, price: 4200, isLegend: true },
-    { nat: "🇦🇷", name: "メッシ", pos: "RWG", altPos: ["AMF", "CF"], category: "FW", rating: 96, price: 4200, isLegend: true },
+    { nat: "🇦🇷", name: "メッシ", pos: "RWG", altPos: ["AMF", "CF", "RMF"], category: "FW", rating: 96, price: 4200, isLegend: true },
     { nat: "🇧🇷", name: "ロナウド", pos: "CF", altPos: [], category: "FW", rating: 96, price: 4200, isLegend: true },
     { nat: "🇮🇹", name: "デル・ピエロ", pos: "CF", altPos: [], category: "FW", rating: 96, price: 4200, isLegend: true },
     { nat: "🇧🇷", name: "ロナウジーニョ", pos: "LWG", altPos: ["AMF", "LMF"], category: "FW", rating: 95, price: 3800, isLegend: true },
     { nat: "🇫🇷", name: "ベンゼマ", pos: "CF", altPos: [], category: "FW", rating: 95, price: 3800, isLegend: true },
     { nat: "🇫🇷", name: "アンリ", pos: "CF", altPos: ["LWG"], category: "FW", rating: 94, price: 3500, isLegend: true },
-    { nat: "🏴󠁧󠁢󠁷󠁬󠁳󠁿", name: "ベイル", pos: "RWG", altPos: ["CF", "LB"], category: "FW", rating: 94, price: 3500, isLegend: true },
+    { nat: "🇵🇹", name: "フィーゴ", pos: "RWG", altPos: ["RMF"], category: "FW", rating: 94, price: 3500, isLegend: true },
+    { nat: "🏴󠁧󠁢󠁷󠁬󠁳󠁿", name: "ベイル", pos: "RWG", altPos: ["CF", "RMF", "LWG" ,"LMF"], category: "FW", rating: 94, price: 3500, isLegend: true },
 
     // --- MF Legend ---
     { nat: "🇫🇷", name: "ジダン", pos: "AMF", altPos: ["CMF"], category: "MF", rating: 97, price: 4400, isLegend: true },
+    { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "ベッカム", pos: "RMF", altPos: ["AMF", "RWG"], category: "MF", rating: 96, price: 4000, isLegend: true },
     { nat: "🇫🇷", name: "プラティニ", pos: "AMF", altPos: ["CMF"], category: "MF", rating: 95, price: 3800, isLegend: true },
-    { nat: "🇳🇱", name: "フリット", pos: "CMF", altPos: ["AMF", "CF", "CB"], category: "MF", rating: 95, price: 3900, isLegend: true },
-    { nat: "🇩🇪", name: "クロース", pos: "CMF", altPos: ["DMF"], category: "MF", rating: 95, price: 3800, isLegend: true },
+    { nat: "🇳🇱", name: "フリット", pos: "CMF", altPos: ["AMF", "CF", "CB", "DMF"], category: "MF", rating: 95, price: 3900, isLegend: true },
+    { nat: "🇩🇪", name: "クロース", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 95, price: 3800, isLegend: true },
     { nat: "🇪🇸", name: "シャビ", pos: "CMF", altPos: ["DMF"], category: "MF", rating: 94, price: 3500, isLegend: true },
-    { nat: "🇧🇷", name: "カゼミロ", pos: "DMF", altPos: ["CMF"], category: "MF", rating: 94, price: 3500, isLegend: true },
+    { nat: "🇧🇷", name: "カゼミロ", pos: "DMF", altPos: ["CMF", "CB"], category: "MF", rating: 94, price: 3500, isLegend: true },
     { nat: "🇪🇸", name: "イニエスタ", pos: "CMF", altPos: ["AMF", "LMF"], category: "MF", rating: 94, price: 3500, isLegend: true },
     { nat: "🇮🇹", name: "ピルロ", pos: "DMF", altPos: ["CMF"], category: "MF", rating: 93, price: 3200, isLegend: true },
 
@@ -422,6 +424,7 @@ const defaultTransferMarket = [
     { nat: "🇩🇪", name: "ベッケンバウアー", pos: "CB", altPos: ["DMF"], category: "DF", rating: 97, price: 4400, isLegend: true },
     { nat: "🇵🇹", name: "ペペ", pos: "CB", altPos: [], category: "DF", rating: 96, price: 4000, isLegend: true },
     { nat: "🇮🇹", name: "バレージ", pos: "CB", altPos: [], category: "DF", rating: 95, price: 3700, isLegend: true },
+    { nat: "🇧🇷", name: "ロベルト・カルロス", pos: "LB", altPos: ["LWB", "LMF"], category: "DF", rating: 95, price: 3700, isLegend: true },
     { nat: "🇪🇸", name: "セルヒオ・ラモス", pos: "CB", altPos: ["RB"], category: "DF", rating: 95, price: 3700, isLegend: true },
     { nat: "🇧🇷", name: "マルセロ", pos: "LB", altPos: ["LWB", "LMF"], category: "DF", rating: 94, price: 3500, isLegend: true },
     { nat: "🇮🇹", name: "ネスタ", pos: "CB", altPos: [], category: "DF", rating: 94, price: 3400, isLegend: true },
@@ -462,6 +465,7 @@ const defaultTransferMarket = [
     { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "パーマー", pos: "AMF", altPos: ["RMF", "RWG"], category: "MF", rating: 90, price: 2100 },
     { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "ライス", pos: "DMF", altPos: ["CMF", "CB"], category: "MF", rating: 90, price: 2100 },
     { nat: "🇧🇪", name: "デ・ブライネ", pos: "AMF", altPos: ["CMF"], category: "MF", rating: 89, price: 1900 },
+    { nat: "🇺🇾", name: "バルベルデ", pos: "CMF", altPos: ["RSB", "RMF", "DMF", "AMF"], category: "MF", rating: 89, price: 1900 },
     { nat: "🇪🇸", name: "ペドリ", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 88, price: 1800 },
     { nat: "🇵🇹", name: "ブルーノ", pos: "AMF", altPos: ["CMF"], category: "MF", rating: 87, price: 1600 },
     { nat: "🇦🇷", name: "マクアリスター", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 86, price: 1500 },
@@ -474,7 +478,7 @@ const defaultTransferMarket = [
 
     // --- DF (15名) ---
     { nat: "🇳🇱", name: "ファン・ダイク", pos: "CB", altPos: [], category: "DF", rating: 90, price: 2100 },
-    { nat: "🇺🇾", name: "アラウホ", pos: "CB", altPos: [], category: "DF", rating: 90, price: 2100 },
+    { nat: "🇺🇾", name: "アラウホ", pos: "CB", altPos: ["CF", "RB"], category: "DF", rating: 90, price: 2100 },
     { nat: "🇫🇷", name: "サリバ", pos: "CB", altPos: [], category: "DF", rating: 89, price: 2000 },
     { nat: "🇵🇹", name: "ルベン・ディアス", pos: "CB", altPos: [], category: "DF", rating: 88, price: 1800 },
     { nat: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", name: "トレント", pos: "RB", altPos: ["RWB", "CMF"], category: "DF", rating: 87, price: 1700 },
