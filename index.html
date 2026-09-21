@@ -167,7 +167,7 @@
             gap: 12px;
         }
 
-        select, button {
+        select, button, input {
             font-family: inherit;
             background-color: var(--card-bg);
             color: var(--text-main);
@@ -233,11 +233,13 @@
             overflow: hidden;
             margin-bottom: 12px;
             user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
         .pitch-line-center { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.25); }
         .pitch-circle { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; border: 2px solid rgba(255,255,255,0.25); border-radius: 50%; transform: translate(-50%, -50%); }
 
-        .player-card {
+        .player-card, .player-pin {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -247,14 +249,18 @@
             padding: 3px 5px;
             cursor: grab;
             user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-touch-callout: none;
             touch-action: manipulation;
             transition: transform 0.1s, border-color 0.1s, opacity 0.1s, box-shadow 0.2s;
             box-sizing: border-box;
         }
-        .player-card:active { cursor: grabbing; }
-        .player-card.dragging { opacity: 0.4; }
-        .player-card.drag-over { border: 2px dashed var(--accent-gold) !important; background: rgba(245, 158, 11, 0.2); }
-        .player-card.selected { border: 2px solid var(--accent-blue) !important; box-shadow: 0 0 10px var(--accent-blue) !important; }
+        .player-card:active, .player-pin:active { cursor: grabbing; }
+        .player-card.dragging, .player-pin.dragging { opacity: 0.4; }
+        .player-card.drag-over, .player-pin.drag-over { border: 2px dashed var(--accent-gold) !important; background: rgba(245, 158, 11, 0.2); }
+        .player-card.selected, .player-pin.selected { border: 2px solid var(--accent-blue) !important; box-shadow: 0 0 10px var(--accent-blue) !important; }
 
         .card-active-player {
             border: 1.5px solid #3b82f6 !important;
@@ -264,8 +270,14 @@
         .card-legend-player {
             border: 1.5px solid #f59e0b !important;
             box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), var(--card-bg)) !important;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), var(--card-bg)) !important;
             animation: legendGoldGlow 2s infinite alternate;
+            opacity: 1 !important;
+        }
+
+        body[data-theme="light"] .card-legend-player {
+            background: linear-gradient(135deg, #fef3c7, #ffffff) !important;
+            opacity: 1 !important;
         }
 
         @keyframes legendGoldGlow {
@@ -286,6 +298,9 @@
             padding: 1px 4px;
             border-radius: 3px;
             color: #fff;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .rating-blue { background-color: #3b82f6; }
         .rating-green { background-color: #10b981; }
@@ -299,6 +314,7 @@
             border-radius: 2px;
             margin-top: 2px;
             overflow: hidden;
+            pointer-events: none;
         }
         .stamina-bar-fill { height: 100%; transition: width 0.2s; }
 
@@ -311,6 +327,8 @@
             max-width: 52px;
             text-align: center;
             pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .bench-grid {
@@ -320,6 +338,7 @@
             margin-top: 6px;
             min-height: 52px;
             user-select: none;
+            -webkit-user-select: none;
         }
         .reserve-section {
             margin-top: 10px;
@@ -334,6 +353,7 @@
             overflow-y: auto;
             min-height: 50px;
             user-select: none;
+            -webkit-user-select: none;
         }
 
         .match-card {
@@ -394,17 +414,17 @@
         .log-other { color: #94a3b8; font-size: 0.85em; background: rgba(255,255,255,0.03); padding: 4px 6px; border-radius: 4px; border-left: 3px solid var(--accent-blue); margin-top: 6px; }
 
         .transfer-market-page {
-            background: linear-gradient(180deg, var(--panel-bg) 0%, rgba(15,23,42,0.95) 100%);
+            background: var(--panel-bg);
             border-radius: 12px;
             padding: 18px;
             border: 1px solid var(--panel-border);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         .market-categories {
             display: flex;
             gap: 8px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             overflow-x: auto;
             padding-bottom: 8px;
             scrollbar-width: thin;
@@ -448,7 +468,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 14px;
-            max-height: 680px;
+            max-height: 640px;
             overflow-y: auto;
             padding-right: 4px;
         }
@@ -572,6 +592,33 @@
         th { background: var(--card-bg); color: var(--text-sub); }
         tr.my-team-row { background: rgba(16, 185, 129, 0.15); font-weight: bold; }
 
+        /* ニュースカード用スタイル */
+        .news-card {
+            background: var(--card-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.15s ease;
+        }
+        .news-card.here-we-go {
+            border: 1.5px solid #f59e0b;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), var(--card-bg));
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+        }
+        .news-badge {
+            display: inline-block;
+            font-size: 0.72em;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+        .news-badge.match { background: var(--accent-blue); color: #fff; }
+        .news-badge.transfer { background: var(--accent-green); color: #fff; }
+        .news-badge.herewego { background: var(--accent-gold); color: #000; }
+        .news-badge.season { background: var(--accent-purple); color: #fff; }
+
         @media (max-width: 900px) {
             .main-layout { grid-template-columns: 1fr; }
             .app-browser-header { padding: 8px 10px; }
@@ -604,6 +651,9 @@
                 </button>
                 <button class="app-page-tab" id="app-tab-2" onclick="switchAppPage(2)">
                     🔄 移籍市場
+                </button>
+                <button class="app-page-tab" id="app-tab-3" onclick="switchAppPage(3)">
+                    📰 ニュース
                 </button>
             </div>
 
@@ -791,6 +841,23 @@
                         </div>
                     </div>
 
+                    <!-- 移籍市場 検索・フィルター機能 -->
+                    <div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+                        <input type="text" id="market-search-input" placeholder="🔍 選手名や国籍で検索..." oninput="renderMarket()" style="flex:1; min-width:200px; padding:8px 12px; border-radius:6px; border:1px solid var(--panel-border); background:var(--card-bg); color:var(--text-main); font-size:0.88em;">
+                        <select id="market-pos-filter" onchange="renderMarket()" style="padding:8px 12px; border-radius:6px; border:1px solid var(--panel-border); background:var(--card-bg); color:var(--text-main); font-size:0.88em;">
+                            <option value="ALL">全ポジション (All Pos)</option>
+                            <option value="FW">FW全般</option>
+                            <option value="MF">MF全般</option>
+                            <option value="DF">DF全般</option>
+                            <option value="GK">GK</option>
+                            <option value="ST">ST / CF</option>
+                            <option value="RWG">RWG / LWG</option>
+                            <option value="OMF">OMF / CMF</option>
+                            <option value="DMF">DMF</option>
+                            <option value="CB">CB / SB</option>
+                        </select>
+                    </div>
+
                     <div class="market-categories" id="market-tabs">
                         <button class="market-tab-btn active" id="mtab-ALL" onclick="setMarketCategory('ALL')">すべて</button>
                         <button class="market-tab-btn" id="mtab-ACTIVE_ALL" onclick="setMarketCategory('ACTIVE_ALL')">現役選手</button>
@@ -810,11 +877,26 @@
                 </div>
             </div>
 
+            <!-- 新設：ニュースタブ -->
+            <div id="page-content-3" style="display:none;">
+                <div class="panel" style="border-radius:12px; padding:18px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                        <h3 style="margin:0; display:flex; align-items:center; gap:8px; font-size:1.1em; color:var(--text-main);">
+                            📰 フットボール ニュース & 移籍速報
+                        </h3>
+                        <button onclick="clearNewsFeed()" style="font-size:0.8em; padding:4px 10px; background:var(--card-bg); color:var(--text-sub); border:1px solid var(--panel-border);">ニュース全削除</button>
+                    </div>
+                    <div id="news-container" style="display:flex; flex-direction:column; gap:12px; max-height:700px; overflow-y:auto; padding-right:4px;">
+                        <div style="text-align:center; color:var(--text-sub); padding:30px;">配信されたニュースはまだありません</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        const STORAGE_KEY = "ML_PRO_SAVE_DATA_2026_V10";
+        const STORAGE_KEY = "ML_PRO_SAVE_DATA_2026_V11";
         const THEME_KEY = "ML_PRO_THEME_PREF";
 
         let transferMarket = JSON.parse(JSON.stringify(defaultTransferMarket));
@@ -832,10 +914,12 @@
             managerMarket: [],
             marketCategory: 'ALL',
             teamSelectLocked: false,
-            pendingOffers: []
+            pendingOffers: [],
+            newsFeed: []
         };
 
         let draggedSource = null, selectedPlayer = null;
+        let currentMarketList = [];
 
         window.onload = function() {
             initApp();
@@ -844,18 +928,54 @@
         function initApp() {
             initTheme();
             if (!loadGameState()) {
-                selectMyTeam();
+                showInitialTeamSelectModal();
             } else {
                 initAllPlayerStats();
                 updateUI();
             }
         }
 
+        /* 初回起動時 チーム選択モーダルポップアップ */
+        function showInitialTeamSelectModal() {
+            const teams = [
+                "レアル・マドリード", "マンチェスター・C", "バルセロナ", "アーセナル", "バイエルン",
+                "ドルトムント", "チェルシー", "パリサンジェルマン", "インテルナツィオナーレ・ミラノ", "ACミラン"
+            ];
+            let optionsHtml = teams.map(t => `<option value="${t}">${t}</option>`).join('');
+            
+            const modalContent = `
+                <div style="margin-bottom: 15px;">
+                    <p style="font-size:0.9em; margin-bottom:10px;">指揮する欧州クラブチームを選択してください：</p>
+                    <select id="modal-team-select" style="width:100%; padding:8px; font-size:1em; border-radius:6px; background:var(--card-bg); color:var(--text-main); border:1px solid var(--panel-border);">
+                        ${optionsHtml}
+                    </select>
+                </div>
+            `;
+            
+            const overlay = document.getElementById('custom-modal-overlay');
+            document.getElementById('modal-title').innerText = "⚽ クラブチーム選択";
+            document.getElementById('modal-message').innerHTML = modalContent;
+            
+            const confirmBtn = document.getElementById('modal-btn-confirm');
+            const cancelBtn = document.getElementById('modal-btn-cancel');
+            cancelBtn.style.display = 'none';
+            confirmBtn.innerText = 'このチームで開始';
+
+            confirmBtn.onclick = () => {
+                const selected = document.getElementById('modal-team-select').value;
+                document.getElementById('team-select').value = selected;
+                overlay.style.display = 'none';
+                selectMyTeam();
+            };
+
+            overlay.style.display = 'flex';
+        }
+
         /* 画面内カスタムモーダルダイアログ表示機能 */
         function showCustomModal(title, message, onConfirm, onCancel) {
             const overlay = document.getElementById('custom-modal-overlay');
             document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal-message').innerHTML = message;
             
             const confirmBtn = document.getElementById('modal-btn-confirm');
             const cancelBtn = document.getElementById('modal-btn-cancel');
@@ -889,15 +1009,20 @@
             gameState.activePage = pageNum;
             document.getElementById('app-tab-1').classList.toggle('active', pageNum === 1);
             document.getElementById('app-tab-2').classList.toggle('active', pageNum === 2);
+            document.getElementById('app-tab-3').classList.toggle('active', pageNum === 3);
             document.getElementById('page-content-1').style.display = (pageNum === 1) ? 'block' : 'none';
             document.getElementById('page-content-2').style.display = (pageNum === 2) ? 'block' : 'none';
+            document.getElementById('page-content-3').style.display = (pageNum === 3) ? 'block' : 'none';
 
             const addressBar = document.getElementById('app-address-display');
             if (pageNum === 1) {
                 addressBar.innerText = '🔒 https://master-league-2026.game/club-management';
-            } else {
+            } else if (pageNum === 2) {
                 addressBar.innerText = '🔒 https://master-league-2026.game/transfer-market';
                 renderMarket();
+            } else if (pageNum === 3) {
+                addressBar.innerText = '🔒 https://master-league-2026.game/news';
+                renderNewsFeed();
             }
             saveGameState();
         }
@@ -945,7 +1070,7 @@
             if (p.suspendedWeeks === undefined) p.suspendedWeeks = 0;
             if (!p.altPos) p.altPos = [];
             if (p.name) p.name = p.name.replace(/^👑\s*/, '');
-            if (!p.nat && playerNatMap[p.name]) p.nat = playerNatMap[p.name];
+            if (!p.nat && playerNatMap && playerNatMap[p.name]) p.nat = playerNatMap[p.name];
             return p;
         }
 
@@ -963,31 +1088,51 @@
             let all = [...myStarters, ...myBench, ...myReserves];
             all.forEach(ensurePlayerDefaults);
 
-            let availableCount = all.filter(p => !isPlayerUnavailable(p)).length;
-            let youthIndex = 1;
-            while (availableCount < 16) {
-                const youthPlayer = {
-                    nat: "🇯🇵", name: `ユース${youthIndex++}`, pos: "CMF", altPos: ["DMF"], category: "MF",
-                    rating: 70, stamina: 100, injuryWeeks: 0, suspendedWeeks: 0
-                };
-                myReserves.push(youthPlayer);
-                all.push(youthPlayer);
-                availableCount++;
-            }
+            const slots = formations[gameState.currentFormation];
 
             for (let i = 0; i < myStarters.length; i++) {
                 if (isPlayerUnavailable(myStarters[i])) {
-                    let benchIdx = myBench.findIndex(p => !isPlayerUnavailable(p));
-                    if (benchIdx !== -1) {
-                        let temp = myStarters[i];
-                        myStarters[i] = myBench[benchIdx];
-                        myBench[benchIdx] = temp;
+                    let unavailPlayer = myStarters[i];
+                    let slot = slots[i] || { pos: "CMF", category: "MF" };
+
+                    let candidates = [...myBench, ...myReserves].filter(p => !isPlayerUnavailable(p));
+                    if (candidates.length > 0) {
+                        let bestMatch = candidates.find(p => p.pos === slot.pos);
+                        if (!bestMatch) bestMatch = candidates.find(p => p.altPos && p.altPos.includes(slot.pos));
+                        if (!bestMatch) bestMatch = candidates.find(p => p.category === slot.category);
+                        if (!bestMatch) bestMatch = candidates[0];
+
+                        removePlayerFromSquad(bestMatch);
+                        myStarters[i] = bestMatch;
+                        myReserves.push(unavailPlayer);
+                    } else {
+                        const youthPlayer = {
+                            nat: "🇯🇵", name: `ユース${Math.floor(Math.random()*100)}`, pos: slot.pos, altPos: [], category: slot.category,
+                            rating: 70, stamina: 100, injuryWeeks: 0, suspendedWeeks: 0
+                        };
+                        myStarters[i] = youthPlayer;
+                        myReserves.push(unavailPlayer);
                     }
+                }
+            }
+
+            for (let i = myBench.length - 1; i >= 0; i--) {
+                if (isPlayerUnavailable(myBench[i])) {
+                    let unavailPlayer = myBench.splice(i, 1)[0];
+                    myReserves.push(unavailPlayer);
+                }
+            }
+
+            while (myBench.length < 5) {
+                let availResIdx = myReserves.findIndex(p => !isPlayerUnavailable(p));
+                if (availResIdx !== -1) {
+                    myBench.push(myReserves.splice(availResIdx, 1)[0]);
+                } else {
+                    break;
                 }
             }
         }
 
-        /* スタメン放出時の自動補充機能 */
         function autoFillStarterAndBench() {
             myStarters = myStarters.filter(p => p != null);
             myBench = myBench.filter(p => p != null);
@@ -999,19 +1144,19 @@
                 let missingIndex = myStarters.length;
                 let slot = slots[missingIndex] || { pos: "CMF", category: "MF" };
 
-                let candidateBenchIdx = myBench.findIndex(p => p.pos === slot.pos);
-                if (candidateBenchIdx === -1) candidateBenchIdx = myBench.findIndex(p => p.altPos && p.altPos.includes(slot.pos));
-                if (candidateBenchIdx === -1) candidateBenchIdx = myBench.findIndex(p => p.category === slot.category);
-                if (candidateBenchIdx === -1 && myBench.length > 0) candidateBenchIdx = 0;
+                let candidateBenchIdx = myBench.findIndex(p => p.pos === slot.pos && !isPlayerUnavailable(p));
+                if (candidateBenchIdx === -1) candidateBenchIdx = myBench.findIndex(p => p.altPos && p.altPos.includes(slot.pos) && !isPlayerUnavailable(p));
+                if (candidateBenchIdx === -1) candidateBenchIdx = myBench.findIndex(p => p.category === slot.category && !isPlayerUnavailable(p));
+                if (candidateBenchIdx === -1) candidateBenchIdx = myBench.findIndex(p => !isPlayerUnavailable(p));
 
                 if (candidateBenchIdx !== -1) {
                     let promoted = myBench.splice(candidateBenchIdx, 1)[0];
                     myStarters.push(promoted);
                 } else {
-                    let candidateResIdx = myReserves.findIndex(p => p.pos === slot.pos);
-                    if (candidateResIdx === -1) candidateResIdx = myReserves.findIndex(p => p.altPos && p.altPos.includes(slot.pos));
-                    if (candidateResIdx === -1) candidateResIdx = myReserves.findIndex(p => p.category === slot.category);
-                    if (candidateResIdx === -1 && myReserves.length > 0) candidateResIdx = 0;
+                    let candidateResIdx = myReserves.findIndex(p => p.pos === slot.pos && !isPlayerUnavailable(p));
+                    if (candidateResIdx === -1) candidateResIdx = myReserves.findIndex(p => p.altPos && p.altPos.includes(slot.pos) && !isPlayerUnavailable(p));
+                    if (candidateResIdx === -1) candidateResIdx = myReserves.findIndex(p => p.category === slot.category && !isPlayerUnavailable(p));
+                    if (candidateResIdx === -1) candidateResIdx = myReserves.findIndex(p => !isPlayerUnavailable(p));
 
                     if (candidateResIdx !== -1) {
                         let promoted = myReserves.splice(candidateResIdx, 1)[0];
@@ -1023,7 +1168,12 @@
             }
 
             while (myBench.length < 5 && myReserves.length > 0) {
-                myBench.push(myReserves.shift());
+                let availIdx = myReserves.findIndex(p => !isPlayerUnavailable(p));
+                if (availIdx !== -1) {
+                    myBench.push(myReserves.splice(availIdx, 1)[0]);
+                } else {
+                    break;
+                }
             }
         }
 
@@ -1042,6 +1192,7 @@
                 gameState.isMatchRunning = false;
                 if (!gameState.marketCategory) gameState.marketCategory = 'ALL';
                 if (!gameState.pendingOffers) gameState.pendingOffers = [];
+                if (!gameState.newsFeed) gameState.newsFeed = [];
 
                 if (!gameState.myManagers || gameState.myManagers.length === 0) {
                     gameState.myManagers = [initialManagers[gameState.teamName]];
@@ -1352,7 +1503,7 @@
                 let badgeClass = getRatingClass(eff.effectiveRating);
 
                 pin.innerHTML = `
-                    <div style="font-size:7px; color:var(--text-sub);">${slot.pos}</div>
+                    <div style="font-size:7px; color:var(--text-sub); pointer-events:none;">${slot.pos}</div>
                     <div class="player-name">${player.name}</div>
                     ${statusBadge ? statusBadge : `<span class="rating-badge ${badgeClass}">${eff.effectiveRating}</span>`}
                     <div class="stamina-bar-container">
@@ -1382,7 +1533,7 @@
                 let badgeClass = getRatingClass(player.rating);
 
                 card.innerHTML = `
-                    <div style="font-size:7px; color:var(--text-sub);">${player.pos}</div>
+                    <div style="font-size:7px; color:var(--text-sub); pointer-events:none;">${player.pos}</div>
                     <div class="player-name">${player.name}</div>
                     ${statusBadge ? statusBadge : `<span class="rating-badge ${badgeClass}">${player.rating}</span>`}
                     <div class="stamina-bar-container">
@@ -1413,7 +1564,7 @@
                 let badgeClass = getRatingClass(player.rating);
 
                 card.innerHTML = `
-                    <div style="font-size:7px; color:var(--text-sub);">${player.pos}</div>
+                    <div style="font-size:7px; color:var(--text-sub); pointer-events:none;">${player.pos}</div>
                     <div class="player-name">${player.name}</div>
                     ${statusBadge ? statusBadge : `<span class="rating-badge ${badgeClass}">${player.rating}</span>`}
                 `;
@@ -1447,6 +1598,7 @@
             };
         }
 
+        /* 修正: クリックによる選手交代は無効化（選択状態と情報表示のみ）。交代はドラッグのみ。 */
         function handlePlayerClick(type, index) {
             if (gameState.isMatchRunning) return;
             if (selectedPlayer && selectedPlayer.type === type && selectedPlayer.index === index) {
@@ -1473,6 +1625,16 @@
         function swapPlayers(loc1, loc2) {
             let p1 = getPlayerByLocation(loc1);
             let p2 = getPlayerByLocation(loc2);
+
+            if (p1 && p1.suspendedWeeks > 0 && (loc2.type === 'starter' || loc2.type === 'bench')) {
+                showCustomModal("配置不可", `${p1.name} 選手は出場停止処分の為、スタメン・ベンチに配置できません。`, null, null);
+                return;
+            }
+            if (p2 && p2.suspendedWeeks > 0 && (loc1.type === 'starter' || loc1.type === 'bench')) {
+                showCustomModal("配置不可", `${p2.name} 選手は出場停止処分の為、スタメン・ベンチに配置できません。`, null, null);
+                return;
+            }
+
             setPlayerByLocation(loc1, p2);
             setPlayerByLocation(loc2, p1);
             updateUI();
@@ -1507,7 +1669,7 @@
                     </div>
                     <div>・適正ポジション: <strong style="color:var(--accent-blue);">${p.pos}</strong> (サブ: ${altPosText})</div>
                     <div>・国籍: <strong>${p.nat || '不明'}</strong> | カテゴリ: <strong>${p.category}</strong></div>
-                    <div>・スタミナ: <strong>${p.stamina}%</strong> | コンディション: <strong>${p.injuryWeeks > 0 ? `ケガ(${p.injuryWeeks}節)` : '良好'}</strong></div>
+                    <div>・スタミナ: <strong>${p.stamina}%</strong> | 状態: <strong>${p.injuryWeeks > 0 ? `ケガ(${p.injuryWeeks}節)` : (p.suspendedWeeks > 0 ? `出場停止(${p.suspendedWeeks}節)` : '良好')}</strong></div>
                     <div>・予想売却価格: <strong style="color:var(--accent-green); font-size:1.05em;">${formatCurrency(sellVal)}</strong></div>
                 </div>
             `;
@@ -1517,6 +1679,11 @@
             if (!selectedPlayer) return;
             const p = getPlayerByLocation(selectedPlayer);
             if (!p) return;
+
+            if (p.suspendedWeeks > 0) {
+                showCustomModal("育成不可", "出場停止中の選手はトレーニングを行えません。", null, null);
+                return;
+            }
 
             if (gameState.funds < 100) {
                 showCustomModal("資金不足", "資金が不足しています (必要: 100億円)", null, null);
@@ -1533,6 +1700,11 @@
             if (!selectedPlayer) return;
             const p = getPlayerByLocation(selectedPlayer);
             if (!p) return;
+
+            if (p.suspendedWeeks > 0) {
+                showCustomModal("放出不可", "出場停止中の選手は売却できません。", null, null);
+                return;
+            }
 
             const allCount = myStarters.length + myBench.length + myReserves.length;
             if (allCount <= 11) {
@@ -1590,13 +1762,19 @@
 
         function renderManagers() {
             const select = document.getElementById('manager-select');
+            if (!select) return;
             select.innerHTML = '';
+            let currentIdx = 0;
             (gameState.myManagers || []).forEach((m, idx) => {
                 const opt = document.createElement('option');
                 opt.value = idx;
                 opt.innerText = m.name;
+                if (gameState.manager && m.name === gameState.manager.name) {
+                    currentIdx = idx;
+                }
                 select.appendChild(opt);
             });
+            select.value = currentIdx;
             if (gameState.manager) {
                 document.getElementById('manager-rating').innerText = ` (OVR: ${gameState.manager.rating})`;
             }
@@ -1610,7 +1788,6 @@
             }
         }
 
-        /* 保留中のオファー一覧レンダリング */
         function renderPendingOffers() {
             const listEl = document.getElementById('offers-list');
             const badgeEl = document.getElementById('offer-count-badge');
@@ -1677,6 +1854,10 @@
                 if (playerStats[off.playerName]) playerStats[off.playerName].team = off.club;
                 autoFillStarterAndBench();
                 gameState.pendingOffers.splice(index, 1);
+                
+                // Here We Go ニュース追加
+                addNewsItem('transfer', `🚨 HERE WE GO! ${off.playerName} が ${off.club} へ完全移籍！`, `${gameState.teamName} は ${off.club} からの移籍金 ${formatCurrency(off.price)} のオファーを受諾。全交渉が合意に達しました！`, true);
+
                 updateUI();
                 showCustomModal("移籍成立", `🎉 ${off.playerName} 選手を ${off.club} へ ${formatCurrency(off.price)} で放出し、資金を獲得しました！`, null, null);
             } else if (off.type === 'buy_player') {
@@ -1693,6 +1874,10 @@
                 if (playerStats[off.playerName]) playerStats[off.playerName].team = gameState.teamName;
                 autoFillStarterAndBench();
                 gameState.pendingOffers.splice(index, 1);
+
+                // Here We Go ニュース追加
+                addNewsItem('transfer', `🚨 HERE WE GO! ${off.playerName} が ${gameState.teamName} へ電撃移籍！`, `特別ディスカウント価格 ${formatCurrency(off.price)} での完全移籍で合意に達しました！`, true);
+
                 updateUI();
                 showCustomModal("獲得完了", `🎉 ${off.playerName} 選手を ${formatCurrency(off.price)} で獲得しました！`, null, null);
             }
@@ -1706,7 +1891,7 @@
             showCustomModal("オファー見送り", `${off.playerName} に対するオファーを見送りました。`, null, null);
         }
 
-        /* 試合が進むごとに相手の勝率・能力が徐々に上昇するように修正 */
+        /* 修正: 相手クラブの総合値（OVR）上がり幅をマイルドに抑制 (1.8 -> 0.6) */
         function updateMatchCenterUI() {
             const myTeam = gameState.teamName;
             let otherTeams = Object.keys(clubPresetData).filter(t => t !== myTeam);
@@ -1721,9 +1906,8 @@
             document.getElementById('my-team-disp').innerText = myTeam;
             document.getElementById('enemy-name').innerText = enemyTeam;
 
-            // 経過試合数に応じた難易度（敵追加OVR）の上昇補正
             let matchProgress = (gameState.season - 1) * 20 + (gameState.week - 1);
-            let difficultyBonus = Math.floor(matchProgress * 0.7);
+            let difficultyBonus = Math.floor(matchProgress * 0.6); // 1.8から0.6へ低減
 
             let baseEnemyRating = Math.round(clubPresetData[enemyTeam].slice(0, 11).reduce((a,b)=>a+b.rating,0)/11);
             let enemyRating = baseEnemyRating + difficultyBonus;
@@ -1780,11 +1964,12 @@
             let myRating = calculateStarterRating();
 
             let matchProgress = (gameState.season - 1) * 20 + (gameState.week - 1);
-            let difficultyBonus = Math.floor(matchProgress * 0.7);
+            let difficultyBonus = Math.floor(matchProgress * 0.6); // 1.8から0.6へ低減
             let enemyRating = Math.round(clubPresetData[enemyTeam].slice(0, 11).reduce((a,b)=>a+b.rating,0)/11) + difficultyBonus;
 
             let myScorers = [];
             let enemyScorers = [];
+            let myMatchYellows = {};
 
             let interval = setInterval(() => {
                 minute += 10;
@@ -1851,12 +2036,26 @@
                     document.getElementById('score-enemy').innerText = scoreEnemy;
                     addMatchLog(`⚽ GOAL!! ${minute}分 [${enemyTeam}] ${eName} にゴールを奪われる！${eAssistText}`, 'log-entry');
                 }
-                else if (roll > 90) {
+                else if (roll > 88) {
                     let isMyCard = Math.random() < 0.5;
                     if (isMyCard && myStarters.length > 0) {
                         let cardPlayer = myStarters[Math.floor(Math.random() * myStarters.length)];
-                        recordCard(cardPlayer.name, myTeam, false, cardPlayer.pos);
-                        addMatchLog(`🟨【警告】${minute}分 [${myTeam}] ${cardPlayer.name} にイエローカード。`, 'log-card');
+                        myMatchYellows[cardPlayer.name] = (myMatchYellows[cardPlayer.name] || 0) + 1;
+
+                        if (myMatchYellows[cardPlayer.name] === 2) {
+                            cardPlayer.suspendedWeeks = 3;
+                            recordCard(cardPlayer.name, myTeam, true, cardPlayer.pos);
+                            addMatchLog(`🟨🟨【退場!!】${minute}分 [${myTeam}] ${cardPlayer.name} が本日2枚目の警告で退場！(3節出場停止)`, 'log-card');
+                        } 
+                        /* 修正: 一発レッド発生率を 0.15 から 0.03 に大幅低下 */
+                        else if (Math.random() < 0.03) {
+                            cardPlayer.suspendedWeeks = 3;
+                            recordCard(cardPlayer.name, myTeam, true, cardPlayer.pos);
+                            addMatchLog(`🟥【レッドカード!!】${minute}分 [${myTeam}] ${cardPlayer.name} が危険なファールで一発退場！(3節出場停止)`, 'log-card');
+                        } else {
+                            recordCard(cardPlayer.name, myTeam, false, cardPlayer.pos);
+                            addMatchLog(`🟨【警告】${minute}分 [${myTeam}] ${cardPlayer.name} にイエローカード。`, 'log-card');
+                        }
                     }
                 }
 
@@ -1900,7 +2099,7 @@
                 addMatchLog(`🎙️【MOM発表】白熱の引き分けとなった一戦、本日のMOMには攻守に奮闘した [${myTeam}] の <strong>${momName}</strong> 選手が選ばれました！`, 'log-mom');
             }
 
-            /* スタミナ処理の修正: 出場したスタメンのみ減少、控え選手のみ回復 */
+            /* スタミナ処理 */
             myStarters.forEach(p => {
                 ensurePlayerDefaults(p);
                 let baseLoss = 20;
@@ -1935,7 +2134,14 @@
             gameState.funds += prize;
             addMatchLog(`💰【試合報酬】${resultTxt}報酬として <strong>${formatCurrency(prize)}</strong> を獲得しました！ (所持金: ${formatCurrency(gameState.funds)})`, 'log-entry');
 
-            // オファー期限の進行
+            // ニュース投稿: 第何節の結果まとめ
+            let topTeam = standings[0] ? standings[0].name : "不明";
+            let newsMatchSummary = `第${gameState.week}節が終了しました！\n\n【自クラブ結果】\n${myTeam} ${scoreMy} - ${scoreEnemy} ${enemyTeam}\n\n【他会場結果】\n${otherLogText.replace(/<br>/g, '\n')}\n\n【現在首位】 👑 ${topTeam}`;
+            addNewsItem('match', `⚽ 第${gameState.week}節 試合結果まとめ`, newsMatchSummary, false);
+
+            // 他クラブの移籍生成ニュース（Here We Go!）
+            simulateOtherClubsTransfers();
+
             if (gameState.pendingOffers && gameState.pendingOffers.length > 0) {
                 for (let i = gameState.pendingOffers.length - 1; i >= 0; i--) {
                     gameState.pendingOffers[i].expireWeeks--;
@@ -1946,29 +2152,54 @@
                 }
             }
 
-            // 新ランダムイベントの判定
             triggerRandomEvents();
-
-            // 新オファーイベントの発生判定
             triggerTransferOfferEvents();
 
             gameState.week++;
 
-            // シーズン終了 (全20節終了時) の報酬・進行処理
+            // シーズン終了処理
             if (gameState.week > 20) {
                 let userRank = standings.findIndex(s => s.name === gameState.teamName) + 1;
                 if (userRank === 0) userRank = 1;
 
-                // 1位: 5000億円、1位下がるごとに-500億円
                 let rankPrize = Math.max(0, 5000 - (userRank - 1) * 500);
                 gameState.funds += rankPrize;
+
+                let winner = standings[0] ? standings[0].name : "不明";
+                let runnerUp = standings[1] ? standings[1].name : "不明";
+
+                // 個人タイトルの集計
+                initAllPlayerStats();
+                let statsArr = Object.values(playerStats);
+                
+                statsArr.sort((a,b) => b.goals - a.goals);
+                let topScorer = statsArr[0] || { name: "なし", goals: 0, team: "-" };
+
+                statsArr.sort((a,b) => b.assists - a.assists);
+                let topAssister = statsArr[0] || { name: "なし", assists: 0, team: "-" };
+
+                let seasonNewsTitle = `🏆 欧州スーパーリーグ Season ${gameState.season} 最終結果 & 顕彰表彰`;
+                let seasonNewsContent = 
+                    `欧州スーパーリーグ Season ${gameState.season} の全20節が終了しました！表彰クラブおよび個人タイトル獲得者は以下の通りです。\n\n` +
+                    `🏆 優勝クラブ: ${winner}\n` +
+                    `🥈 準優勝クラブ: ${runnerUp}\n` +
+                    `🥉 第3位: ${standings[2] ? standings[2].name : '-'}\n\n` +
+                    `⚽【得点王 (Golden Boot)】\n` +
+                    `  🥇 ${topScorer.name} (${topScorer.team}) - ${topScorer.goals}ゴール\n\n` +
+                    `👟【アシスト王 (Playmaker Award)】\n` +
+                    `  🥇 ${topAssister.name} (${topAssister.team}) - ${topAssister.assists}アシスト\n\n` +
+                    `自クラブ最終順位: 第${userRank}位 (獲得賞金: ${formatCurrency(rankPrize)})`;
+
+                addNewsItem('season', seasonNewsTitle, seasonNewsContent, false);
 
                 showCustomModal(
                     "🏆 シーズン終了 & 順位報酬獲得",
                     `欧州スーパーリーグ S${gameState.season} が全20節終了しました！\n\n` +
                     `【最終順位】 第 ${userRank} 位\n` +
                     `【順位獲得賞金】 ${formatCurrency(rankPrize)}\n\n` +
-                    `（現在の所持金: ${formatCurrency(gameState.funds)}）\n\n` +
+                    `【優勝】 ${winner} / 【準優勝】 ${runnerUp}\n` +
+                    `【得点王】 ${topScorer.name} (${topScorer.goals}点)\n` +
+                    `【アシスト王】 ${topAssister.name} (${topAssister.assists}アシスト)\n\n` +
                     `新シーズン S${gameState.season + 1} が開幕します！`,
                     null, null
                 );
@@ -1985,11 +2216,101 @@
             updateUI();
         }
 
-        /* 新イベント追加（グッズ売り上げ報酬、特別リフレッシュ休暇） */
+        /* ニュース機能 helper */
+        function addNewsItem(type, title, content, isHereWeGo = false) {
+            if (!gameState.newsFeed) gameState.newsFeed = [];
+            const item = {
+                id: Date.now() + Math.random(),
+                type,
+                title,
+                content,
+                isHereWeGo,
+                season: gameState.season,
+                week: gameState.week,
+                timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+            gameState.newsFeed.unshift(item);
+            if (gameState.newsFeed.length > 50) gameState.newsFeed.pop();
+        }
+
+        function renderNewsFeed() {
+            const container = document.getElementById('news-container');
+            if (!container) return;
+            if (!gameState.newsFeed || gameState.newsFeed.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:var(--text-sub); padding:30px;">配信されたニュースはまだありません</div>`;
+                return;
+            }
+
+            let html = '';
+            gameState.newsFeed.forEach(item => {
+                let badgeClass = 'match';
+                let badgeText = '試合結果';
+                if (item.type === 'transfer') {
+                    badgeClass = item.isHereWeGo ? 'herewego' : 'transfer';
+                    badgeText = item.isHereWeGo ? '🚨 HERE WE GO!' : '移籍情報';
+                } else if (item.type === 'season') {
+                    badgeClass = 'season';
+                    badgeText = '🏆 シーズン総括';
+                }
+
+                let cardClass = item.isHereWeGo ? 'news-card here-we-go' : 'news-card';
+
+                html += `
+                    <div class="${cardClass}">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <div>
+                                <span class="news-badge ${badgeClass}">${badgeText}</span>
+                                <span style="font-size:0.75em; color:var(--text-sub); margin-left:8px;">S${item.season} - 第${item.week}節 (${item.timestamp})</span>
+                            </div>
+                        </div>
+                        <h4 style="margin:0 0 6px 0; font-size:1.0em; color:var(--text-main);">${item.title}</h4>
+                        <div style="font-size:0.85em; color:var(--text-sub); line-height:1.5; white-space:pre-wrap;">${item.content}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function clearNewsFeed() {
+            showCustomModal("ニュース削除", "ニュース一覧を消去しますか？", () => {
+                gameState.newsFeed = [];
+                renderNewsFeed();
+                saveGameState();
+            }, () => {});
+        }
+
+        /* 他クラブ同士の移籍ニュース生成（Here We Go! 演出つき） */
+        function simulateOtherClubsTransfers() {
+            if (Math.random() > 0.4) return;
+
+            const clubs = Object.keys(clubPresetData).filter(c => c !== gameState.teamName);
+            const sellerClub = clubs[Math.floor(Math.random() * clubs.length)];
+            let buyerClub = clubs[Math.floor(Math.random() * clubs.length)];
+            while (buyerClub === sellerClub) {
+                buyerClub = clubs[Math.floor(Math.random() * clubs.length)];
+            }
+
+            const sellerPlayers = clubPresetData[sellerClub] || [];
+            if (sellerPlayers.length === 0) return;
+
+            const player = sellerPlayers[Math.floor(Math.random() * sellerPlayers.length)];
+            const fee = Math.floor((player.rating * player.rating * 0.3) * (1.1 + Math.random() * 0.5));
+
+            const hereWeGoTitles = [
+                `🚨 HERE WE GO! ${player.name} が ${buyerClub} へ移籍決定！`,
+                `🚨 HERE WE GO! ${buyerClub} が ${player.name} の獲得で完全合意！`,
+                `🚨 HERE WE GO! ${sellerClub} の ${player.name}、新天地は ${buyerClub} に決定！`
+            ];
+            const title = hereWeGoTitles[Math.floor(Math.random() * hereWeGoTitles.length)];
+
+            const content = `ファブリツィオ・ロマーノ氏によると、${sellerClub} に所属する ${player.name} (${player.pos}, Rating: ${player.rating}) の ${buyerClub} への完全移籍が合意に達しました！\n\n・推定移籍金: ${formatCurrency(fee)}\n・契約期間: 長期契約\n・ステータス: Medical successfully completed 🟢`;
+
+            addNewsItem('transfer', title, content, true);
+        }
+
         function triggerRandomEvents() {
             let eventRoll = Math.random();
 
-            // グッズ売り上げ報酬イベント (稀に発生)
             if (eventRoll < 0.08) {
                 let reward = 1000;
                 gameState.funds += reward;
@@ -2002,7 +2323,6 @@
                 }, 600);
                 addMatchLog(`🛍️【特別イベント】グッズ売り上げ急増により ${formatCurrency(reward)} の臨時収入を獲得！`, 'log-mom');
             }
-            // 選手休暇イベント (たまに発生)
             else if (eventRoll < 0.22) {
                 let allPlayers = [...myStarters, ...myBench, ...myReserves];
                 allPlayers.forEach(p => {
@@ -2096,7 +2416,6 @@
             return resultsSummary.join('<br>');
         }
 
-        /* 獲得オファー・放出オファーの保留追加機能 */
         function triggerTransferOfferEvents() {
             if (!gameState.pendingOffers) gameState.pendingOffers = [];
 
@@ -2204,14 +2523,12 @@
                         </tr>
                     `;
                 });
-                html += '</tbody></table>';
+                html += `</tbody></table>`;
                 container.innerHTML = html;
-
-            } else if (gameState.activeTab === 'goals') {
-                let list = Object.values(playerStats)
-                    .filter(p => p.goals > 0)
-                    .sort((a, b) => b.goals - a.goals)
-                    .slice(0, 15);
+            }
+            else if (gameState.activeTab === 'goals') {
+                let statsArr = Object.values(playerStats).filter(s => s.goals > 0);
+                statsArr.sort((a, b) => b.goals - a.goals);
 
                 let html = `
                     <table>
@@ -2219,37 +2536,32 @@
                             <tr>
                                 <th>順位</th>
                                 <th>選手名</th>
-                                <th>所属</th>
-                                <th>Pos</th>
-                                <th>得点数</th>
+                                <th>クラブ</th>
+                                <th>得点</th>
                             </tr>
                         </thead>
                         <tbody>
                 `;
-                if (list.length === 0) {
-                    html += `<tr><td colspan="5" style="padding:15px; color:var(--text-sub);">まだ記録はありません</td></tr>`;
+                if (statsArr.length === 0) {
+                    html += `<tr><td colspan="4" style="color:var(--text-sub);">記録がありません</td></tr>`;
                 } else {
-                    list.forEach((p, idx) => {
-                        let isMy = p.team === gameState.teamName;
+                    statsArr.slice(0, 10).forEach((s, idx) => {
                         html += `
-                            <tr class="${isMy ? 'my-team-row' : ''}">
+                            <tr>
                                 <td>${idx + 1}</td>
-                                <td style="text-align:left; font-weight:bold;">${p.name}</td>
-                                <td>${p.team}</td>
-                                <td>${p.pos}</td>
-                                <td><strong style="color:var(--accent-green);">${p.goals}</strong> G</td>
+                                <td style="text-align:left;">${s.name}</td>
+                                <td>${s.team}</td>
+                                <td><strong style="color:var(--accent-green);">${s.goals}</strong></td>
                             </tr>
                         `;
                     });
                 }
-                html += '</tbody></table>';
+                html += `</tbody></table>`;
                 container.innerHTML = html;
-
-            } else if (gameState.activeTab === 'assists') {
-                let list = Object.values(playerStats)
-                    .filter(p => p.assists > 0)
-                    .sort((a, b) => b.assists - a.assists)
-                    .slice(0, 15);
+            }
+            else if (gameState.activeTab === 'assists') {
+                let statsArr = Object.values(playerStats).filter(s => s.assists > 0);
+                statsArr.sort((a, b) => b.assists - a.assists);
 
                 let html = `
                     <table>
@@ -2257,208 +2569,275 @@
                             <tr>
                                 <th>順位</th>
                                 <th>選手名</th>
-                                <th>所属</th>
-                                <th>Pos</th>
+                                <th>クラブ</th>
                                 <th>アシスト</th>
                             </tr>
                         </thead>
                         <tbody>
                 `;
-                if (list.length === 0) {
-                    html += `<tr><td colspan="5" style="padding:15px; color:var(--text-sub);">まだ記録はありません</td></tr>`;
+                if (statsArr.length === 0) {
+                    html += `<tr><td colspan="4" style="color:var(--text-sub);">記録がありません</td></tr>`;
                 } else {
-                    list.forEach((p, idx) => {
-                        let isMy = p.team === gameState.teamName;
+                    statsArr.slice(0, 10).forEach((s, idx) => {
                         html += `
-                            <tr class="${isMy ? 'my-team-row' : ''}">
+                            <tr>
                                 <td>${idx + 1}</td>
-                                <td style="text-align:left; font-weight:bold;">${p.name}</td>
-                                <td>${p.team}</td>
-                                <td>${p.pos}</td>
-                                <td><strong style="color:var(--accent-blue);">${p.assists}</strong> A</td>
+                                <td style="text-align:left;">${s.name}</td>
+                                <td>${s.team}</td>
+                                <td><strong style="color:var(--accent-blue);">${s.assists}</strong></td>
                             </tr>
                         `;
                     });
                 }
-                html += '</tbody></table>';
+                html += `</tbody></table>`;
                 container.innerHTML = html;
-
-            } else if (gameState.activeTab === 'cards') {
-                let list = Object.values(playerStats)
-                    .filter(p => p.yellowCards > 0 || p.redCards > 0)
-                    .sort((a, b) => (b.redCards * 3 + b.yellowCards) - (a.redCards * 3 + a.yellowCards))
-                    .slice(0, 15);
+            }
+            else if (gameState.activeTab === 'cards') {
+                let statsArr = Object.values(playerStats).filter(s => s.yellowCards > 0 || s.redCards > 0);
+                statsArr.sort((a, b) => (b.redCards * 2 + b.yellowCards) - (a.redCards * 2 + a.yellowCards));
 
                 let html = `
                     <table>
                         <thead>
                             <tr>
-                                <th>順位</th>
                                 <th>選手名</th>
-                                <th>所属</th>
+                                <th>クラブ</th>
                                 <th>🟨 警告</th>
                                 <th>🟥 退場</th>
                             </tr>
                         </thead>
                         <tbody>
                 `;
-                if (list.length === 0) {
-                    html += `<tr><td colspan="5" style="padding:15px; color:var(--text-sub);">カード記録はありません</td></tr>`;
+                if (statsArr.length === 0) {
+                    html += `<tr><td colspan="4" style="color:var(--text-sub);">記録がありません</td></tr>`;
                 } else {
-                    list.forEach((p, idx) => {
-                        let isMy = p.team === gameState.teamName;
+                    statsArr.slice(0, 10).forEach(s => {
                         html += `
-                            <tr class="${isMy ? 'my-team-row' : ''}">
-                                <td>${idx + 1}</td>
-                                <td style="text-align:left; font-weight:bold;">${p.name}</td>
-                                <td>${p.team}</td>
-                                <td><span style="color:#facc15; font-weight:bold;">${p.yellowCards}</span></td>
-                                <td><span style="color:#ef4444; font-weight:bold;">${p.redCards}</span></td>
+                            <tr>
+                                <td style="text-align:left;">${s.name}</td>
+                                <td>${s.team}</td>
+                                <td><strong style="color:var(--accent-gold);">${s.yellowCards}</strong></td>
+                                <td><strong style="color:var(--accent-red);">${s.redCards}</strong></td>
                             </tr>
                         `;
                     });
                 }
-                html += '</tbody></table>';
+                html += `</tbody></table>`;
                 container.innerHTML = html;
             }
         }
 
+        /* 移籍市場 レンダリング */
         function renderMarket() {
             const grid = document.getElementById('market-grid');
+            if (!grid) return;
             grid.innerHTML = '';
 
-            const cat = gameState.marketCategory || 'ALL';
+            const searchTxt = (document.getElementById('market-search-input')?.value || '').toLowerCase();
+            const posFilter = document.getElementById('market-pos-filter')?.value || 'ALL';
 
-            if (cat === 'MANAGER') {
-                (gameState.managerMarket || []).forEach((m, idx) => {
-                    const card = document.createElement('div');
-                    card.className = 'market-card-item';
-                    card.innerHTML = `
-                        <div>
-                            <div class="market-card-header">
-                                <span class="market-pos-badge">👔 MANAGER</span>
-                                <span style="font-size:0.75em; color:var(--text-sub);">指揮官</span>
-                            </div>
-                            <div style="font-weight:bold; font-size:1.05em; margin-top:6px;">${m.name}</div>
-                            <div class="market-detail-row">
-                                総合評価: <strong style="color:var(--accent-gold);">${m.rating}</strong>
-                            </div>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                            <span style="font-weight:bold; color:var(--accent-green); font-size:1.0em;">${formatCurrency(m.price)}</span>
-                            <button class="btn-buy" onclick="buyManager(${idx})">契約</button>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
+            if (gameState.marketCategory === 'MANAGER') {
+                renderManagerMarket(grid, searchTxt);
                 return;
             }
 
-            let filtered = transferMarket.filter(p => {
-                ensurePlayerDefaults(p);
-                if (cat === 'ALL') return true;
-                if (cat === 'ACTIVE_ALL') return !p.isLegend;
-                if (cat === 'LEGEND_ALL') return p.isLegend;
-                if (cat === 'FW') return p.category === 'FW' && !p.isLegend;
-                if (cat === 'MF') return p.category === 'MF' && !p.isLegend;
-                if (cat === 'DF') return p.category === 'DF' && !p.isLegend;
-                if (cat === 'GK') return p.category === 'GK' && !p.isLegend;
-                if (cat === 'LEGEND_FW') return p.category === 'FW' && p.isLegend;
-                if (cat === 'LEGEND_MF') return p.category === 'MF' && p.isLegend;
-                if (cat === 'LEGEND_DF') return p.category === 'DF' && p.isLegend;
-                if (cat === 'LEGEND_GK') return p.category === 'GK' && p.isLegend;
-                return true;
-            });
+            let filtered = (transferMarket || []).map(ensurePlayerDefaults);
 
-            filtered.forEach((player) => {
-                const realIndex = transferMarket.indexOf(player);
-                const card = document.createElement('div');
-                card.className = `market-card-item ${player.isLegend ? 'legend-border' : ''}`;
+            // カテゴリ切り替え
+            const cat = gameState.marketCategory;
+            if (cat === 'ACTIVE_ALL') filtered = filtered.filter(p => !p.isLegend);
+            else if (cat === 'LEGEND_ALL') filtered = filtered.filter(p => p.isLegend);
+            else if (cat === 'FW') filtered = filtered.filter(p => p.category === 'FW' && !p.isLegend);
+            else if (cat === 'MF') filtered = filtered.filter(p => p.category === 'MF' && !p.isLegend);
+            else if (cat === 'DF') filtered = filtered.filter(p => p.category === 'DF' && !p.isLegend);
+            else if (cat === 'GK') filtered = filtered.filter(p => p.category === 'GK' && !p.isLegend);
+            else if (cat === 'LEGEND_FW') filtered = filtered.filter(p => p.category === 'FW' && p.isLegend);
+            else if (cat === 'LEGEND_MF') filtered = filtered.filter(p => p.category === 'MF' && p.isLegend);
+            else if (cat === 'LEGEND_DF') filtered = filtered.filter(p => p.category === 'DF' && p.isLegend);
+            else if (cat === 'LEGEND_GK') filtered = filtered.filter(p => p.category === 'GK' && p.isLegend);
 
-                let badgeClass = getRatingClass(player.rating);
-                let altPosTxt = (player.altPos && player.altPos.length > 0) ? player.altPos.join(', ') : 'なし';
+            // ポジションドロップダウンフィルター
+            if (posFilter !== 'ALL') {
+                if (['FW', 'MF', 'DF', 'GK'].includes(posFilter)) {
+                    filtered = filtered.filter(p => p.category === posFilter);
+                } else {
+                    filtered = filtered.filter(p => p.pos === posFilter || (p.altPos && p.altPos.includes(posFilter)));
+                }
+            }
 
-                card.innerHTML = `
+            // 検索ワードフィルター
+            if (searchTxt) {
+                filtered = filtered.filter(p => 
+                    p.name.toLowerCase().includes(searchTxt) || 
+                    (p.nat && p.nat.toLowerCase().includes(searchTxt))
+                );
+            }
+
+            currentMarketList = filtered;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-sub); padding:40px;">条件に一致する選手が見つかりません</div>`;
+                return;
+            }
+
+            filtered.forEach((p, idx) => {
+                const item = document.createElement('div');
+                item.className = `market-card-item ${p.isLegend ? 'legend-border' : ''}`;
+
+                const isAffordable = gameState.funds >= p.price;
+                const altText = p.altPos && p.altPos.length > 0 ? p.altPos.join(', ') : 'なし';
+
+                item.innerHTML = `
                     <div>
                         <div class="market-card-header">
-                            <span class="market-pos-badge">${player.pos}</span>
-                            ${player.isLegend ? '<span class="legend-pill">👑 LEGEND</span>' : '<span class="active-pill">現役</span>'}
+                            <span class="market-pos-badge">${p.pos}</span>
+                            <span style="font-size:1.1em; font-weight:bold; color:var(--accent-gold);">OVR ${p.rating}</span>
                         </div>
-                        <div style="font-weight:bold; font-size:1.05em; margin-top:6px; display:flex; align-items:center; gap:6px;">
-                            <span>${player.nat || '🏳️'}</span>
-                            <span>${player.name}</span>
+                        <div style="font-weight:bold; font-size:1.05em; margin-top:6px; color:var(--text-main);">
+                            ${p.nat || '🏳️'} ${p.name}
+                        </div>
+                        <div style="margin-top:2px;">
+                            ${p.isLegend ? '<span class="legend-pill">👑 LEGEND</span>' : '<span class="active-pill">現役</span>'}
                         </div>
                         <div class="market-detail-row">
-                            <span>・メイン適性: <strong style="color:var(--accent-blue);">${player.pos}</strong></span><br>
-                            <span>・サブ適性: <strong>${altPosTxt}</strong></span>
-                        </div>
-                        <div style="margin-top:6px; font-size:0.8em; color:var(--text-sub); display:flex; align-items:center; gap:6px;">
-                            <span>OVR:</span>
-                            <span class="rating-badge ${badgeClass}">${player.rating}</span>
-                            <span style="font-size:0.75em; opacity:0.8;">| ${player.category}</span>
+                            <span>サブ適正: ${altText}</span><br>
+                            <span>カテゴリ: ${p.category}</span>
                         </div>
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; border-top:1px dashed var(--panel-border); padding-top:8px;">
-                        <span style="font-weight:bold; color:var(--accent-green); font-size:1.0em;">${formatCurrency(player.price)}</span>
-                        <button class="btn-buy" onclick="buyPlayer(${realIndex})">獲得</button>
+                        <div style="font-weight:bold; font-size:1.0em; color:var(--accent-green);">
+                            ${formatCurrency(p.price)}
+                        </div>
+                        <button class="btn-buy" ${!isAffordable ? 'disabled' : ''} onclick="buyPlayer(${idx})">
+                            ${isAffordable ? '獲得する' : '資金不足'}
+                        </button>
                     </div>
                 `;
-                grid.appendChild(card);
+                grid.appendChild(item);
+            });
+        }
+
+        function renderManagerMarket(grid, searchTxt) {
+            let filtered = (gameState.managerMarket || []);
+            if (searchTxt) {
+                filtered = filtered.filter(m => m.name.toLowerCase().includes(searchTxt));
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-sub); padding:40px;">市場に利用可能な監督がいません</div>`;
+                return;
+            }
+
+            filtered.forEach((m, idx) => {
+                const item = document.createElement('div');
+                item.className = 'market-card-item legend-border';
+
+                const isOwned = gameState.myManagers.some(myM => myM.name === m.name);
+                const isCurrent = gameState.manager && gameState.manager.name === m.name;
+                const isAffordable = gameState.funds >= m.price;
+
+                item.innerHTML = `
+                    <div>
+                        <div class="market-card-header">
+                            <span class="market-pos-badge">👔 MANAGER</span>
+                            <span style="font-size:1.1em; font-weight:bold; color:var(--accent-gold);">OVR ${m.rating}</span>
+                        </div>
+                        <div style="font-weight:bold; font-size:1.1em; margin-top:8px; color:var(--text-main);">
+                            ${m.name}
+                        </div>
+                        <div style="font-size:0.8em; color:var(--text-sub); margin-top:4px;">
+                            得意フォーメーション: <strong>${m.formation || '全般'}</strong>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; border-top:1px dashed var(--panel-border); padding-top:8px;">
+                        <div style="font-weight:bold; font-size:1.0em; color:var(--accent-green);">
+                            ${formatCurrency(m.price)}
+                        </div>
+                        ${isCurrent ? 
+                            '<button class="btn-buy" disabled style="background:var(--accent-blue);">指揮中</button>' : 
+                            (isOwned ? 
+                                `<button class="btn-buy" style="background:var(--accent-gold); color:#000;" onclick="hireManager('${m.name}')">就任させる</button>` :
+                                `<button class="btn-buy" ${!isAffordable ? 'disabled' : ''} onclick="buyManager(${idx})">${isAffordable ? '契約する' : '資金不足'}</button>`
+                            )
+                        }
+                    </div>
+                `;
+                grid.appendChild(item);
             });
         }
 
         function buyPlayer(index) {
-            const player = transferMarket[index];
+            const player = currentMarketList[index];
             if (!player) return;
 
             if (gameState.funds < player.price) {
-                showCustomModal("資金不足", `資金が不足しています。(必要: ${formatCurrency(player.price)})`, null, null);
+                showCustomModal("資金不足", "資金が不足しているため、この選手を獲得できません。", null, null);
                 return;
             }
 
             showCustomModal(
                 "選手獲得の確認",
-                `${player.nat || ''} ${player.name} (${player.pos} / OVR:${player.rating}) を\n${formatCurrency(player.price)} で獲得しますか？`,
+                `${player.name} (${player.pos}, OVR:${player.rating}) を ${formatCurrency(player.price)} で獲得しますか？`,
                 () => {
                     gameState.funds -= player.price;
-                    const bought = transferMarket.splice(index, 1)[0];
-                    ensurePlayerDefaults(bought);
-                    myReserves.push(bought);
 
-                    if (playerStats[bought.name]) playerStats[bought.name].team = gameState.teamName;
+                    let realIndex = transferMarket.findIndex(p => p.name === player.name);
+                    if (realIndex !== -1) transferMarket.splice(realIndex, 1);
 
+                    ensurePlayerDefaults(player);
+                    myReserves.push(player);
+                    if (playerStats[player.name]) playerStats[player.name].team = gameState.teamName;
+
+                    autoFillStarterAndBench();
                     updateUI();
                     renderMarket();
-                    showCustomModal("獲得完了", `${bought.name} 選手を獲得しました！`, null, null);
+
+                    // Here We Go ニュース追加
+                    addNewsItem('transfer', `🚨 HERE WE GO! ${player.name} が ${gameState.teamName} へ完全移籍！`, `移籍金 ${formatCurrency(player.price)} で契約合意！メディカルチェックをクリアし入団が決定しました！`, true);
+
+                    showCustomModal("獲得完了", `🎉 ${player.name} 選手を獲得しました！ (リザーブに追加されました)`, null, null);
                 },
                 () => {}
             );
         }
 
         function buyManager(index) {
-            const manager = gameState.managerMarket[index];
-            if (!manager) return;
+            const m = gameState.managerMarket[index];
+            if (!m) return;
 
-            if (gameState.funds < manager.price) {
-                showCustomModal("資金不足", "資金が不足しています。", null, null);
+            if (gameState.funds < m.price) {
+                showCustomModal("資金不足", "資金が不足しているため、監督と契約できません。", null, null);
                 return;
             }
 
             showCustomModal(
                 "監督契約の確認",
-                `${manager.name} 監督と ${formatCurrency(manager.price)} で契約しますか？`,
+                `${m.name} 監督 (OVR:${m.rating}) と ${formatCurrency(m.price)} で契約しますか？`,
                 () => {
-                    gameState.funds -= manager.price;
-                    const bought = gameState.managerMarket.splice(index, 1)[0];
-                    gameState.myManagers.push(bought);
-                    gameState.manager = bought;
+                    gameState.funds -= m.price;
+                    gameState.myManagers.push(m);
+                    gameState.manager = m;
+                    gameState.managerMarket.splice(index, 1);
+
+                    // ニュース追加
+                    addNewsItem('transfer', `👔 【新監督就任】 ${gameState.teamName} が ${m.name} 氏の招聘を発表！`, `${gameState.teamName} は本日、${m.name} 氏が新監督に就任したことを公式発表しました。`, false);
 
                     updateUI();
                     renderMarket();
-                    showCustomModal("契約完了", `${bought.name} 監督と契約しました！`, null, null);
+                    showCustomModal("就任完了", `👔 ${m.name} 氏がクラブの新監督に就任しました！`, null, null);
                 },
                 () => {}
             );
+        }
+
+        function hireManager(managerName) {
+            const target = gameState.myManagers.find(m => m.name === managerName);
+            if (target) {
+                gameState.manager = target;
+                updateUI();
+                renderMarket();
+                showCustomModal("監督変更", `👔 ${target.name} 氏をメイン監督に設定しました。`, null, null);
+            }
         }
     </script>
 </body>
