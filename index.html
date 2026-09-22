@@ -679,7 +679,7 @@
             <div id="page-content-1">
                 <div class="header">
                     <div>
-                        <span style="font-size:0.7em; color:var(--text-sub);">クラブ選択 (欧州強豪10)</span><br>
+                        <span style="font-size:0.7em; color:var(--text-sub);">クラブ選択 (欧州強豪12)</span><br>
                         <select id="team-select" onchange="selectMyTeam()">
                             <option value="レアル・マドリード">レアル・マドリード</option>
                             <option value="マンチェスター・C">マンチェスター・C</option>
@@ -691,6 +691,8 @@
                             <option value="パリサンジェルマン">パリサンジェルマン</option>
                             <option value="インテルナツィオナーレ・ミラノ">インテル</option>
                             <option value="ACミラン">ACミラン</option>
+                            <option value="マンチェスター・ユナイテッド">マンチェスター・ユナイテッド</option>
+                            <option value="リヴァプール">リヴァプール</option>
                         </select>
                     </div>
                     <div>
@@ -700,10 +702,10 @@
                     </div>
                     <div>
                         <span style="font-size:0.7em; color:var(--text-sub);">所属リーグ</span><br>
-                        <strong style="font-size:0.95em; color:var(--accent-blue);">欧州スーパーリーグ 26/27</strong>
+                        <strong style="font-size:0.95em; color:var(--accent-blue);">UEFA チャンピオンズリーグ</strong>
                     </div>
                     <div>
-                        <span style="font-size:0.7em; color:var(--text-sub);">シーズン / 節 (全20節)</span><br>
+                        <span style="font-size:0.7em; color:var(--text-sub);">シーズン / 節 (全24節)</span><br>
                         <strong>S<span id="season">1</span> - 第<span id="week">1</span>節</strong>
                     </div>
                     <div>
@@ -834,7 +836,7 @@
                 <div class="transfer-market-page">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
                         <h3 style="margin:0; display:flex; align-items:center; gap:8px; font-size:1.1em; color:var(--text-main);">
-                            🔄 移籍市場 (Transfer Market)
+                            🔄 移籍市場 (Transfer Market) <span id="market-sale-banner" style="display:none; font-size:0.75em; color:var(--accent-red); background:rgba(239, 68, 68, 0.15); border:1px solid var(--accent-red); padding:2px 8px; border-radius:4px;">🔥 SALE開催中 (25% OFF)</span>
                         </h3>
                         <div style="font-size:0.9em; color:var(--text-sub);">
                             所持金: <strong style="color:var(--accent-green); font-size:1.15em;" id="market-page-funds">3,500億円</strong>
@@ -843,7 +845,7 @@
 
                     <!-- 移籍市場 検索・フィルター機能 -->
                     <div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
-                        <input type="text" id="market-search-input" placeholder="🔍 選手名や国籍で検索..." oninput="renderMarket()" style="flex:1; min-width:200px; padding:8px 12px; border-radius:6px; border:1px solid var(--panel-border); background:var(--card-bg); color:var(--text-main); font-size:0.88em;">
+                        <input type="text" id="market-search-input" placeholder="🔍 選手名や国名(国籍)で検索..." oninput="renderMarket()" style="flex:1; min-width:200px; padding:8px 12px; border-radius:6px; border:1px solid var(--panel-border); background:var(--card-bg); color:var(--text-main); font-size:0.88em;">
                         <select id="market-pos-filter" onchange="renderMarket()" style="padding:8px 12px; border-radius:6px; border:1px solid var(--panel-border); background:var(--card-bg); color:var(--text-main); font-size:0.88em;">
                             <option value="ALL">全ポジション (All Pos)</option>
                             <option value="FW">FW全般</option>
@@ -899,7 +901,20 @@
         const STORAGE_KEY = "ML_PRO_SAVE_DATA_2026_V11";
         const THEME_KEY = "ML_PRO_THEME_PREF";
 
-        let transferMarket = JSON.parse(JSON.stringify(defaultTransferMarket));
+        // 国旗から国名への変換用マッピング
+        const flagToCountryName = {
+            "🇪🇸": "スペイン", "🏴󠁧󠁢󠁥󠁮󠁧󠁿": "イングランド", "🇫🇷": "フランス", "🇩🇪": "ドイツ",
+            "🇮🇹": "イタリア", "🇧🇷": "ブラジル", "🇦🇷": "アルゼンチン", "🇵🇹": "ポルトガル",
+            "🇳🇱": "オランダ", "🇧🇪": "ベルギー", "🇯🇵": "日本", "🇭🇷": "クロアチア",
+            "🇺🇾": "ウルグアイ", "🇳🇴": "ノルウェー", "🇪🇬": "エジプト", "🇰🇷": "韓国",
+            "🇵🇱": "ポーランド", "🇸🇳": "セネガル", "🇨🇦": "カナダ", "🇲🇦": "モロッコ",
+            "🇩🇰": "デンマーク", "🇸🇪": "スウェーデン", "🇦🇺": "オーストラリア", "🇳🇬": "ナイジェリア",
+            "🇨🇮": "コートジボワール", "🇨🇱": "チリ", "🇨🇴": "コロンビア", "🇩🇿": "アルジェリア",
+            "🇦🇹": "オーストリア", "🇨🇭": "スイス", "🏴󠁧󠁢󠁳󠁣󠁴󠁿": "スコットランド", "🏴󠁧󠁢󠁷󠁬󠁳󠁿": "ウェールズ",
+            "🇸🇮": "スロベニア", "🇸🇰": "スロバキア", "🇸🇷": "スリナム", "🇬🇭": "ガーナ", "🇨🇲": "カメルーン"
+        };
+
+        let transferMarket = typeof defaultTransferMarket !== 'undefined' ? JSON.parse(JSON.stringify(defaultTransferMarket)) : [];
         let myStarters = [], myBench = [], myReserves = [];
         let playerStats = {}, standings = [];
 
@@ -915,11 +930,11 @@
             marketCategory: 'ALL',
             teamSelectLocked: false,
             pendingOffers: [],
-            newsFeed: []
+            newsFeed: [],
+            saleWeeks: 0
         };
 
-        let draggedSource = null, selectedPlayer = null;
-        let currentMarketList = [];
+        let draggedSource = null, selectedPlayer = null, touchDragOverEl = null;
 
         window.onload = function() {
             initApp();
@@ -935,11 +950,22 @@
             }
         }
 
+        /* 監督のデフォルト設定（得意フォーメーション付与等） */
+        function ensureManagerDefaults(m) {
+            if (!m) return m;
+            if (!m.favFormation) {
+                const forms = ["4-2-3-1", "4-3-3", "4-4-2", "3-5-2", "3-4-3", "4-1-4-1", "4-3-2-1", "5-3-2"];
+                m.favFormation = forms[Math.floor(Math.random() * forms.length)];
+            }
+            return m;
+        }
+
         /* 初回起動時 チーム選択モーダルポップアップ */
         function showInitialTeamSelectModal() {
             const teams = [
                 "レアル・マドリード", "マンチェスター・C", "バルセロナ", "アーセナル", "バイエルン",
-                "ドルトムント", "チェルシー", "パリサンジェルマン", "インテルナツィオナーレ・ミラノ", "ACミラン"
+                "ドルトムント", "チェルシー", "パリサンジェルマン", "インテルナツィオナーレ・ミラノ", "ACミラン",
+                "マンチェスター・ユナイテッド", "リヴァプール"
             ];
             let optionsHtml = teams.map(t => `<option value="${t}">${t}</option>`).join('');
             
@@ -1070,7 +1096,7 @@
             if (p.suspendedWeeks === undefined) p.suspendedWeeks = 0;
             if (!p.altPos) p.altPos = [];
             if (p.name) p.name = p.name.replace(/^👑\s*/, '');
-            if (!p.nat && playerNatMap && playerNatMap[p.name]) p.nat = playerNatMap[p.name];
+            if (!p.nat && typeof playerNatMap !== 'undefined' && playerNatMap[p.name]) p.nat = playerNatMap[p.name];
             return p;
         }
 
@@ -1088,7 +1114,7 @@
             let all = [...myStarters, ...myBench, ...myReserves];
             all.forEach(ensurePlayerDefaults);
 
-            const slots = formations[gameState.currentFormation];
+            const slots = formations[gameState.currentFormation] || formations["4-2-3-1"];
 
             for (let i = 0; i < myStarters.length; i++) {
                 if (isPlayerUnavailable(myStarters[i])) {
@@ -1133,12 +1159,21 @@
             }
         }
 
+        function removePlayerFromSquad(p) {
+            let sIdx = myStarters.findIndex(x => x.name === p.name);
+            if (sIdx !== -1) { myStarters.splice(sIdx, 1); return; }
+            let bIdx = myBench.findIndex(x => x.name === p.name);
+            if (bIdx !== -1) { myBench.splice(bIdx, 1); return; }
+            let rIdx = myReserves.findIndex(x => x.name === p.name);
+            if (rIdx !== -1) { myReserves.splice(rIdx, 1); return; }
+        }
+
         function autoFillStarterAndBench() {
             myStarters = myStarters.filter(p => p != null);
             myBench = myBench.filter(p => p != null);
             myReserves = myReserves.filter(p => p != null);
 
-            const slots = formations[gameState.currentFormation];
+            const slots = formations[gameState.currentFormation] || formations["4-2-3-1"];
 
             while (myStarters.length < 11) {
                 let missingIndex = myStarters.length;
@@ -1193,13 +1228,27 @@
                 if (!gameState.marketCategory) gameState.marketCategory = 'ALL';
                 if (!gameState.pendingOffers) gameState.pendingOffers = [];
                 if (!gameState.newsFeed) gameState.newsFeed = [];
+                if (gameState.saleWeeks === undefined) gameState.saleWeeks = 0;
 
                 if (!gameState.myManagers || gameState.myManagers.length === 0) {
-                    gameState.myManagers = [initialManagers[gameState.teamName]];
+                    if (typeof initialManagers !== 'undefined' && initialManagers[gameState.teamName]) {
+                        gameState.myManagers = [ensureManagerDefaults(initialManagers[gameState.teamName])];
+                    } else {
+                        gameState.myManagers = [ensureManagerDefaults({ name: "アンチェロッティ", rating: 88, favFormation: "4-2-3-1" })];
+                    }
+                } else {
+                    gameState.myManagers.forEach(ensureManagerDefaults);
                 }
+
                 if (!gameState.manager) gameState.manager = gameState.myManagers[0];
+                else ensureManagerDefaults(gameState.manager);
+
                 if (!gameState.managerMarket || gameState.managerMarket.length === 0) {
-                    gameState.managerMarket = JSON.parse(JSON.stringify(freeManagers));
+                    if (typeof freeManagers !== 'undefined') {
+                        gameState.managerMarket = JSON.parse(JSON.stringify(freeManagers)).map(ensureManagerDefaults);
+                    }
+                } else {
+                    gameState.managerMarket.forEach(ensureManagerDefaults);
                 }
 
                 myStarters = (data.myStarters || []).map(ensurePlayerDefaults);
@@ -1263,7 +1312,7 @@
         }
 
         function alignStartersToFormation(starters, formKey) {
-            const slots = formations[formKey];
+            const slots = formations[formKey] || formations["4-2-3-1"];
             let pool = JSON.parse(JSON.stringify(starters)).map(ensurePlayerDefaults);
             let aligned = [];
 
@@ -1279,7 +1328,7 @@
         }
 
         function autoAlignToFormation(players, formKey) {
-            const slots = formations[formKey];
+            const slots = formations[formKey] || formations["4-2-3-1"];
             let pool = JSON.parse(JSON.stringify(players)).map(ensurePlayerDefaults);
             let starters = [];
 
@@ -1303,7 +1352,7 @@
             let available = allPlayers.filter(p => !isPlayerUnavailable(p));
             let unavailable = allPlayers.filter(p => isPlayerUnavailable(p));
 
-            const slots = formations[gameState.currentFormation];
+            const slots = formations[gameState.currentFormation] || formations["4-2-3-1"];
             let newStarters = [];
 
             slots.forEach(slot => {
@@ -1346,6 +1395,10 @@
             gameState.teamName = document.getElementById('team-select').value;
             const presetAll = JSON.parse(JSON.stringify(clubPresetData[gameState.teamName])).map(ensurePlayerDefaults);
 
+            /* 修正: 初期選択したクラブの選手が移籍市場・獲得オファーで重複登場しないよう除外 */
+            const initialClubPlayerNames = new Set(presetAll.map(p => p.name));
+            transferMarket = transferMarket.filter(p => !initialClubPlayerNames.has(p.name));
+
             const starters = presetAll.filter(p => p.squadRole === 'starter');
             const bench = presetAll.filter(p => p.squadRole === 'bench');
             const reserves = presetAll.filter(p => p.squadRole === 'out' || (!p.squadRole && !starters.includes(p) && !bench.includes(p)));
@@ -1361,10 +1414,12 @@
                 myReserves = aligned.reserves;
             }
 
-            const initM = initialManagers[gameState.teamName];
+            const initM = ensureManagerDefaults(initialManagers && initialManagers[gameState.teamName] ? initialManagers[gameState.teamName] : { name: "名監督", rating: 85, favFormation: "4-2-3-1" });
             gameState.myManagers = [initM];
             gameState.manager = initM;
-            gameState.managerMarket = JSON.parse(JSON.stringify(freeManagers));
+            if (typeof freeManagers !== 'undefined') {
+                gameState.managerMarket = JSON.parse(JSON.stringify(freeManagers)).map(ensureManagerDefaults);
+            }
 
             initStandings();
             initAllPlayerStats();
@@ -1453,8 +1508,9 @@
             updateUI();
         }
 
+        /* 修正: 監督の得意フォーメーションに応じて総合値ボーナス/ペナルティを反映 */
         function calculateStarterRating() {
-            const slots = formations[gameState.currentFormation];
+            const slots = formations[gameState.currentFormation] || formations["4-2-3-1"];
             let sum = 0, legendCount = 0;
 
             myStarters.forEach((p, idx) => {
@@ -1464,7 +1520,18 @@
             });
             let base = Math.round(sum / (myStarters.length || 1));
             let managerBonus = gameState.manager ? Math.floor((gameState.manager.rating - 80) / 2) : 0;
-            return base + managerBonus + (legendCount * 2);
+            
+            let formationMatchBonus = 0;
+            if (gameState.manager) {
+                ensureManagerDefaults(gameState.manager);
+                if (gameState.manager.favFormation === gameState.currentFormation) {
+                    formationMatchBonus = 5; // 得意フォーメーション一致で +5
+                } else {
+                    formationMatchBonus = -4; // 不一致で -4
+                }
+            }
+
+            return Math.max(1, base + managerBonus + (legendCount * 2) + formationMatchBonus);
         }
 
         function calculateSellValue(player) {
@@ -1475,12 +1542,22 @@
             return Math.max(50, base);
         }
 
+        /* 修正: 移籍市場での購入価格計算（セール開催中は25% OFF） */
+        function getPlayerBuyPrice(player) {
+            if (!player) return 0;
+            let basePrice = player.price || Math.floor(player.rating * player.rating * 0.35);
+            if (gameState.saleWeeks && gameState.saleWeeks > 0) {
+                return Math.floor(basePrice * 0.75); // 25% OFF
+            }
+            return basePrice;
+        }
+
         function renderSquad() {
             autoFixSquadForUnavailable();
 
             const pitch = document.getElementById('pitch');
             pitch.querySelectorAll('.player-pin').forEach(p => p.remove());
-            const slots = formations[gameState.currentFormation];
+            const slots = formations[gameState.currentFormation] || formations["4-2-3-1"];
 
             myStarters.forEach((player, idx) => {
                 ensurePlayerDefaults(player);
@@ -1596,9 +1673,66 @@
                 element.classList.remove('drag-over');
                 if (draggedSource) swapPlayers(draggedSource, { type, index });
             };
+
+            element.dataset.dragType = type;
+            element.dataset.dragIndex = index;
+
+            element.addEventListener('touchstart', (e) => {
+                if (gameState.isMatchRunning) return;
+                if (!e.touches || e.touches.length !== 1) return;
+                draggedSource = { type, index };
+                element.classList.add('dragging');
+            }, { passive: true });
+
+            element.addEventListener('touchmove', (e) => {
+                if (!draggedSource) return;
+                if (!e.touches || e.touches.length !== 1) return;
+                e.preventDefault();
+
+                const touch = e.touches[0];
+                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                const dropEl = target ? target.closest('[data-drag-type]') : null;
+
+                if (touchDragOverEl && touchDragOverEl !== dropEl) {
+                    touchDragOverEl.classList.remove('drag-over');
+                    touchDragOverEl = null;
+                }
+                if (dropEl && dropEl !== element) {
+                    dropEl.classList.add('drag-over');
+                    touchDragOverEl = dropEl;
+                }
+            }, { passive: false });
+
+            element.addEventListener('touchend', (e) => {
+                if (!draggedSource) return;
+                const touch = e.changedTouches && e.changedTouches[0];
+                const target = touch ? document.elementFromPoint(touch.clientX, touch.clientY) : null;
+                const dropEl = target ? target.closest('[data-drag-type]') : null;
+
+                element.classList.remove('dragging');
+                if (touchDragOverEl) {
+                    touchDragOverEl.classList.remove('drag-over');
+                    touchDragOverEl = null;
+                }
+
+                if (dropEl && dropEl !== element) {
+                    const dType = dropEl.dataset.dragType;
+                    const dIndex = parseInt(dropEl.dataset.dragIndex, 10);
+                    swapPlayers(draggedSource, { type: dType, index: dIndex });
+                }
+                draggedSource = null;
+            });
+
+            element.addEventListener('touchcancel', () => {
+                element.classList.remove('dragging');
+                if (touchDragOverEl) {
+                    touchDragOverEl.classList.remove('drag-over');
+                    touchDragOverEl = null;
+                }
+                draggedSource = null;
+            });
         }
 
-        /* 修正: クリックによる選手交代は無効化（選択状態と情報表示のみ）。交代はドラッグのみ。 */
         function handlePlayerClick(type, index) {
             if (gameState.isMatchRunning) return;
             if (selectedPlayer && selectedPlayer.type === type && selectedPlayer.index === index) {
@@ -1668,7 +1802,7 @@
                         <span style="font-size:0.8em; color:var(--text-sub);">OVR: ${p.rating}</span>
                     </div>
                     <div>・適正ポジション: <strong style="color:var(--accent-blue);">${p.pos}</strong> (サブ: ${altPosText})</div>
-                    <div>・国籍: <strong>${p.nat || '不明'}</strong> | カテゴリ: <strong>${p.category}</strong></div>
+                    <div>・国籍: <strong>${p.nat || '不明'}</strong> (${flagToCountryName[p.nat] || ''}) | カテゴリ: <strong>${p.category}</strong></div>
                     <div>・スタミナ: <strong>${p.stamina}%</strong> | 状態: <strong>${p.injuryWeeks > 0 ? `ケガ(${p.injuryWeeks}節)` : (p.suspendedWeeks > 0 ? `出場停止(${p.suspendedWeeks}節)` : '良好')}</strong></div>
                     <div>・予想売却価格: <strong style="color:var(--accent-green); font-size:1.05em;">${formatCurrency(sellVal)}</strong></div>
                 </div>
@@ -1760,12 +1894,14 @@
             saveGameState();
         }
 
+        /* 修正: 監督表示に得意フォーメーション（favFormation）を反映 */
         function renderManagers() {
             const select = document.getElementById('manager-select');
             if (!select) return;
             select.innerHTML = '';
             let currentIdx = 0;
             (gameState.myManagers || []).forEach((m, idx) => {
+                ensureManagerDefaults(m);
                 const opt = document.createElement('option');
                 opt.value = idx;
                 opt.innerText = m.name;
@@ -1776,14 +1912,15 @@
             });
             select.value = currentIdx;
             if (gameState.manager) {
-                document.getElementById('manager-rating').innerText = ` (OVR: ${gameState.manager.rating})`;
+                ensureManagerDefaults(gameState.manager);
+                document.getElementById('manager-rating').innerText = ` (OVR: ${gameState.manager.rating} / 得意: ${gameState.manager.favFormation || '4-2-3-1'})`;
             }
         }
 
         function switchManager() {
             const idx = document.getElementById('manager-select').value;
             if (gameState.myManagers[idx]) {
-                gameState.manager = gameState.myManagers[idx];
+                gameState.manager = ensureManagerDefaults(gameState.myManagers[idx]);
                 updateUI();
             }
         }
@@ -1855,7 +1992,6 @@
                 autoFillStarterAndBench();
                 gameState.pendingOffers.splice(index, 1);
                 
-                // Here We Go ニュース追加
                 addNewsItem('transfer', `🚨 HERE WE GO! ${off.playerName} が ${off.club} へ完全移籍！`, `${gameState.teamName} は ${off.club} からの移籍金 ${formatCurrency(off.price)} のオファーを受諾。全交渉が合意に達しました！`, true);
 
                 updateUI();
@@ -1875,7 +2011,6 @@
                 autoFillStarterAndBench();
                 gameState.pendingOffers.splice(index, 1);
 
-                // Here We Go ニュース追加
                 addNewsItem('transfer', `🚨 HERE WE GO! ${off.playerName} が ${gameState.teamName} へ電撃移籍！`, `特別ディスカウント価格 ${formatCurrency(off.price)} での完全移籍で合意に達しました！`, true);
 
                 updateUI();
@@ -1891,7 +2026,7 @@
             showCustomModal("オファー見送り", `${off.playerName} に対するオファーを見送りました。`, null, null);
         }
 
-        /* 修正: 相手クラブの総合値（OVR）上がり幅をマイルドに抑制 (1.8 -> 0.6) */
+        /* 修正: 敵総合値を高くして勝率を難しく設定。シーズン2以降はさらに難易度アップ */
         function updateMatchCenterUI() {
             const myTeam = gameState.teamName;
             let otherTeams = Object.keys(clubPresetData).filter(t => t !== myTeam);
@@ -1906,8 +2041,10 @@
             document.getElementById('my-team-disp').innerText = myTeam;
             document.getElementById('enemy-name').innerText = enemyTeam;
 
-            let matchProgress = (gameState.season - 1) * 20 + (gameState.week - 1);
-            let difficultyBonus = Math.floor(matchProgress * 0.6); // 1.8から0.6へ低減
+            // シーズン数と節数に応じた難易度補正（シーズン1から+4〜、シーズン2はさらに+6のボーナス）
+            let seasonBonus = (gameState.season - 1) * 6; // シーズン2は+6、シーズン3は+12
+            let weekBonus = Math.floor((gameState.week - 1) * 0.5);
+            let difficultyBonus = 4 + seasonBonus + weekBonus; 
 
             let baseEnemyRating = Math.round(clubPresetData[enemyTeam].slice(0, 11).reduce((a,b)=>a+b.rating,0)/11);
             let enemyRating = baseEnemyRating + difficultyBonus;
@@ -1916,8 +2053,9 @@
             let myRating = calculateStarterRating();
             let diff = myRating - enemyRating;
 
-            let winRate = Math.min(85, Math.max(10, 45 + diff * 4));
-            let drawRate = Math.min(35, Math.max(10, 25 - Math.abs(diff)));
+            // 相手総合値が高くなった分、勝率が難しくなるよう計算式を調整
+            let winRate = Math.min(80, Math.max(5, 40 + diff * 3.5));
+            let drawRate = Math.min(35, Math.max(10, 25 - Math.abs(diff) * 0.5));
             let lossRate = Math.max(5, 100 - winRate - drawRate);
 
             document.getElementById('rate-win-txt').innerText = Math.round(winRate);
@@ -1963,8 +2101,10 @@
             let minute = 0;
             let myRating = calculateStarterRating();
 
-            let matchProgress = (gameState.season - 1) * 20 + (gameState.week - 1);
-            let difficultyBonus = Math.floor(matchProgress * 0.6); // 1.8から0.6へ低減
+            // 敵総合値の難易度アップ計算
+            let seasonBonus = (gameState.season - 1) * 6;
+            let weekBonus = Math.floor((gameState.week - 1) * 0.5);
+            let difficultyBonus = 4 + seasonBonus + weekBonus;
             let enemyRating = Math.round(clubPresetData[enemyTeam].slice(0, 11).reduce((a,b)=>a+b.rating,0)/11) + difficultyBonus;
 
             let myScorers = [];
@@ -1977,13 +2117,13 @@
                 document.getElementById('match-timer').innerText = `${minute}:00`;
 
                 let roll = Math.random() * 100;
-                let probMy = 15 + (myRating - enemyRating) * 1.5;
-                let probEnemy = 15 + (enemyRating - myRating) * 1.5;
+                let probMy = 14 + (myRating - enemyRating) * 1.4;
+                let probEnemy = 16 + (enemyRating - myRating) * 1.4;
 
                 if (roll < 8) {
                     let isMyPk = Math.random() > 0.5;
                     let kickerTeam = isMyPk ? myTeam : enemyTeam;
-                    let kickerName = isMyPk ? (myStarters.find(p=>p.category==='FW')?.name || myStarters[0].name) : (teamPkKickerMap[enemyTeam] || "エース");
+                    let kickerName = isMyPk ? (myStarters.find(p=>p.category==='FW')?.name || myStarters[0].name) : (teamPkKickerMap && teamPkKickerMap[enemyTeam] ? teamPkKickerMap[enemyTeam] : "エース");
                     let isGoal = Math.random() < 0.78;
 
                     if (isGoal) {
@@ -2047,7 +2187,6 @@
                             recordCard(cardPlayer.name, myTeam, true, cardPlayer.pos);
                             addMatchLog(`🟨🟨【退場!!】${minute}分 [${myTeam}] ${cardPlayer.name} が本日2枚目の警告で退場！(3節出場停止)`, 'log-card');
                         } 
-                        /* 修正: 一発レッド発生率を 0.15 から 0.03 に大幅低下 */
                         else if (Math.random() < 0.03) {
                             cardPlayer.suspendedWeeks = 3;
                             recordCard(cardPlayer.name, myTeam, true, cardPlayer.pos);
@@ -2134,12 +2273,18 @@
             gameState.funds += prize;
             addMatchLog(`💰【試合報酬】${resultTxt}報酬として <strong>${formatCurrency(prize)}</strong> を獲得しました！ (所持金: ${formatCurrency(gameState.funds)})`, 'log-entry');
 
-            // ニュース投稿: 第何節の結果まとめ
+            // セール期間カウント減少＆セール発生判定
+            if (gameState.saleWeeks > 0) {
+                gameState.saleWeeks--;
+            } else if (gameState.week % 5 === 0 && Math.random() < 0.6) {
+                gameState.saleWeeks = 3; // 3節のセール開催
+                addNewsItem('transfer', `🔥 移籍市場メガセール開催決定！`, `移籍市場で全選手の獲得価格が 25% OFF になる期間限定メガセールが開催されます！（期間: 3節分）`, false);
+            }
+
             let topTeam = standings[0] ? standings[0].name : "不明";
             let newsMatchSummary = `第${gameState.week}節が終了しました！\n\n【自クラブ結果】\n${myTeam} ${scoreMy} - ${scoreEnemy} ${enemyTeam}\n\n【他会場結果】\n${otherLogText.replace(/<br>/g, '\n')}\n\n【現在首位】 👑 ${topTeam}`;
             addNewsItem('match', `⚽ 第${gameState.week}節 試合結果まとめ`, newsMatchSummary, false);
 
-            // 他クラブの移籍生成ニュース（Here We Go!）
             simulateOtherClubsTransfers();
 
             if (gameState.pendingOffers && gameState.pendingOffers.length > 0) {
@@ -2157,18 +2302,17 @@
 
             gameState.week++;
 
-            // シーズン終了処理
-            if (gameState.week > 20) {
+            /* 修正: 全24節対応 シーズン終了判定 */
+            if (gameState.week > 24) {
                 let userRank = standings.findIndex(s => s.name === gameState.teamName) + 1;
                 if (userRank === 0) userRank = 1;
 
-                let rankPrize = Math.max(0, 5000 - (userRank - 1) * 500);
+                let rankPrize = Math.max(0, 6000 - (userRank - 1) * 500);
                 gameState.funds += rankPrize;
 
                 let winner = standings[0] ? standings[0].name : "不明";
                 let runnerUp = standings[1] ? standings[1].name : "不明";
 
-                // 個人タイトルの集計
                 initAllPlayerStats();
                 let statsArr = Object.values(playerStats);
                 
@@ -2178,9 +2322,9 @@
                 statsArr.sort((a,b) => b.assists - a.assists);
                 let topAssister = statsArr[0] || { name: "なし", assists: 0, team: "-" };
 
-                let seasonNewsTitle = `🏆 欧州スーパーリーグ Season ${gameState.season} 最終結果 & 顕彰表彰`;
+                let seasonNewsTitle = `🏆 UEFA チャンピオンズリーグ Season ${gameState.season} 最終結果 & 顕彰表彰`;
                 let seasonNewsContent = 
-                    `欧州スーパーリーグ Season ${gameState.season} の全20節が終了しました！表彰クラブおよび個人タイトル獲得者は以下の通りです。\n\n` +
+                    `UEFA チャンピオンズリーグ Season ${gameState.season} の全24節が終了しました！表彰クラブおよび個人タイトル獲得者は以下の通りです。\n\n` +
                     `🏆 優勝クラブ: ${winner}\n` +
                     `🥈 準優勝クラブ: ${runnerUp}\n` +
                     `🥉 第3位: ${standings[2] ? standings[2].name : '-'}\n\n` +
@@ -2194,13 +2338,13 @@
 
                 showCustomModal(
                     "🏆 シーズン終了 & 順位報酬獲得",
-                    `欧州スーパーリーグ S${gameState.season} が全20節終了しました！\n\n` +
+                    `UEFA チャンピオンズリーグ S${gameState.season} が全24節終了しました！\n\n` +
                     `【最終順位】 第 ${userRank} 位\n` +
                     `【順位獲得賞金】 ${formatCurrency(rankPrize)}\n\n` +
                     `【優勝】 ${winner} / 【準優勝】 ${runnerUp}\n` +
                     `【得点王】 ${topScorer.name} (${topScorer.goals}点)\n` +
                     `【アシスト王】 ${topAssister.name} (${topAssister.assists}アシスト)\n\n` +
-                    `新シーズン S${gameState.season + 1} が開幕します！`,
+                    `新シーズン S${gameState.season + 1} が開幕します！（難易度がさらに上がります）`,
                     null, null
                 );
 
@@ -2216,7 +2360,6 @@
             updateUI();
         }
 
-        /* ニュース機能 helper */
         function addNewsItem(type, title, content, isHereWeGo = false) {
             if (!gameState.newsFeed) gameState.newsFeed = [];
             const item = {
@@ -2279,7 +2422,6 @@
             }, () => {});
         }
 
-        /* 他クラブ同士の移籍ニュース生成（Here We Go! 演出つき） */
         function simulateOtherClubsTransfers() {
             if (Math.random() > 0.4) return;
 
@@ -2340,6 +2482,29 @@
             }
         }
 
+        function triggerTransferOfferEvents() {
+            if (Math.random() < 0.35) {
+                let myAll = [...myStarters, ...myBench, ...myReserves];
+                if (myAll.length > 11) {
+                    let targetP = myAll[Math.floor(Math.random() * myAll.length)];
+                    let otherClubs = Object.keys(clubPresetData).filter(c => c !== gameState.teamName);
+                    let offerClub = otherClubs[Math.floor(Math.random() * otherClubs.length)];
+                    let offerPrice = Math.floor(calculateSellValue(targetP) * (1.1 + Math.random() * 0.4));
+
+                    if (!gameState.pendingOffers.some(o => o.playerName === targetP.name)) {
+                        gameState.pendingOffers.push({
+                            type: 'sell_player',
+                            playerName: targetP.name,
+                            player: targetP,
+                            club: offerClub,
+                            price: offerPrice,
+                            expireWeeks: 2
+                        });
+                    }
+                }
+            }
+        }
+
         function simulateOtherMatches(userEnemyTeam, scoreMy, scoreEnemy) {
             let userTeam = gameState.teamName;
             let otherTeams = Object.keys(clubPresetData).filter(t => t !== userTeam && t !== userEnemyTeam);
@@ -2357,306 +2522,167 @@
                 else { uRecord.draw++; uRecord.points += 1; eRecord.draw++; eRecord.points += 1; }
             }
 
-            let resultsSummary = [];
+            let logTexts = [];
 
             for (let i = 0; i < otherTeams.length; i += 2) {
-                if (i + 1 >= otherTeams.length) break;
-                let t1 = otherTeams[i];
-                let t2 = otherTeams[i+1];
+                if (i + 1 < otherTeams.length) {
+                    let t1 = otherTeams[i];
+                    let t2 = otherTeams[i+1];
+                    let r1 = standings.find(s => s.name === t1);
+                    let r2 = standings.find(s => s.name === t2);
 
-                let g1 = Math.floor(Math.random() * 4);
-                let g2 = Math.floor(Math.random() * 4);
+                    let g1 = Math.floor(Math.random() * 4);
+                    let g2 = Math.floor(Math.random() * 4);
 
-                let pList1 = clubPresetData[t1] || [];
-                let pList2 = clubPresetData[t2] || [];
+                    if (r1 && r2) {
+                        r1.played++; r2.played++;
+                        r1.gf += g1; r1.ga += g2; r1.gd = r1.gf - r1.ga;
+                        r2.gf += g2; r2.ga += g1; r2.gd = r2.gf - r2.ga;
 
-                for (let k = 0; k < g1; k++) {
-                    let sc = selectScorer(pList1);
-                    if (sc) {
-                        recordGoal(sc.name, t1, sc.pos);
-                        let ass = pList1.find(p => p.name !== sc.name && (p.category === 'MF' || p.category === 'FW'));
-                        if (ass && Math.random() < 0.7) recordAssist(ass.name, t1, ass.pos);
+                        if (g1 > g2) { r1.win++; r1.points += 3; r2.loss++; }
+                        else if (g1 < g2) { r2.win++; r2.points += 3; r1.loss++; }
+                        else { r1.draw++; r1.points += 1; r2.draw++; r2.points += 1; }
                     }
-                }
-                for (let k = 0; k < g2; k++) {
-                    let sc = selectScorer(pList2);
-                    if (sc) {
-                        recordGoal(sc.name, t2, sc.pos);
-                        let ass = pList2.find(p => p.name !== sc.name && (p.category === 'MF' || p.category === 'FW'));
-                        if (ass && Math.random() < 0.7) recordAssist(ass.name, t2, ass.pos);
+
+                    let t1List = clubPresetData[t1] || [];
+                    let t2List = clubPresetData[t2] || [];
+                    for (let g = 0; g < g1; g++) {
+                        let sc = selectScorer(t1List);
+                        if (sc) recordGoal(sc.name, t1, sc.pos);
                     }
+                    for (let g = 0; g < g2; g++) {
+                        let sc = selectScorer(t2List);
+                        if (sc) recordGoal(sc.name, t2, sc.pos);
+                    }
+
+                    logTexts.push(`${t1} ${g1} - ${g2} ${t2}`);
                 }
-
-                if (Math.random() < 0.3) {
-                    let cp = pList1[Math.floor(Math.random() * pList1.length)];
-                    if (cp) recordCard(cp.name, t1, Math.random() < 0.15, cp.pos);
-                }
-                if (Math.random() < 0.3) {
-                    let cp = pList2[Math.floor(Math.random() * pList2.length)];
-                    if (cp) recordCard(cp.name, t2, Math.random() < 0.15, cp.pos);
-                }
-
-                let r1 = standings.find(s => s.name === t1);
-                let r2 = standings.find(s => s.name === t2);
-
-                if (r1 && r2) {
-                    r1.played++; r2.played++;
-                    r1.gf += g1; r1.ga += g2; r1.gd = r1.gf - r1.ga;
-                    r2.gf += g2; r2.ga += g1; r2.gd = r2.gf - r2.ga;
-
-                    if (g1 > g2) { r1.win++; r1.points += 3; r2.loss++; }
-                    else if (g1 < g2) { r2.win++; r2.points += 3; r1.loss++; }
-                    else { r1.draw++; r1.points += 1; r2.draw++; r2.points += 1; }
-                }
-
-                resultsSummary.push(`・${t1} ${g1} - ${g2} ${t2}`);
             }
 
             standings.sort((a, b) => b.points - a.points || b.gd - a.gd || b.gf - a.gf);
-            return resultsSummary.join('<br>');
+            return logTexts.join('<br>');
         }
 
-        function triggerTransferOfferEvents() {
-            if (!gameState.pendingOffers) gameState.pendingOffers = [];
-
-            let roll = Math.random();
-
-            if (roll < 0.25) {
-                let allMy = [...myStarters, ...myBench, ...myReserves];
-                if (allMy.length <= 11) return;
-
-                let targetPlayer = allMy[Math.floor(Math.random() * allMy.length)];
-                if (gameState.pendingOffers.some(o => o.playerName === targetPlayer.name)) return;
-
-                let baseVal = calculateSellValue(targetPlayer);
-                let offerPrice = Math.floor(baseVal * (1.3 + Math.random() * 0.4));
-
-                let buyerClubs = Object.keys(clubPresetData).filter(c => c !== gameState.teamName);
-                let buyer = buyerClubs[Math.floor(Math.random() * buyerClubs.length)];
-
-                gameState.pendingOffers.push({
-                    id: Date.now() + Math.random(),
-                    type: 'sell_player',
-                    player: targetPlayer,
-                    playerName: targetPlayer.name,
-                    price: offerPrice,
-                    club: buyer,
-                    expireWeeks: 3
-                });
-
-                addMatchLog(`📩【オファー到着】${buyer} から ${targetPlayer.name} 選手への獲得オファー(${formatCurrency(offerPrice)})が届きました！(3節検討可能)`, 'log-mom');
-                renderPendingOffers();
-            }
-            else if (roll < 0.45) {
-                let availableOffers = transferMarket.filter(p => !p.isLegend);
-                if (availableOffers.length === 0) return;
-
-                let targetPlayer = availableOffers[Math.floor(Math.random() * availableOffers.length)];
-                if (gameState.pendingOffers.some(o => o.playerName === targetPlayer.name)) return;
-
-                let discountPrice = Math.floor(targetPlayer.price * 0.7);
-
-                gameState.pendingOffers.push({
-                    id: Date.now() + Math.random(),
-                    type: 'buy_player',
-                    player: targetPlayer,
-                    playerName: targetPlayer.name,
-                    price: discountPrice,
-                    expireWeeks: 3
-                });
-
-                addMatchLog(`📢【オファー到着】移籍エージェントから ${targetPlayer.name} 選手の特別価格オファー(${formatCurrency(discountPrice)})が届きました！(3節検討可能)`, 'log-mom');
-                renderPendingOffers();
-            }
-        }
-
-        function removePlayerFromSquad(player) {
-            let sIdx = myStarters.indexOf(player);
-            if (sIdx !== -1) { myStarters.splice(sIdx, 1); return; }
-            let bIdx = myBench.indexOf(player);
-            if (bIdx !== -1) { myBench.splice(bIdx, 1); return; }
-            let rIdx = myReserves.indexOf(player);
-            if (rIdx !== -1) { myReserves.splice(rIdx, 1); return; }
-        }
-
-        function switchViewTab(tab) {
-            gameState.activeTab = tab;
+        function switchViewTab(tabName) {
+            gameState.activeTab = tabName;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            const activeBtn = document.getElementById(`tab-${tab}`);
-            if (activeBtn) activeBtn.classList.add('active');
+            const btn = document.getElementById(`tab-${tabName}`);
+            if (btn) btn.classList.add('active');
             renderView();
+            saveGameState();
         }
 
         function renderView() {
             const container = document.getElementById('view-container');
+            if (!container) return;
+
             initAllPlayerStats();
 
             if (gameState.activeTab === 'standings') {
-                let html = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>順位</th>
-                                <th>クラブ</th>
-                                <th>勝点</th>
-                                <th>試</th>
-                                <th>勝</th>
-                                <th>分</th>
-                                <th>負</th>
-                                <th>得失</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
+                let html = `<table><thead><tr><th>順位</th><th>クラブ</th><th>勝点</th><th>試合</th><th>勝</th><th>分</th><th>負</th><th>得失</th></tr></thead><tbody>`;
                 standings.forEach((s, idx) => {
                     let isMy = s.name === gameState.teamName;
-                    html += `
-                        <tr class="${isMy ? 'my-team-row' : ''}">
-                            <td>${idx + 1}</td>
-                            <td style="text-align:left;">${s.name}</td>
-                            <td><strong>${s.points}</strong></td>
-                            <td>${s.played}</td>
-                            <td>${s.win}</td>
-                            <td>${s.draw}</td>
-                            <td>${s.loss}</td>
-                            <td>${s.gd > 0 ? '+' + s.gd : s.gd}</td>
-                        </tr>
-                    `;
+                    html += `<tr class="${isMy ? 'my-team-row' : ''}">
+                        <td>${idx + 1}</td>
+                        <td style="text-align:left;">${isMy ? '⭐ ' : ''}${s.name}</td>
+                        <td><strong>${s.points}</strong></td>
+                        <td>${s.played}</td>
+                        <td>${s.win}</td>
+                        <td>${s.draw}</td>
+                        <td>${s.loss}</td>
+                        <td>${s.gd > 0 ? '+' + s.gd : s.gd}</td>
+                    </tr>`;
                 });
                 html += `</tbody></table>`;
                 container.innerHTML = html;
-            }
-            else if (gameState.activeTab === 'goals') {
-                let statsArr = Object.values(playerStats).filter(s => s.goals > 0);
-                statsArr.sort((a, b) => b.goals - a.goals);
-
-                let html = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>順位</th>
-                                <th>選手名</th>
-                                <th>クラブ</th>
-                                <th>得点</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                if (statsArr.length === 0) {
-                    html += `<tr><td colspan="4" style="color:var(--text-sub);">記録がありません</td></tr>`;
-                } else {
-                    statsArr.slice(0, 10).forEach((s, idx) => {
-                        html += `
-                            <tr>
-                                <td>${idx + 1}</td>
-                                <td style="text-align:left;">${s.name}</td>
-                                <td>${s.team}</td>
-                                <td><strong style="color:var(--accent-green);">${s.goals}</strong></td>
-                            </tr>
-                        `;
-                    });
-                }
+            } else if (gameState.activeTab === 'goals') {
+                let list = Object.values(playerStats).sort((a, b) => b.goals - a.goals).slice(0, 10);
+                let html = `<table><thead><tr><th>順位</th><th>選手名</th><th>所属</th><th>Pos</th><th>得点</th></tr></thead><tbody>`;
+                list.forEach((p, idx) => {
+                    html += `<tr>
+                        <td>${idx + 1}</td>
+                        <td style="text-align:left;">${p.name}</td>
+                        <td>${p.team}</td>
+                        <td>${p.pos}</td>
+                        <td><strong style="color:var(--accent-green);">${p.goals}</strong></td>
+                    </tr>`;
+                });
                 html += `</tbody></table>`;
                 container.innerHTML = html;
-            }
-            else if (gameState.activeTab === 'assists') {
-                let statsArr = Object.values(playerStats).filter(s => s.assists > 0);
-                statsArr.sort((a, b) => b.assists - a.assists);
-
-                let html = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>順位</th>
-                                <th>選手名</th>
-                                <th>クラブ</th>
-                                <th>アシスト</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                if (statsArr.length === 0) {
-                    html += `<tr><td colspan="4" style="color:var(--text-sub);">記録がありません</td></tr>`;
-                } else {
-                    statsArr.slice(0, 10).forEach((s, idx) => {
-                        html += `
-                            <tr>
-                                <td>${idx + 1}</td>
-                                <td style="text-align:left;">${s.name}</td>
-                                <td>${s.team}</td>
-                                <td><strong style="color:var(--accent-blue);">${s.assists}</strong></td>
-                            </tr>
-                        `;
-                    });
-                }
+            } else if (gameState.activeTab === 'assists') {
+                let list = Object.values(playerStats).sort((a, b) => b.assists - a.assists).slice(0, 10);
+                let html = `<table><thead><tr><th>順位</th><th>選手名</th><th>所属</th><th>Pos</th><th>アシスト</th></tr></thead><tbody>`;
+                list.forEach((p, idx) => {
+                    html += `<tr>
+                        <td>${idx + 1}</td>
+                        <td style="text-align:left;">${p.name}</td>
+                        <td>${p.team}</td>
+                        <td>${p.pos}</td>
+                        <td><strong style="color:var(--accent-blue);">${p.assists}</strong></td>
+                    </tr>`;
+                });
                 html += `</tbody></table>`;
                 container.innerHTML = html;
-            }
-            else if (gameState.activeTab === 'cards') {
-                let statsArr = Object.values(playerStats).filter(s => s.yellowCards > 0 || s.redCards > 0);
-                statsArr.sort((a, b) => (b.redCards * 2 + b.yellowCards) - (a.redCards * 2 + a.yellowCards));
-
-                let html = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>選手名</th>
-                                <th>クラブ</th>
-                                <th>🟨 警告</th>
-                                <th>🟥 退場</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                if (statsArr.length === 0) {
-                    html += `<tr><td colspan="4" style="color:var(--text-sub);">記録がありません</td></tr>`;
-                } else {
-                    statsArr.slice(0, 10).forEach(s => {
-                        html += `
-                            <tr>
-                                <td style="text-align:left;">${s.name}</td>
-                                <td>${s.team}</td>
-                                <td><strong style="color:var(--accent-gold);">${s.yellowCards}</strong></td>
-                                <td><strong style="color:var(--accent-red);">${s.redCards}</strong></td>
-                            </tr>
-                        `;
-                    });
-                }
+            } else if (gameState.activeTab === 'cards') {
+                let list = Object.values(playerStats).sort((a, b) => (b.yellowCards + b.redCards * 2) - (a.yellowCards + a.redCards * 2)).slice(0, 10);
+                let html = `<table><thead><tr><th>順位</th><th>選手名</th><th>所属</th><th>🟨 警告</th><th>🟥 退場</th></tr></thead><tbody>`;
+                list.forEach((p, idx) => {
+                    html += `<tr>
+                        <td>${idx + 1}</td>
+                        <td style="text-align:left;">${p.name}</td>
+                        <td>${p.team}</td>
+                        <td>${p.yellowCards}</td>
+                        <td><strong style="color:var(--accent-red);">${p.redCards}</strong></td>
+                    </tr>`;
+                });
                 html += `</tbody></table>`;
                 container.innerHTML = html;
             }
         }
 
-        /* 移籍市場 レンダリング */
+        /* 修正: 移籍市場のレンダリング。国名（国籍）での検索に対応 & セール表示追加 */
         function renderMarket() {
             const grid = document.getElementById('market-grid');
+            const saleBanner = document.getElementById('market-sale-banner');
             if (!grid) return;
+
+            if (saleBanner) {
+                if (gameState.saleWeeks > 0) {
+                    saleBanner.style.display = 'inline-block';
+                    saleBanner.innerText = `🔥 SALE開催中!! (残り${gameState.saleWeeks}節 / 25% OFF)`;
+                } else {
+                    saleBanner.style.display = 'none';
+                }
+            }
+
+            const category = gameState.marketCategory || 'ALL';
+            const posFilter = document.getElementById('market-pos-filter') ? document.getElementById('market-pos-filter').value : 'ALL';
+            
+            // 検索入力（小文字＆トリム）
+            const searchInput = document.getElementById('market-search-input') ? document.getElementById('market-search-input').value.toLowerCase().trim() : '';
+
             grid.innerHTML = '';
 
-            const searchTxt = (document.getElementById('market-search-input')?.value || '').toLowerCase();
-            const posFilter = document.getElementById('market-pos-filter')?.value || 'ALL';
-
-            if (gameState.marketCategory === 'MANAGER') {
-                renderManagerMarket(grid, searchTxt);
+            if (category === 'MANAGER') {
+                renderManagerMarket(grid, searchInput);
                 return;
             }
 
             let filtered = (transferMarket || []).map(ensurePlayerDefaults);
 
-            // カテゴリ切り替え
-            const cat = gameState.marketCategory;
-            if (cat === 'ACTIVE_ALL') filtered = filtered.filter(p => !p.isLegend);
-            else if (cat === 'LEGEND_ALL') filtered = filtered.filter(p => p.isLegend);
-            else if (cat === 'FW') filtered = filtered.filter(p => p.category === 'FW' && !p.isLegend);
-            else if (cat === 'MF') filtered = filtered.filter(p => p.category === 'MF' && !p.isLegend);
-            else if (cat === 'DF') filtered = filtered.filter(p => p.category === 'DF' && !p.isLegend);
-            else if (cat === 'GK') filtered = filtered.filter(p => p.category === 'GK' && !p.isLegend);
-            else if (cat === 'LEGEND_FW') filtered = filtered.filter(p => p.category === 'FW' && p.isLegend);
-            else if (cat === 'LEGEND_MF') filtered = filtered.filter(p => p.category === 'MF' && p.isLegend);
-            else if (cat === 'LEGEND_DF') filtered = filtered.filter(p => p.category === 'DF' && p.isLegend);
-            else if (cat === 'LEGEND_GK') filtered = filtered.filter(p => p.category === 'GK' && p.isLegend);
+            // ポジションカテゴリフィルター
+            if (category === 'ACTIVE_ALL') filtered = filtered.filter(p => !p.isLegend);
+            else if (category === 'LEGEND_ALL') filtered = filtered.filter(p => p.isLegend);
+            else if (category === 'FW') filtered = filtered.filter(p => !p.isLegend && p.category === 'FW');
+            else if (category === 'MF') filtered = filtered.filter(p => !p.isLegend && p.category === 'MF');
+            else if (category === 'DF') filtered = filtered.filter(p => !p.isLegend && p.category === 'DF');
+            else if (category === 'GK') filtered = filtered.filter(p => !p.isLegend && p.category === 'GK');
+            else if (category === 'LEGEND_FW') filtered = filtered.filter(p => p.isLegend && p.category === 'FW');
+            else if (category === 'LEGEND_MF') filtered = filtered.filter(p => p.isLegend && p.category === 'MF');
+            else if (category === 'LEGEND_DF') filtered = filtered.filter(p => p.isLegend && p.category === 'DF');
+            else if (category === 'LEGEND_GK') filtered = filtered.filter(p => p.isLegend && p.category === 'GK');
 
-            // ポジションドロップダウンフィルター
+            // 詳細ポジションフィルター
             if (posFilter !== 'ALL') {
                 if (['FW', 'MF', 'DF', 'GK'].includes(posFilter)) {
                     filtered = filtered.filter(p => p.category === posFilter);
@@ -2665,179 +2691,175 @@
                 }
             }
 
-            // 検索ワードフィルター
-            if (searchTxt) {
-                filtered = filtered.filter(p => 
-                    p.name.toLowerCase().includes(searchTxt) || 
-                    (p.nat && p.nat.toLowerCase().includes(searchTxt))
-                );
+            /* 修正: 検索欄で選手名・国旗・国名(日本語)・国籍での検索を可能にする */
+            if (searchInput !== '') {
+                filtered = filtered.filter(p => {
+                    let nameMatch = p.name ? p.name.toLowerCase().includes(searchInput) : false;
+                    let natMatch = p.nat ? p.nat.includes(searchInput) : false;
+                    
+                    // 国旗絵文字から日本語国名を取得して判定
+                    let countryNameJp = (p.nat && flagToCountryName[p.nat]) ? flagToCountryName[p.nat].toLowerCase() : "";
+                    let countryMatch = countryNameJp.includes(searchInput);
+
+                    let altCountryMatch = p.country ? p.country.toLowerCase().includes(searchInput) : false;
+
+                    return nameMatch || natMatch || countryMatch || altCountryMatch;
+                });
             }
 
-            currentMarketList = filtered;
-
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-sub); padding:40px;">条件に一致する選手が見つかりません</div>`;
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-sub); padding:40px;">該当する選手が見つかりませんでした</div>`;
                 return;
             }
 
-            filtered.forEach((p, idx) => {
-                const item = document.createElement('div');
-                item.className = `market-card-item ${p.isLegend ? 'legend-border' : ''}`;
+            filtered.forEach(p => {
+                const isLegend = p.isLegend;
+                const buyPrice = getPlayerBuyPrice(p);
+                const originalPrice = p.price || Math.floor(p.rating * p.rating * 0.35);
+                const isSaleActive = gameState.saleWeeks > 0;
 
-                const isAffordable = gameState.funds >= p.price;
-                const altText = p.altPos && p.altPos.length > 0 ? p.altPos.join(', ') : 'なし';
+                const card = document.createElement('div');
+                card.className = `market-card-item ${isLegend ? 'legend-border' : ''}`;
 
-                item.innerHTML = `
+                let priceDisplay = isSaleActive ? 
+                    `<span style="text-decoration:line-through; color:var(--text-sub); font-size:0.8em; margin-right:4px;">${formatCurrency(originalPrice)}</span><strong style="color:var(--accent-red);">${formatCurrency(buyPrice)}</strong>` : 
+                    `<strong style="color:var(--accent-green);">${formatCurrency(buyPrice)}</strong>`;
+
+                card.innerHTML = `
                     <div>
                         <div class="market-card-header">
                             <span class="market-pos-badge">${p.pos}</span>
-                            <span style="font-size:1.1em; font-weight:bold; color:var(--accent-gold);">OVR ${p.rating}</span>
+                            ${isLegend ? '<span class="legend-pill">👑 LEGEND</span>' : '<span class="active-pill">現役</span>'}
                         </div>
-                        <div style="font-weight:bold; font-size:1.05em; margin-top:6px; color:var(--text-main);">
+                        <div style="font-size:1.1em; font-weight:bold; margin-top:8px; color:var(--text-main);">
                             ${p.nat || '🏳️'} ${p.name}
                         </div>
-                        <div style="margin-top:2px;">
-                            ${p.isLegend ? '<span class="legend-pill">👑 LEGEND</span>' : '<span class="active-pill">現役</span>'}
-                        </div>
                         <div class="market-detail-row">
-                            <span>サブ適正: ${altText}</span><br>
-                            <span>カテゴリ: ${p.category}</span>
+                            <span>国籍: <strong>${p.nat || '不明'} (${flagToCountryName[p.nat] || ''})</strong></span>
+                            <span>カテゴリ: <strong>${p.category}</strong></span>
+                        </div>
+                        <div style="margin-top:8px; font-size:0.85em;">
+                            能力 (OVR): <strong style="color:var(--accent-gold); font-size:1.1em;">${p.rating}</strong>
                         </div>
                     </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; border-top:1px dashed var(--panel-border); padding-top:8px;">
-                        <div style="font-weight:bold; font-size:1.0em; color:var(--accent-green);">
-                            ${formatCurrency(p.price)}
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; border-top:1px dashed var(--panel-border); padding-top:10px;">
+                        <div style="font-size:0.9em;">
+                            価格: ${priceDisplay}
                         </div>
-                        <button class="btn-buy" ${!isAffordable ? 'disabled' : ''} onclick="buyPlayer(${idx})">
-                            ${isAffordable ? '獲得する' : '資金不足'}
-                        </button>
+                        <button class="btn-buy" onclick="buyPlayerFromMarket('${p.name}')">獲得</button>
                     </div>
                 `;
-                grid.appendChild(item);
+                grid.appendChild(card);
             });
         }
 
-        function renderManagerMarket(grid, searchTxt) {
-            let filtered = (gameState.managerMarket || []);
-            if (searchTxt) {
-                filtered = filtered.filter(m => m.name.toLowerCase().includes(searchTxt));
+        /* 監督市場の表示 */
+        function renderManagerMarket(grid, searchInput) {
+            let list = (gameState.managerMarket || []).map(ensureManagerDefaults);
+
+            if (searchInput) {
+                list = list.filter(m => m.name.toLowerCase().includes(searchInput) || (m.favFormation && m.favFormation.toLowerCase().includes(searchInput)));
             }
 
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-sub); padding:40px;">市場に利用可能な監督がいません</div>`;
+            if (list.length === 0) {
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-sub); padding:40px;">就任可能な監督がいません</div>`;
                 return;
             }
 
-            filtered.forEach((m, idx) => {
-                const item = document.createElement('div');
-                item.className = 'market-card-item legend-border';
+            list.forEach((m, idx) => {
+                const cost = Math.floor((m.rating - 70) * 120);
+                const card = document.createElement('div');
+                card.className = `market-card-item`;
 
-                const isOwned = gameState.myManagers.some(myM => myM.name === m.name);
-                const isCurrent = gameState.manager && gameState.manager.name === m.name;
-                const isAffordable = gameState.funds >= m.price;
-
-                item.innerHTML = `
+                card.innerHTML = `
                     <div>
                         <div class="market-card-header">
-                            <span class="market-pos-badge">👔 MANAGER</span>
-                            <span style="font-size:1.1em; font-weight:bold; color:var(--accent-gold);">OVR ${m.rating}</span>
+                            <span class="market-pos-badge" style="background:rgba(139, 92, 246, 0.15); color:var(--accent-purple); border-color:rgba(139, 92, 246, 0.3);">👔 監督</span>
+                            <span class="legend-pill" style="background:var(--accent-purple); color:#fff;">マネージャー</span>
                         </div>
-                        <div style="font-weight:bold; font-size:1.1em; margin-top:8px; color:var(--text-main);">
+                        <div style="font-size:1.1em; font-weight:bold; margin-top:8px; color:var(--text-main);">
                             ${m.name}
                         </div>
-                        <div style="font-size:0.8em; color:var(--text-sub); margin-top:4px;">
-                            得意フォーメーション: <strong>${m.formation || '全般'}</strong>
+                        <div class="market-detail-row">
+                            <span>得意フォーメーション: <strong style="color:var(--accent-gold);">${m.favFormation || '4-2-3-1'}</strong></span>
+                        </div>
+                        <div style="margin-top:8px; font-size:0.85em;">
+                            監督能力 (OVR): <strong style="color:var(--accent-gold); font-size:1.1em;">${m.rating}</strong>
                         </div>
                     </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; border-top:1px dashed var(--panel-border); padding-top:8px;">
-                        <div style="font-weight:bold; font-size:1.0em; color:var(--accent-green);">
-                            ${formatCurrency(m.price)}
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; border-top:1px dashed var(--panel-border); padding-top:10px;">
+                        <div style="font-size:0.9em;">
+                            契約金: <strong style="color:var(--accent-green);">${formatCurrency(cost)}</strong>
                         </div>
-                        ${isCurrent ? 
-                            '<button class="btn-buy" disabled style="background:var(--accent-blue);">指揮中</button>' : 
-                            (isOwned ? 
-                                `<button class="btn-buy" style="background:var(--accent-gold); color:#000;" onclick="hireManager('${m.name}')">就任させる</button>` :
-                                `<button class="btn-buy" ${!isAffordable ? 'disabled' : ''} onclick="buyManager(${idx})">${isAffordable ? '契約する' : '資金不足'}</button>`
-                            )
-                        }
+                        <button class="btn-buy" onclick="hireManager(${idx})">契約招聘</button>
                     </div>
                 `;
-                grid.appendChild(item);
+                grid.appendChild(card);
             });
         }
 
-        function buyPlayer(index) {
-            const player = currentMarketList[index];
-            if (!player) return;
-
-            if (gameState.funds < player.price) {
-                showCustomModal("資金不足", "資金が不足しているため、この選手を獲得できません。", null, null);
-                return;
-            }
-
-            showCustomModal(
-                "選手獲得の確認",
-                `${player.name} (${player.pos}, OVR:${player.rating}) を ${formatCurrency(player.price)} で獲得しますか？`,
-                () => {
-                    gameState.funds -= player.price;
-
-                    let realIndex = transferMarket.findIndex(p => p.name === player.name);
-                    if (realIndex !== -1) transferMarket.splice(realIndex, 1);
-
-                    ensurePlayerDefaults(player);
-                    myReserves.push(player);
-                    if (playerStats[player.name]) playerStats[player.name].team = gameState.teamName;
-
-                    autoFillStarterAndBench();
-                    updateUI();
-                    renderMarket();
-
-                    // Here We Go ニュース追加
-                    addNewsItem('transfer', `🚨 HERE WE GO! ${player.name} が ${gameState.teamName} へ完全移籍！`, `移籍金 ${formatCurrency(player.price)} で契約合意！メディカルチェックをクリアし入団が決定しました！`, true);
-
-                    showCustomModal("獲得完了", `🎉 ${player.name} 選手を獲得しました！ (リザーブに追加されました)`, null, null);
-                },
-                () => {}
-            );
-        }
-
-        function buyManager(index) {
-            const m = gameState.managerMarket[index];
+        function hireManager(index) {
+            let m = gameState.managerMarket[index];
             if (!m) return;
+            ensureManagerDefaults(m);
 
-            if (gameState.funds < m.price) {
-                showCustomModal("資金不足", "資金が不足しているため、監督と契約できません。", null, null);
+            let cost = Math.floor((m.rating - 70) * 120);
+            if (gameState.funds < cost) {
+                showCustomModal("資金不足", "資金が不足しているため監督を契約できません。", null, null);
                 return;
             }
 
             showCustomModal(
                 "監督契約の確認",
-                `${m.name} 監督 (OVR:${m.rating}) と ${formatCurrency(m.price)} で契約しますか？`,
+                `${m.name} 監督 (OVR: ${m.rating} / 得意: ${m.favFormation}) を ${formatCurrency(cost)} で招聘契約しますか？`,
                 () => {
-                    gameState.funds -= m.price;
+                    gameState.funds -= cost;
+                    gameState.managerMarket.splice(index, 1);
                     gameState.myManagers.push(m);
                     gameState.manager = m;
-                    gameState.managerMarket.splice(index, 1);
 
-                    // ニュース追加
-                    addNewsItem('transfer', `👔 【新監督就任】 ${gameState.teamName} が ${m.name} 氏の招聘を発表！`, `${gameState.teamName} は本日、${m.name} 氏が新監督に就任したことを公式発表しました。`, false);
+                    addNewsItem('transfer', `👔 ${gameState.teamName} が ${m.name} 新監督の就任を発表！`, `得意フォーメーション ${m.favFormation} を掲げる ${m.name} 氏が正式に監督として契約を結びました！`, false);
 
                     updateUI();
-                    renderMarket();
-                    showCustomModal("就任完了", `👔 ${m.name} 氏がクラブの新監督に就任しました！`, null, null);
+                    showCustomModal("就任完了", `🎉 ${m.name} 氏が新監督として就任しました！`, null, null);
                 },
                 () => {}
             );
         }
 
-        function hireManager(managerName) {
-            const target = gameState.myManagers.find(m => m.name === managerName);
-            if (target) {
-                gameState.manager = target;
-                updateUI();
-                renderMarket();
-                showCustomModal("監督変更", `👔 ${target.name} 氏をメイン監督に設定しました。`, null, null);
+        function buyPlayerFromMarket(playerName) {
+            let idx = transferMarket.findIndex(p => p.name === playerName);
+            if (idx === -1) return;
+
+            let p = transferMarket[idx];
+            ensurePlayerDefaults(p);
+            let buyPrice = getPlayerBuyPrice(p);
+
+            if (gameState.funds < buyPrice) {
+                showCustomModal("資金不足", "資金が不足しているため選手を獲得できません。", null, null);
+                return;
             }
+
+            showCustomModal(
+                "選手獲得の確認",
+                `${p.nat || ''} ${p.name} (OVR: ${p.rating}) を ${formatCurrency(buyPrice)} で獲得しますか？`,
+                () => {
+                    gameState.funds -= buyPrice;
+                    transferMarket.splice(idx, 1);
+                    myReserves.push(p);
+
+                    if (playerStats[p.name]) playerStats[p.name].team = gameState.teamName;
+
+                    autoFillStarterAndBench();
+
+                    addNewsItem('transfer', `🚨 HERE WE GO! ${p.name} が ${gameState.teamName} へ完全移籍！`, `移籍金 ${formatCurrency(buyPrice)} で獲得合意に達しました！`, true);
+
+                    updateUI();
+                    renderMarket();
+                    showCustomModal("獲得成功", `🎉 ${p.name} 選手を獲得し、チームに合流しました！`, null, null);
+                },
+                () => {}
+            );
         }
     </script>
 </body>
