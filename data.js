@@ -22,8 +22,52 @@ const playerNatMap = {
     "ケイン": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "ウルライヒ": "🇩🇪", "イトウ": "🇯🇵", "ター": "🇩🇪", "ライマー": "🇦🇹",
     "パヴロヴィッチ": "🇩🇪", "サイバリ": "🇲🇦", "ニャブリ": "🇩🇪", "メッシ": "🇦🇷", "C・ロナウド": "🇵🇹",
     "ジダン": "🇫🇷", "ロナウジーニョ": "🇧🇷", "ペレ": "🇧🇷", "マラドーナ": "🇦🇷", "マルディーニ": "🇮🇹",
-    "カンナヴァーロ": "🇮🇹", "ブッフォン": "🇮🇹", "ヤシン": "🇷🇺"
-};
+    "カンナヴァーロ": "🇮🇹", "ブッフォン": "🇮🇹", "ヤシン": "🇷🇺",// マンチェスター・ユナイテッド
+    "セニ・ラメンス": "🇧🇪",
+    "パトリック・ドルグ": "🇩🇰",
+    "リサンドロ・マルティネス": "🇦🇷",
+    "マタイス・デ・リフト": "🇳🇱",
+    "ディオゴ・ダロト": "🇵🇹",
+    "ブルーノ・フェルナンデス": "🇵🇹",
+    "マヌエル・ウガルテ": "🇺🇾",
+    "ユーリ・ティーレマンス": "🇧🇪",
+    "ブライアン・ムベウモ": "🇨🇲",
+    "マテウス・クーニャ": "🇧🇷",
+    "ベンヤミン・シェシュコ": "🇸🇮",
+    "カール・ダーロウ": "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
+    "レニー・ヨロ": "🇫🇷",
+    "ヌサイル・マズラウイ": "🇲🇦",
+    "コビー・メイヌー": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "アマド・ディアロ": "🇨🇮",
+    "トム・ヒートン": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "ルーク・ショー": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "ハリー・マグワイア": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "メイソン・マウント": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "ジョシュア・ザークツィー": "🇳🇱",
+
+    // リヴァプール
+    "アリソン": "🇧🇷",
+    "ミロシュ・ケルケズ": "🇭🇺",
+    "フィルジル・ファンダイク": "🇳🇱",
+    "ロナルド・アラウホ": "🇺🇾",
+    "ジェレミー・フリンポン": "🇳🇱",
+    "ドミニク・ソボスライ": "🇭🇺",
+    "アレクシス・マクアリスター": "🇦🇷",
+    "フロリアン・ヴィルツ": "🇩🇪",
+    "ブラッドリー・バルコラ": "🇫🇷",
+    "アレクサンデル・イサク": "🇸🇪",
+    "コーディ・ガクポ": "🇳🇱",
+    "ギオルギ・ママルダシュビリ": "🇬🇪",
+    "ジョバンニ・レオーニ": "🇮🇹",
+    "ジョー・ゴメス": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "ライアン・フラーフェンベルフ": "🇳🇱",
+    "フェデリコ・キエーザ": "🇮🇹",
+    "フレディ・ウッドマン": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "コスタス・ツィミカス": "🇬🇷",
+    "コナー・ブラッドリー": "🏴󠁧󠁢󠁮󠁧󠁿",
+    "遠藤 航": "🇯🇵",
+    "トレー・ニョーニ": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
+}
 
 // 搭載10クラブの選手データ（26-27シーズン版）
 const clubPresetData = {
@@ -285,6 +329,68 @@ const clubPresetData = {
         { name: "カマルダ", pos: "CF", altPos: [], category: "FW", rating: 76, squadRole: "out" },
         { name: "モレイラ", pos: "LWG", altPos: ["RWG", "AMF"], category: "FW", rating: 78, squadRole: "out" },
         { name: "ムサ", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 80, squadRole: "out" }
+    ],
+
+    "マンチェスター・ユナイテッド": [
+    // スタメン
+    { name: "セニ・ラメンス", pos: "GK", altPos: [], category: "GK", rating: 84, squadRole: "starter" },
+    { name: "パトリック・ドルグ", pos: "LB", altPos: ["LWB", "LMF"], category: "DF", rating: 83, squadRole: "starter" },
+    { name: "リサンドロ・マルティネス", pos: "CB", altPos: ["LB"], category: "DF", rating: 87, squadRole: "starter" },
+    { name: "マタイス・デ・リフト", pos: "CB", altPos: [], category: "DF", rating: 87, squadRole: "starter" },
+    { name: "ディオゴ・ダロト", pos: "RB", altPos: ["LB", "RMF"], category: "DF", rating: 84, squadRole: "starter" },
+
+    { name: "ブルーノ・フェルナンデス", pos: "AMF", altPos: ["CMF", "SS", "LMF"], category: "MF", rating: 91, squadRole: "starter" },
+    { name: "マヌエル・ウガルテ", pos: "DMF", altPos: ["CMF"], category: "MF", rating: 84, squadRole: "starter" },
+    { name: "ユーリ・ティーレマンス", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 86, squadRole: "starter" },
+
+    { name: "ブライアン・ムベウモ", pos: "RWG", altPos: ["RMF", "CF"], category: "FW", rating: 88, squadRole: "starter" },
+    { name: "マテウス・クーニャ", pos: "SS", altPos: ["CF", "AMF", "LWG"], category: "FW", rating: 91, squadRole: "starter" },
+    { name: "ベンヤミン・シェシュコ", pos: "CF", altPos: ["SS"], category: "FW", rating: 87, squadRole: "starter" },
+
+    // ベンチ
+    { name: "カール・ダーロウ", pos: "GK", altPos: [], category: "GK", rating: 79, squadRole: "bench" },
+    { name: "レニー・ヨロ", pos: "CB", altPos: ["RB"], category: "DF", rating: 84, squadRole: "bench" },
+    { name: "ヌサイル・マズラウイ", pos: "RB", altPos: ["LB", "CB"], category: "DF", rating: 83, squadRole: "bench" },
+    { name: "コビー・メイヌー", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 86, squadRole: "bench" },
+    { name: "アマド・ディアロ", pos: "RWG", altPos: ["RMF", "AMF", "LWG"], category: "FW", rating: 85, squadRole: "bench" },
+
+    // ベンチ外
+    { name: "トム・ヒートン", pos: "GK", altPos: [], category: "GK", rating: 76, squadRole: "out" },
+    { name: "ルーク・ショー", pos: "LB", altPos: ["CB"], category: "DF", rating: 82, squadRole: "out" },
+    { name: "ハリー・マグワイア", pos: "CB", altPos: [], category: "DF", rating: 82, squadRole: "out" },
+    { name: "メイソン・マウント", pos: "CMF", altPos: ["AMF", "LMF"], category: "MF", rating: 82, squadRole: "out" },
+    { name: "ジョシュア・ザークツィー", pos: "CF", altPos: ["SS", "AMF"], category: "FW", rating: 81, squadRole: "out" }
+    ],
+
+    "リヴァプール": [
+    // スタメン
+    { name: "アリソン", pos: "GK", altPos: [], category: "GK", rating: 89, squadRole: "starter" },
+    { name: "ミロシュ・ケルケズ", pos: "LB", altPos: ["LWB"], category: "DF", rating: 84, squadRole: "starter" },
+    { name: "フィルジル・ファンダイク", pos: "CB", altPos: [], category: "DF", rating: 91, squadRole: "starter" },
+    { name: "ロナルド・アラウホ", pos: "CB", altPos: ["RB", "CF"], category: "DF", rating: 88, squadRole: "starter" },
+    { name: "ジェレミー・フリンポン", pos: "RB", altPos: ["RWB", "RMF"], category: "DF", rating: 86, squadRole: "starter" },
+
+    { name: "ドミニク・ソボスライ", pos: "DMF", altPos: ["CMF", "RMF" ,"RB"], category: "MF", rating: 90, squadRole: "starter" },
+    { name: "アレクシス・マクアリスター", pos: "CMF", altPos: ["DMF", "AMF"], category: "MF", rating: 88, squadRole: "starter" },
+    { name: "フロリアン・ヴィルツ", pos: "AMF", altPos: ["CMF", "SS"], category: "MF", rating: 89, squadRole: "starter" },
+
+    { name: "ブラッドリー・バルコラ", pos: "RWG", altPos: ["LWG", "SS", "LMF", "RMF"], category: "FW", rating: 88, squadRole: "starter" },
+    { name: "アレクサンデル・イサク", pos: "CF", altPos: ["SS"], category: "FW", rating: 88, squadRole: "starter" },
+    { name: "コーディ・ガクポ", pos: "LWG", altPos: ["LMF", "CF"], category: "FW", rating: 86, squadRole: "starter" },
+
+    // ベンチ
+    { name: "ギオルギ・ママルダシュビリ", pos: "GK", altPos: [], category: "GK", rating: 87, squadRole: "bench" },
+    { name: "ジョバンニ・レオーニ", pos: "CB", altPos: [], category: "DF", rating: 82, squadRole: "bench" },
+    { name: "ジョー・ゴメス", pos: "CB", altPos: ["RB", "LB"], category: "DF", rating: 82, squadRole: "bench" },
+    { name: "ライアン・フラーフェンベルフ", pos: "CMF", altPos: ["DMF"], category: "MF", rating: 86, squadRole: "bench" },
+    { name: "フェデリコ・キエーザ", pos: "RWG", altPos: ["LWG", "RMF"], category: "FW", rating: 83, squadRole: "bench" },
+
+    // ベンチ外
+    { name: "フレディ・ウッドマン", pos: "GK", altPos: [], category: "GK", rating: 76, squadRole: "out" },
+    { name: "コスタス・ツィミカス", pos: "LB", altPos: ["LWB"], category: "DF", rating: 80, squadRole: "out" },
+    { name: "コナー・ブラッドリー", pos: "RB", altPos: ["RWB"], category: "DF", rating: 82, squadRole: "out" },
+    { name: "遠藤 航", pos: "DMF", altPos: ["CMF", "CB"], category: "MF", rating: 80, squadRole: "out" },
+    { name: "トレー・ニョーニ", pos: "CMF", altPos: ["AMF", "DMF"], category: "MF", rating: 76, squadRole: "out" }
     ]
 };
 
@@ -299,7 +405,9 @@ const initialManagers = {
     "チェルシー": { name: "シャビ・アロンソ", rating: 80, price: 200 },
     "パリサンジェルマン": { name: "ルイス・エンリケ", rating: 81, price: 220 },
     "インテルナツィオナーレ・ミラノ": { name: "クリスティアン・キヴ", rating: 79, price: 180 },
-    "ACミラン": { name: "ルベン・アモリム", rating: 78, price: 160 }
+    "ACミラン": { name: "ルベン・アモリム", rating: 78, price: 160 },
+    "マンチェスター・ユナイテッド": { name: "マイケル・キャリック", rating: 78, price: 160 },
+    "リヴァプール": { name: "アンドニ・イラオラ", rating: 78, price: 160 }
 };
 
 // 獲得可能なフリー監督市場（80~95に設定）
@@ -332,7 +440,9 @@ const teamPkKickerMap = {
     "チェルシー": "パーマー",
     "パリサンジェルマン": "デンベレ",
     "インテルナツィオナーレ・ミラノ": "チャルハノール",
-    "ACミラン": "ラモス"
+    "ACミラン": "ラモス",
+    "マンチェスター・ユナイテッド": "ブルーノ・フェルナンデス",
+    "リヴァプール": "ドミニク・ソボスライ"
 };
 
 // フォーメーション定義
